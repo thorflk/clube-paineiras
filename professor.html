@@ -40,6 +40,101 @@
     min-height: 100vh;
   }
 
+  /* ── LOGIN OVERLAY ── */
+  #login-overlay {
+    position: fixed; inset: 0; z-index: 9999;
+    background: linear-gradient(135deg, #0a0a14 0%, #1a0a14 50%, #0a0a14 100%);
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+  }
+  #login-overlay::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(224,0,122,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .login-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(224,0,122,0.2);
+    border-radius: 20px;
+    padding: 44px 40px 40px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(224,0,122,0.08);
+    position: relative;
+    backdrop-filter: blur(12px);
+    animation: loginFadeIn .4s ease both;
+  }
+  @keyframes loginFadeIn {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .login-logo {
+    display: flex; flex-direction: column; align-items: center; margin-bottom: 32px;
+  }
+  .login-logo-circle {
+    width: 56px; height: 56px; border-radius: 50%;
+    border: 2px solid var(--pink);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 14px;
+    box-shadow: 0 0 24px rgba(224,0,122,0.25);
+  }
+  .login-logo-circle svg { width: 32px; height: 32px; }
+  .login-logo h2 {
+    font-family: 'Sora', sans-serif; font-size: 1.05rem; font-weight: 700;
+    color: var(--pink); text-align: center; line-height: 1.3;
+  }
+  .login-logo p {
+    font-size: 0.72rem; color: #666; margin-top: 4px; text-align: center;
+  }
+  .login-field { margin-bottom: 16px; }
+  .login-field label {
+    display: block; font-size: 0.72rem; font-weight: 600;
+    color: #888; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 7px;
+  }
+  .login-field input {
+    width: 100%; padding: 12px 16px;
+    background: rgba(255,255,255,0.06);
+    border: 1.5px solid rgba(255,255,255,0.1);
+    border-radius: var(--radius-sm);
+    font-family: 'Inter', sans-serif; font-size: 0.9rem;
+    color: #fff; outline: none;
+    transition: border-color .2s, box-shadow .2s;
+  }
+  .login-field input::placeholder { color: #555; }
+  .login-field input:focus {
+    border-color: var(--pink);
+    box-shadow: 0 0 0 3px rgba(224,0,122,0.12);
+  }
+  .login-btn {
+    width: 100%; padding: 13px;
+    background: var(--pink);
+    border: none; border-radius: var(--radius-sm);
+    font-family: 'Sora', sans-serif; font-size: 0.92rem; font-weight: 700;
+    color: #fff; cursor: pointer; margin-top: 8px;
+    transition: background .2s, transform .15s, box-shadow .2s;
+    box-shadow: 0 4px 20px rgba(224,0,122,0.35);
+    letter-spacing: 0.02em;
+  }
+  .login-btn:hover { background: var(--pink-light); transform: translateY(-1px); box-shadow: 0 6px 28px rgba(224,0,122,0.45); }
+  .login-btn:active { transform: translateY(0); }
+  .login-error {
+    display: none;
+    margin-top: 14px; padding: 10px 14px;
+    background: rgba(255,59,59,0.12); border: 1px solid rgba(255,59,59,0.3);
+    border-radius: var(--radius-sm); color: #ff7070; font-size: 0.8rem;
+    text-align: center;
+  }
+  .login-error.show { display: block; animation: shake .3s ease; }
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    25%      { transform: translateX(-6px); }
+    75%      { transform: translateX(6px); }
+  }
+
+  /* ── APP (hidden until login) ── */
+  #app { display: none; }
+
   /* ── HEADER ── */
   header {
     background: #000;
@@ -158,6 +253,34 @@
   }
   .refresh-btn:hover { background: var(--pink-light); transform: translateY(-1px); }
 
+  /* ── EXPORT CONTROLS ── */
+  .export-wrap {
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  }
+  .export-select {
+    padding: 9px 12px; border-radius: var(--radius-sm);
+    border: 1.5px solid var(--border); background: var(--surface2);
+    font-family: 'Inter', sans-serif; font-size: 0.82rem; color: var(--text2);
+    outline: none; cursor: pointer; transition: border-color .2s;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238888aa' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    padding-right: 30px;
+  }
+  .export-select:focus { border-color: var(--pink); }
+  .export-btn {
+    padding: 9px 16px; border-radius: var(--radius-sm);
+    background: transparent; color: var(--pink);
+    border: 1.5px solid var(--pink-border);
+    font-family: 'Sora', sans-serif; font-size: 0.82rem; font-weight: 600;
+    cursor: pointer; transition: all .2s;
+    display: flex; align-items: center; gap: 6px;
+    white-space: nowrap;
+  }
+  .export-btn:hover { background: var(--pink); color: #fff; box-shadow: 0 2px 10px rgba(224,0,122,0.25); transform: translateY(-1px); }
+  .export-btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
   /* ── TABLE WRAP ── */
   .table-wrap {
     background: var(--surface);
@@ -270,19 +393,111 @@
   .expand-btn.open svg { transform: rotate(180deg); }
 
   /* ── RESPONSIVE ── */
+  /*
+    Colunas por posição (th/td):
+    1 = expand btn
+    2 = Data
+    3 = CPF
+    4 = Atleta
+    5 = Peso
+    6 = Urina
+    7 = Sono
+    8 = Recuperação
+    9 = Cansaço
+    10 = Estresse
+    11 = Humor
+    12 = Dores
+    13 = Status
+
+    Tablet (≤768px): mostrar btn, Data, Atleta, Peso, Urina, Status
+    → ocultar CPF(3), Sono(7), Recuperação(8), Cansaço(9), Estresse(10), Humor(11), Dores(12)
+
+    Mobile (≤480px): mostrar btn, Atleta, Peso, Urina, Status
+    → ocultar tb Data(2), CPF(3)
+  */
   @media (max-width: 768px) {
     .stats-row { grid-template-columns: 1fr 1fr; }
-    th:nth-child(n+7), td:nth-child(n+7) { display: none; }
     header { padding: 0 16px; }
     .header-badge { display: none; }
+
+    /* Ocultar: CPF(3), Sono(7), Recuperação(8), Cansaço(9), Estresse(10), Humor(11), Dores(12) */
+    th:nth-child(3), td:nth-child(3),
+    th:nth-child(7), td:nth-child(7),
+    th:nth-child(8), td:nth-child(8),
+    th:nth-child(9), td:nth-child(9),
+    th:nth-child(10), td:nth-child(10),
+    th:nth-child(11), td:nth-child(11),
+    th:nth-child(12), td:nth-child(12) { display: none; }
+
+    /* Compactar colunas visíveis no tablet */
+    td:nth-child(5), td:nth-child(6) {
+      font-size: 0.75rem;
+      padding: 9px 8px;
+      white-space: nowrap;
+    }
+    th:nth-child(5), th:nth-child(6) { padding: 9px 8px; }
+
+    .export-wrap { width: 100%; }
+    .export-select, .export-btn { font-size: 0.78rem; }
   }
+
   @media (max-width: 480px) {
-    .stats-row { grid-template-columns: 1fr 1fr; }
-    th:nth-child(n+5), td:nth-child(n+5) { display: none; }
+    main { padding: 20px 12px 60px; }
+    .stats-row { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .stat-val { font-size: 1.6rem; }
+    .controls { padding: 14px 12px; gap: 10px; }
+    .search-wrap { min-width: 100%; }
+
+    /* Ocultar tb: Data(2), CPF(3) */
+    th:nth-child(2), td:nth-child(2),
+    th:nth-child(3), td:nth-child(3) { display: none; }
+
+    /* Linha principal mobile: expand + Atleta + Peso + Urina + Status */
+    td:nth-child(4) { font-size: 0.78rem; font-weight: 600; max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    td:nth-child(5) { font-size: 0.72rem; padding: 8px 6px; white-space: nowrap; }
+    td:nth-child(6) { font-size: 0.7rem; padding: 8px 6px; white-space: nowrap; max-width: 80px; overflow: hidden; text-overflow: ellipsis; }
+    td:nth-child(13) { padding: 8px 6px; }
+
+    .filter-btns { gap: 4px; }
+    .filter-btn { padding: 6px 10px; font-size: 0.72rem; }
+    .refresh-btn { font-size: 0.75rem; padding: 8px 12px; }
+    .export-btn { font-size: 0.75rem; padding: 8px 12px; }
+    .export-select { font-size: 0.75rem; padding: 8px 28px 8px 10px; }
   }
 </style>
 </head>
 <body>
+
+<!-- ══ LOGIN OVERLAY ══════════════════════════════════════ -->
+<div id="login-overlay">
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="login-logo-circle">
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="20" cy="20" r="18" stroke="#e0007a" stroke-width="2"/>
+          <path d="M20 6 L20 20 M20 20 L28 13 M20 20 L12 13 M20 20 L26 27 M20 20 L14 27" stroke="#e0007a" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="20" cy="20" r="2.5" fill="#e0007a"/>
+        </svg>
+      </div>
+      <h2>Clube Paineiras do Morumby</h2>
+      <p>Painel do Professor — Acesso Restrito</p>
+    </div>
+
+    <div class="login-field">
+      <label for="login-user">Usuário</label>
+      <input type="text" id="login-user" placeholder="Digite seu usuário" autocomplete="username" onkeydown="if(event.key==='Enter')doLogin()"/>
+    </div>
+    <div class="login-field">
+      <label for="login-pass">Senha</label>
+      <input type="password" id="login-pass" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"/>
+    </div>
+    <button class="login-btn" onclick="doLogin()">Entrar no Painel</button>
+    <div class="login-error" id="login-error">Usuário ou senha incorretos. Tente novamente.</div>
+  </div>
+</div>
+
+<!-- ══ APP ════════════════════════════════════════════════ -->
+<div id="app">
 
 <header>
   <div class="logo-circle">
@@ -338,6 +553,19 @@
       <button class="filter-btn" onclick="setFilter('atencao', this)">Atenção</button>
       <button class="filter-btn" onclick="setFilter('ok', this)">✓ OK</button>
     </div>
+    <!-- EXPORT CSV -->
+    <div class="export-wrap">
+      <select class="export-select" id="export-days" title="Período para exportação">
+        <option value="7">Últimos 7 dias</option>
+        <option value="15">Últimos 15 dias</option>
+        <option value="30" selected>Últimos 30 dias</option>
+        <option value="0">Tudo</option>
+      </select>
+      <button class="export-btn" onclick="exportCSV()">
+        <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Exportar CSV
+      </button>
+    </div>
     <button class="refresh-btn" onclick="loadData()">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
       Atualizar
@@ -386,7 +614,28 @@
 
 </main>
 
+</div><!-- /#app -->
+
 <script>
+// ── LOGIN ─────────────────────────────────────────────────
+const LOGIN_USER = 'paineiras';
+const LOGIN_PASS = '123';
+
+function doLogin() {
+  const u = document.getElementById('login-user').value.trim();
+  const p = document.getElementById('login-pass').value;
+  const err = document.getElementById('login-error');
+  if (u === LOGIN_USER && p === LOGIN_PASS) {
+    document.getElementById('login-overlay').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    loadData();
+  } else {
+    err.classList.add('show');
+    document.getElementById('login-pass').value = '';
+    setTimeout(() => err.classList.remove('show'), 3500);
+  }
+}
+
 // ── SUPABASE ──────────────────────────────────────────────
 const { createClient } = supabase;
 const sb = createClient(
@@ -396,7 +645,7 @@ const sb = createClient(
 
 // ── STATE ─────────────────────────────────────────────────
 let allData = [];
-let athletes = {}; // cpf -> name lookup
+let athletes = {};
 let currentFilter = 'todos';
 let currentPage = 1;
 const PAGE_SIZE = 20;
@@ -417,13 +666,11 @@ function calcRisk(row) {
   if (WARN_VALS.includes(row.dor_muscular)) score += 1;
   if (HIGH_RISK_VALS.includes(row.humor)) score += 1;
   if (WARN_VALS.includes(row.humor)) score += 1;
-  // Many pain locations
   if (row.dores_locais && row.dores_locais !== 'Nenhuma') {
     const count = row.dores_locais.split(',').length;
     if (count >= 4) score += 2;
     else if (count >= 2) score += 1;
   }
-  // Recovery
   if (row.recuperado && row.recuperado.toLowerCase().includes('muito pouca')) score += 2;
   else if (row.recuperado && row.recuperado.toLowerCase().includes('pouca')) score += 1;
   if (score >= 4) return 'risco';
@@ -436,11 +683,9 @@ async function loadData() {
   document.getElementById('table-body').innerHTML = `
     <tr><td colspan="13"><div class="loading-state"><div class="spinner"></div>Carregando dados…</div></td></tr>`;
 
-  // Load athletes for name lookup
   const { data: aths } = await sb.from('cadastro_aluno').select('cpf,nome,categoria,modalidade');
   if (aths) aths.forEach(a => { athletes[a.cpf] = a; });
 
-  // Load responses
   const { data, error } = await sb.from('respostas').select('*').order('id', { ascending: false });
   if (error) {
     document.getElementById('table-body').innerHTML = `<tr><td colspan="13"><div class="empty-state"><p>Erro ao carregar dados: ${error.message}</p></div></td></tr>`;
@@ -455,9 +700,9 @@ async function loadData() {
 
 // ── STATS ─────────────────────────────────────────────────
 function updateStats() {
-  const risk = allData.filter(r => r._risk === 'risco').length;
-  const warn = allData.filter(r => r._risk === 'atencao').length;
-  const ok   = allData.filter(r => r._risk === 'ok').length;
+  const risk   = allData.filter(r => r._risk === 'risco').length;
+  const warn   = allData.filter(r => r._risk === 'atencao').length;
+  const ok     = allData.filter(r => r._risk === 'ok').length;
   const unique = new Set(allData.map(r => r.cpf)).size;
   document.getElementById('stat-total').textContent  = allData.length;
   document.getElementById('stat-risk').textContent   = risk;
@@ -493,7 +738,6 @@ function renderTable() {
     return matchFilter && matchSearch;
   });
 
-  // Sort
   rows.sort((a, b) => {
     let va = a[sortField] ?? ''; let vb = b[sortField] ?? '';
     if (!isNaN(va) && !isNaN(vb)) { va = Number(va); vb = Number(vb); }
@@ -529,7 +773,6 @@ function renderTable() {
       ? `<span class="badge badge-warn">Atenção</span>`
       : `<span class="badge badge-ok">OK</span>`;
 
-    // Pain pills
     let painHtml = '—';
     if (row.dores_locais && row.dores_locais !== 'Nenhuma') {
       const parts = row.dores_locais.split(',').map(s => s.trim());
@@ -537,7 +780,6 @@ function renderTable() {
       painHtml = `<div class="pain-pills">${parts.map(p => `<span class="pain-pill${many?' many':''}">${p}</span>`).join('')}</div>`;
     }
 
-    // Main row
     const tr = document.createElement('tr');
     tr.className = riskCls;
     tr.id = `row-${row.id}`;
@@ -564,7 +806,6 @@ function renderTable() {
     `;
     tbody.appendChild(tr);
 
-    // Detail row
     const dtr = document.createElement('tr');
     dtr.className = 'detail-row';
     dtr.id = `detail-${row.id}`;
@@ -595,7 +836,6 @@ function toggleDetail(id) {
   const btn = document.getElementById(`expand-${id}`);
   if (!dtr) return;
   const isOpen = dtr.classList.contains('open');
-  // Close all
   document.querySelectorAll('.detail-row.open').forEach(r => r.classList.remove('open'));
   document.querySelectorAll('.expand-btn.open').forEach(b => b.classList.remove('open'));
   if (!isOpen) {
@@ -629,8 +869,98 @@ function goPage(n) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// ── INIT ──────────────────────────────────────────────────
-loadData();
+// ── EXPORT CSV ────────────────────────────────────────────
+function exportCSV() {
+  const days = parseInt(document.getElementById('export-days').value, 10);
+
+  // Calcular data de corte
+  let cutoff = null;
+  if (days > 0) {
+    cutoff = new Date();
+    cutoff.setHours(0, 0, 0, 0);
+    cutoff.setDate(cutoff.getDate() - days);
+  }
+
+  // Filtrar dados
+  const filtered = allData.filter(r => {
+    if (!cutoff) return true;
+    if (!r.data_resposta) return false;
+    // data_resposta pode ser "YYYY-MM-DD" ou "DD/MM/YYYY"
+    let d;
+    if (/^\d{4}-\d{2}-\d{2}/.test(r.data_resposta)) {
+      d = new Date(r.data_resposta.substring(0, 10));
+    } else if (/^\d{2}\/\d{2}\/\d{4}/.test(r.data_resposta)) {
+      const [dd, mm, yyyy] = r.data_resposta.split('/');
+      d = new Date(`${yyyy}-${mm}-${dd}`);
+    } else {
+      d = new Date(r.data_resposta);
+    }
+    return !isNaN(d) && d >= cutoff;
+  });
+
+  if (!filtered.length) {
+    alert('Nenhum dado encontrado para o período selecionado.');
+    return;
+  }
+
+  // Colunas do CSV
+  const cols = [
+    { key: 'data_resposta',  label: 'Data Resposta' },
+    { key: 'cpf',            label: 'CPF' },
+    { key: '_nome',          label: 'Nome Atleta' },
+    { key: '_categoria',     label: 'Categoria' },
+    { key: '_modalidade',    label: 'Modalidade' },
+    { key: 'sexo',           label: 'Sexo' },
+    { key: 'peso',           label: 'Peso (kg)' },
+    { key: 'urina',          label: 'Cor da Urina' },
+    { key: 'horas_sono',     label: 'Horas de Sono' },
+    { key: 'qualidade_sono', label: 'Qualidade do Sono' },
+    { key: 'recuperado',     label: 'Recuperação' },
+    { key: 'cansaco',        label: 'Cansaço' },
+    { key: 'estresse',       label: 'Estresse' },
+    { key: 'humor',          label: 'Humor' },
+    { key: 'dor_muscular',   label: 'Dor Muscular (Geral)' },
+    { key: 'dores_locais',   label: 'Dores Locais' },
+    { key: 'menstruou',      label: 'Menstruou' },
+    { key: 'menst_duracao',  label: 'Duração Normal (Menst.)' },
+    { key: 'menst_vezes',    label: 'Mais de 1x/mês (Menst.)' },
+    { key: '_risk',          label: 'Status de Risco' },
+  ];
+
+  // Montar CSV
+  const escape = v => {
+    if (v === null || v === undefined) return '';
+    const s = String(v).replace(/"/g, '""');
+    return /[,"\n\r]/.test(s) ? `"${s}"` : s;
+  };
+
+  const header = cols.map(c => escape(c.label)).join(',');
+  const rowsCSV = filtered.map(r => {
+    const ath = athletes[r.cpf] || {};
+    const enriched = {
+      ...r,
+      _nome:       ath.nome       || '',
+      _categoria:  ath.categoria  || '',
+      _modalidade: ath.modalidade || '',
+    };
+    // Traduzir risco
+    enriched._risk = r._risk === 'risco' ? 'Risco' : r._risk === 'atencao' ? 'Atenção' : 'OK';
+    return cols.map(c => escape(enriched[c.key])).join(',');
+  });
+
+  const csv = '\uFEFF' + [header, ...rowsCSV].join('\r\n'); // BOM para Excel reconhecer UTF-8
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const periodo = days === 0 ? 'tudo' : `ultimos${days}dias`;
+  const hoje = new Date().toISOString().slice(0, 10);
+  a.href = url;
+  a.download = `paineiras_respostas_${periodo}_${hoje}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
 </script>
 </body>
 </html>
