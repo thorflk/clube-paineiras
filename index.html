@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Questionário de Saúde — Clube Paineiras do Morumby</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --pink: #e0007a;
+    --pink-light: #ff3399;
+    --pink-glow: rgba(224,0,122,0.15);
+    --pink-border: rgba(224,0,122,0.3);
+    --bg: #f5f5f7;
+    --surface: #ffffff;
+    --surface2: #fafafa;
+    --border: #e8e8ec;
+    --text: #1a1a2e;
+    --text2: #555566;
+    --text3: #888899;
+    --success: #00c853;
+    --danger: #ff3b3b;
+    --shadow: 0 2px 16px rgba(0,0,0,0.07);
+    --shadow-hover: 0 8px 32px rgba(224,0,122,0.18);
+    --radius: 14px;
+    --radius-sm: 8px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* ── HEADER ── */
+  header {
+    width: 100%;
+    background: #000;
+    padding: 18px 32px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.4);
+  }
+  .logo-circle {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    border: 2px solid var(--pink);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .logo-circle svg { width: 26px; height: 26px; }
+  .header-title { font-family: 'Sora', sans-serif; }
+  .header-title h1 { font-size: 1rem; font-weight: 700; color: var(--pink); letter-spacing: 0.02em; }
+  .header-title p { font-size: 0.72rem; color: #aaa; font-weight: 300; margin-top: 1px; }
+  .header-link {
+    margin-left: auto;
+    color: var(--pink);
+    font-size: 0.78rem;
+    font-weight: 500;
+    text-decoration: none;
+    border: 1px solid var(--pink-border);
+    padding: 6px 14px;
+    border-radius: 20px;
+    transition: all .2s;
+    white-space: nowrap;
+  }
+  .header-link:hover { background: var(--pink); color: #fff; }
+
+  /* ── PROGRESS ── */
+  .progress-wrap {
+    width: 100%;
+    max-width: 680px;
+    padding: 28px 20px 0;
+  }
+  .progress-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .progress-label { font-family: 'Sora', sans-serif; font-size: 0.78rem; font-weight: 600; color: var(--text2); }
+  .progress-count { font-size: 0.72rem; color: var(--text3); }
+  .progress-bar-bg {
+    width: 100%; height: 6px;
+    background: var(--border);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--pink), var(--pink-light));
+    border-radius: 99px;
+    transition: width .5s cubic-bezier(.4,0,.2,1);
+    width: 0%;
+  }
+  .step-dots {
+    display: flex; gap: 6px; margin-top: 10px; justify-content: center;
+  }
+  .step-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--border);
+    transition: all .3s;
+  }
+  .step-dot.active { background: var(--pink); transform: scale(1.3); }
+  .step-dot.done { background: var(--pink); opacity: 0.4; }
+
+  /* ── CARD CONTAINER ── */
+  .container {
+    width: 100%;
+    max-width: 680px;
+    padding: 24px 20px 60px;
+  }
+  .step-card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    padding: 36px 36px 28px;
+    animation: fadeUp .35s ease both;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .step-icon {
+    width: 46px; height: 46px; border-radius: 12px;
+    background: var(--pink-glow);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 16px;
+  }
+  .step-icon svg { width: 22px; height: 22px; stroke: var(--pink); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .step-title { font-family: 'Sora', sans-serif; font-size: 1.3rem; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+  .step-sub { font-size: 0.82rem; color: var(--text3); margin-bottom: 28px; }
+
+  /* ── FORM ELEMENTS ── */
+  .field { margin-bottom: 20px; }
+  .field label { display: block; font-size: 0.8rem; font-weight: 600; color: var(--text2); margin-bottom: 7px; letter-spacing: 0.03em; text-transform: uppercase; }
+  .field input, .field select {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    color: var(--text);
+    background: var(--surface2);
+    transition: border-color .2s, box-shadow .2s;
+    outline: none;
+    -webkit-appearance: none;
+  }
+  .field input:focus, .field select:focus {
+    border-color: var(--pink);
+    box-shadow: 0 0 0 3px var(--pink-glow);
+  }
+  .field input::placeholder { color: var(--text3); }
+
+  /* ── WELCOME BOX ── */
+  .welcome-box {
+    display: none;
+    background: linear-gradient(135deg, #fff0f8, #fff);
+    border: 1.5px solid var(--pink-border);
+    border-radius: var(--radius-sm);
+    padding: 14px 18px;
+    margin-top: 12px;
+    animation: fadeUp .3s ease;
+  }
+  .welcome-box.show { display: flex; align-items: center; gap: 12px; }
+  .welcome-avatar {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: var(--pink);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Sora', sans-serif; font-weight: 700; font-size: 1rem; color: #fff;
+    flex-shrink: 0;
+  }
+  .welcome-text strong { display: block; font-family: 'Sora', sans-serif; font-size: 0.95rem; color: var(--text); }
+  .welcome-text span { font-size: 0.78rem; color: var(--text3); }
+
+  /* ── NEW MEMBER BOX ── */
+  .new-member-box {
+    display: none;
+    background: #fffbf0;
+    border: 1.5px solid #f0d060;
+    border-radius: var(--radius-sm);
+    padding: 18px;
+    margin-top: 14px;
+    animation: fadeUp .3s ease;
+  }
+  .new-member-box.show { display: block; }
+  .new-member-title { font-family: 'Sora', sans-serif; font-size: 0.85rem; font-weight: 700; color: #886600; margin-bottom: 14px; display: flex; align-items: center; gap: 6px; }
+
+  /* ── SEXO CARDS ── */
+  .sex-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+  .sex-card {
+    border: 2px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 16px;
+    cursor: pointer;
+    text-align: center;
+    transition: all .2s;
+    background: var(--surface2);
+  }
+  .sex-card:hover { border-color: var(--pink-border); box-shadow: var(--shadow-hover); transform: translateY(-2px); }
+  .sex-card.selected { border-color: var(--pink); background: var(--pink-glow); }
+  .sex-card .sex-icon { font-size: 1.8rem; margin-bottom: 6px; }
+  .sex-card .sex-label { font-family: 'Sora', sans-serif; font-weight: 600; font-size: 0.9rem; color: var(--text); }
+
+  /* ── OPTION CARDS (1-5 scales) ── */
+  .option-cards { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
+  .option-card {
+    flex: 1; min-width: 80px;
+    border: 2px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 12px 8px;
+    cursor: pointer;
+    text-align: center;
+    transition: all .2s;
+    background: var(--surface2);
+  }
+  .option-card:hover { border-color: var(--pink-border); box-shadow: 0 4px 16px rgba(224,0,122,0.1); transform: translateY(-2px); }
+  .option-card.selected { border-color: var(--pink); background: var(--pink-glow); }
+  .option-card .opt-num { font-family: 'Sora', sans-serif; font-weight: 700; font-size: 1.2rem; color: var(--pink); display: block; }
+  .option-card .opt-label { font-size: 0.65rem; color: var(--text2); line-height: 1.3; margin-top: 4px; }
+  .option-card.selected .opt-label { color: var(--pink); }
+
+  /* ── RECOVERY CARDS (1-10) ── */
+  .recovery-cards { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
+  .recovery-card {
+    width: calc(20% - 7px);
+    min-width: 50px;
+    border: 2px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 10px 4px;
+    cursor: pointer;
+    text-align: center;
+    transition: all .2s;
+    background: var(--surface2);
+  }
+  .recovery-card:hover { border-color: var(--pink-border); transform: translateY(-2px); }
+  .recovery-card.selected { border-color: var(--pink); background: var(--pink-glow); }
+  .recovery-card .rec-num { font-family: 'Sora', sans-serif; font-weight: 700; font-size: 1.1rem; color: var(--pink); }
+  .recovery-card .rec-label { font-size: 0.55rem; color: var(--text3); margin-top: 3px; line-height: 1.2; }
+
+  /* ── URINE CARDS ── */
+  .urine-cards { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+  .urine-card {
+    flex: 1; min-width: 70px;
+    border: 2px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 12px 6px;
+    cursor: pointer;
+    text-align: center;
+    transition: all .2s;
+    background: var(--surface2);
+  }
+  .urine-card:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
+  .urine-card.selected { border-color: var(--pink); box-shadow: var(--shadow-hover); }
+  .urine-dot { width: 28px; height: 28px; border-radius: 50%; margin: 0 auto 6px; border: 2px solid transparent; }
+  .urine-label { font-size: 0.6rem; color: var(--text2); line-height: 1.3; }
+  .urine-card.selected .urine-label { color: var(--pink); font-weight: 600; }
+  .urine-card.selected .urine-dot { border-color: var(--pink); }
+
+  /* ── MENSTRUATION SECTION ── */
+  .menst-section { display: none; animation: fadeUp .3s ease; }
+  .menst-section.show { display: block; }
+  .menst-sub { display: none; animation: fadeUp .3s ease; }
+  .menst-sub.show { display: block; }
+  .yn-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+  .yn-card {
+    border: 2px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 14px;
+    cursor: pointer;
+    text-align: center;
+    transition: all .2s;
+    background: var(--surface2);
+    font-family: 'Sora', sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text2);
+  }
+  .yn-card:hover { border-color: var(--pink-border); transform: translateY(-2px); }
+  .yn-card.selected { border-color: var(--pink); background: var(--pink-glow); color: var(--pink); }
+
+  /* ── PAIN TAGS ── */
+  .pain-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
+  .pain-tag {
+    border: 2px solid var(--border);
+    border-radius: 99px;
+    padding: 8px 14px;
+    cursor: pointer;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--text2);
+    background: var(--surface2);
+    transition: all .2s;
+    user-select: none;
+  }
+  .pain-tag:hover { border-color: var(--pink-border); color: var(--pink); }
+  .pain-tag.selected { border-color: var(--pink); background: var(--pink); color: #fff; }
+
+  /* ── SECTION LABEL ── */
+  .section-label {
+    font-family: 'Sora', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--pink);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 10px;
+    margin-top: 24px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--pink-border); }
+
+  /* ── DIVIDER ── */
+  .divider { height: 1px; background: var(--border); margin: 24px 0; }
+
+  /* ── BUTTONS ── */
+  .btn-row { display: flex; gap: 10px; margin-top: 28px; }
+  .btn {
+    flex: 1;
+    padding: 13px 20px;
+    border-radius: var(--radius-sm);
+    font-family: 'Sora', sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    border: none;
+    cursor: pointer;
+    transition: all .2s;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+  }
+  .btn-secondary {
+    background: transparent;
+    border: 1.5px solid var(--border);
+    color: var(--text2);
+  }
+  .btn-secondary:hover { border-color: var(--pink-border); color: var(--pink); }
+  .btn-primary {
+    background: var(--pink);
+    color: #fff;
+    box-shadow: 0 4px 14px rgba(224,0,122,0.3);
+  }
+  .btn-primary:hover { background: var(--pink-light); box-shadow: 0 6px 20px rgba(224,0,122,0.45); transform: translateY(-1px); }
+  .btn-primary:active { transform: translateY(0); }
+  .btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none !important; box-shadow: none !important; }
+
+  /* ── TOAST ── */
+  #toast {
+    position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(20px);
+    background: var(--text); color: #fff;
+    padding: 12px 24px; border-radius: 99px;
+    font-size: 0.85rem; font-weight: 500;
+    opacity: 0; transition: all .3s;
+    z-index: 999; white-space: nowrap;
+    pointer-events: none;
+  }
+  #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  #toast.success { background: var(--success); }
+  #toast.error { background: var(--danger); }
+
+  /* ── SUCCESS SCREEN ── */
+  #success-screen {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 60px 20px;
+    animation: fadeUp .4s ease;
+  }
+  #success-screen.show { display: flex; }
+  .success-icon {
+    width: 80px; height: 80px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--pink), var(--pink-light));
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 24px;
+    box-shadow: 0 8px 30px rgba(224,0,122,0.35);
+  }
+  .success-icon svg { width: 40px; height: 40px; stroke: #fff; fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+  #success-screen h2 { font-family: 'Sora', sans-serif; font-size: 1.6rem; font-weight: 700; margin-bottom: 8px; }
+  #success-screen p { color: var(--text3); font-size: 0.9rem; margin-bottom: 28px; }
+
+  /* ── LOADING ── */
+  .spinner {
+    width: 18px; height: 18px;
+    border: 2.5px solid rgba(255,255,255,0.4);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin .7s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 520px) {
+    .step-card { padding: 24px 18px 20px; }
+    .recovery-card { width: calc(25% - 8px); }
+    .sex-cards { grid-template-columns: 1fr 1fr; }
+    .option-card { min-width: 60px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-circle">
+    <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="20" cy="20" r="18" stroke="#e0007a" stroke-width="2"/>
+      <path d="M20 6 L20 20 M20 20 L28 13 M20 20 L12 13 M20 20 L26 27 M20 20 L14 27" stroke="#e0007a" stroke-width="2" stroke-linecap="round"/>
+      <circle cx="20" cy="20" r="2.5" fill="#e0007a"/>
+    </svg>
+  </div>
+  <div class="header-title">
+    <h1>Clube Paineiras do Morumby</h1>
+    <p>Questionário de Saúde do Atleta</p>
+  </div>
+  <a href="professor.html" class="header-link">Painel do Professor →</a>
+</header>
+
+<div class="progress-wrap" id="progress-wrap">
+  <div class="progress-info">
+    <span class="progress-label" id="progress-label">Identificação</span>
+    <span class="progress-count" id="progress-count">Etapa 1 de 5</span>
+  </div>
+  <div class="progress-bar-bg">
+    <div class="progress-bar-fill" id="progress-bar"></div>
+  </div>
+  <div class="step-dots" id="step-dots"></div>
+</div>
+
+<div class="container">
+
+  <!-- ════ STEP 1: CPF / Cadastro ════ -->
+  <div class="step-card" id="step-1">
+    <div class="step-icon">
+      <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    </div>
+    <div class="step-title">Identificação</div>
+    <div class="step-sub">Digite seu CPF para começar</div>
+
+    <div class="field">
+      <label>CPF do Atleta</label>
+      <input type="text" id="cpf-input" placeholder="000.000.000-00" maxlength="14" inputmode="numeric"/>
+    </div>
+
+    <div class="welcome-box" id="welcome-box">
+      <div class="welcome-avatar" id="welcome-avatar">?</div>
+      <div class="welcome-text">
+        <strong id="welcome-name">—</strong>
+        <span id="welcome-info">—</span>
+      </div>
+    </div>
+
+    <div class="new-member-box" id="new-member-box">
+      <div class="new-member-title">⚠️ CPF não encontrado — Faça seu cadastro</div>
+      <div class="field">
+        <label>Nome Completo</label>
+        <input type="text" id="reg-nome" placeholder="Seu nome completo"/>
+      </div>
+      <div class="field">
+        <label>Data de Nascimento</label>
+        <input type="text" id="reg-nascimento" placeholder="DD/MM/AAAA" maxlength="10"/>
+      </div>
+      <div class="field">
+        <label>Categoria</label>
+        <input type="text" id="reg-categoria" placeholder="Ex: Sub-17, Adulto..."/>
+      </div>
+      <div class="field">
+        <label>Modalidade</label>
+        <input type="text" id="reg-modalidade" placeholder="Ex: Natação, Tênis..."/>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-primary" id="btn-step1" onclick="goStep1()">
+        Continuar <span>→</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ════ STEP 2: Dados Pessoais + Físicos ════ -->
+  <div class="step-card" id="step-2" style="display:none">
+    <div class="step-icon">
+      <svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+    </div>
+    <div class="step-title">Dados Pessoais & Físicos</div>
+    <div class="step-sub">Informações sobre seu corpo hoje</div>
+
+    <div class="section-label">Sexo Biológico</div>
+    <div class="sex-cards">
+      <div class="sex-card" onclick="selectSexo('Masculino', this)">
+        <div class="sex-icon">♂</div>
+        <div class="sex-label">Masculino</div>
+      </div>
+      <div class="sex-card" onclick="selectSexo('Feminino', this)">
+        <div class="sex-icon">♀</div>
+        <div class="sex-label">Feminino</div>
+      </div>
+    </div>
+
+    <!-- Menstruação -->
+    <div class="menst-section" id="menst-section">
+      <div class="section-label">Ciclo Menstrual</div>
+      <div class="field"><label>Você menstruou esse mês?</label></div>
+      <div class="yn-cards">
+        <div class="yn-card" onclick="selectYN('menstruou', 'Sim', this)">✓ Sim</div>
+        <div class="yn-card" onclick="selectYN('menstruou', 'Não', this)">✗ Não</div>
+      </div>
+      <div class="menst-sub" id="menst-sub">
+        <div class="field"><label>Teve duração normal?</label></div>
+        <div class="yn-cards">
+          <div class="yn-card" onclick="selectYN('menst_duracao', 'Sim', this)">✓ Sim</div>
+          <div class="yn-card" onclick="selectYN('menst_duracao', 'Não', this)">✗ Não</div>
+        </div>
+        <div class="field"><label>Mais que uma vez no mês?</label></div>
+        <div class="yn-cards">
+          <div class="yn-card" onclick="selectYN('menst_vezes', 'Sim', this)">✓ Sim</div>
+          <div class="yn-card" onclick="selectYN('menst_vezes', 'Não', this)">✗ Não</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section-label">Peso & Hidratação</div>
+    <div class="field">
+      <label>Peso atual (kg)</label>
+      <input type="number" id="peso-input" placeholder="Ex: 72.5" step="0.1" min="20" max="300"/>
+    </div>
+
+    <div class="field"><label>Cor da urina hoje</label></div>
+    <div class="urine-cards">
+      <div class="urine-card" onclick="selectUrine('Muito claro', this)">
+        <div class="urine-dot" style="background:#f5f0c0;"></div>
+        <div class="urine-label">Muito claro</div>
+      </div>
+      <div class="urine-card" onclick="selectUrine('Claro', this)">
+        <div class="urine-dot" style="background:#f0e060;"></div>
+        <div class="urine-label">Claro</div>
+      </div>
+      <div class="urine-card" onclick="selectUrine('Amarelo normal', this)">
+        <div class="urine-dot" style="background:#e8c020;"></div>
+        <div class="urine-label">Normal</div>
+      </div>
+      <div class="urine-card" onclick="selectUrine('Escuro', this)">
+        <div class="urine-dot" style="background:#c08000;"></div>
+        <div class="urine-label">Escuro</div>
+      </div>
+      <div class="urine-card" onclick="selectUrine('Muito escuro', this)">
+        <div class="urine-dot" style="background:#7a4800;"></div>
+        <div class="urine-label">Muito escuro</div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section-label">Sono</div>
+    <div class="field">
+      <label>Horas de sono esta noite</label>
+      <input type="number" id="sono-input" placeholder="Ex: 7.5" step="0.5" min="0" max="24"/>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="showStep(1)">← Voltar</button>
+      <button class="btn btn-primary" onclick="goStep2()">Avançar →</button>
+    </div>
+  </div>
+
+  <!-- ════ STEP 3: Recuperação ════ -->
+  <div class="step-card" id="step-3" style="display:none">
+    <div class="step-icon">
+      <svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+    </div>
+    <div class="step-title">Recuperação</div>
+    <div class="step-sub">Como você se sente para o treino de hoje?</div>
+
+    <div class="section-label">Nível de Recuperação (1 a 10)</div>
+    <div class="recovery-cards" id="recovery-cards"></div>
+
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="showStep(2)">← Voltar</button>
+      <button class="btn btn-primary" onclick="goStep3()">Avançar →</button>
+    </div>
+  </div>
+
+  <!-- ════ STEP 4: Bem-estar ════ -->
+  <div class="step-card" id="step-4" style="display:none">
+    <div class="step-icon">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+    </div>
+    <div class="step-title">Bem-estar</div>
+    <div class="step-sub">Como você está se sentindo hoje?</div>
+
+    <div class="section-label">Nível de Cansaço</div>
+    <div class="option-cards" id="cansaco-cards"></div>
+
+    <div class="section-label">Qualidade do Sono</div>
+    <div class="option-cards" id="sono-cards"></div>
+
+    <div class="section-label">Dor Muscular</div>
+    <div class="option-cards" id="dor-cards"></div>
+
+    <div class="section-label">Nível de Estresse</div>
+    <div class="option-cards" id="estresse-cards"></div>
+
+    <div class="section-label">Humor</div>
+    <div class="option-cards" id="humor-cards"></div>
+
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="showStep(3)">← Voltar</button>
+      <button class="btn btn-primary" onclick="goStep4()">Avançar →</button>
+    </div>
+  </div>
+
+  <!-- ════ STEP 5: Dores Musculares ════ -->
+  <div class="step-card" id="step-5" style="display:none">
+    <div class="step-icon">
+      <svg viewBox="0 0 24 24"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>
+    </div>
+    <div class="step-title">Dores Musculares</div>
+    <div class="step-sub">Selecione todas as regiões com desconforto (ou nenhuma)</div>
+
+    <div class="pain-tags" id="pain-tags"></div>
+
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="showStep(4)">← Voltar</button>
+      <button class="btn btn-primary" id="btn-submit" onclick="submitForm()">
+        <span id="submit-text">Enviar Questionário</span>
+        <div class="spinner" id="submit-spinner" style="display:none"></div>
+      </button>
+    </div>
+  </div>
+
+  <!-- ════ SUCCESS ════ -->
+  <div id="success-screen">
+    <div class="success-icon">
+      <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+    <h2>Questionário enviado!</h2>
+    <p>Seus dados foram salvos com sucesso.<br/>Bom treino, atleta! 💪</p>
+    <button class="btn btn-primary" style="max-width:220px" onclick="resetForm()">Novo Questionário</button>
+  </div>
+
+</div><!-- /container -->
+
+<div id="toast"></div>
+
+<script>
+// ── SUPABASE ──────────────────────────────────────────────
+const { createClient } = supabase;
+const sb = createClient(
+  "https://qgrqhyudrtaooqxggvkc.supabase.co",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFncnFoeXVkcnRhb29xeGdndmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk2NTI3MTMsImV4cCI6MjA5NTIyODcxM30.7m4vMCGCBZAbZ-5eJRCoavJjxQk6Kdhf_RVRugkeTkA"
+);
+
+// ── STATE ─────────────────────────────────────────────────
+const state = {
+  cpf: '', nome: '', isNew: false,
+  sexo: '', menstruou: 'N/A', menst_duracao: 'N/A', menst_vezes: 'N/A',
+  peso: null, urina: '', horas_sono: null,
+  recuperado: '', cansaco: '', qualidade_sono: '', dor_muscular: '', estresse: '', humor: '',
+  dores: [],
+  currentStep: 1,
+  totalSteps: 5
+};
+
+// ── STEP LABELS ───────────────────────────────────────────
+const stepLabels = ['Identificação','Dados Físicos','Recuperação','Bem-estar','Dores Musculares'];
+
+// ── INIT DOTS ─────────────────────────────────────────────
+function initDots() {
+  const wrap = document.getElementById('step-dots');
+  wrap.innerHTML = '';
+  for (let i = 0; i < state.totalSteps; i++) {
+    const d = document.createElement('div');
+    d.className = 'step-dot' + (i === 0 ? ' active' : '');
+    d.id = `dot-${i+1}`;
+    wrap.appendChild(d);
+  }
+}
+
+function updateProgress(step) {
+  state.currentStep = step;
+  const pct = ((step - 1) / (state.totalSteps - 1)) * 100;
+  document.getElementById('progress-bar').style.width = pct + '%';
+  document.getElementById('progress-label').textContent = stepLabels[step - 1];
+  document.getElementById('progress-count').textContent = `Etapa ${step} de ${state.totalSteps}`;
+  for (let i = 1; i <= state.totalSteps; i++) {
+    const d = document.getElementById(`dot-${i}`);
+    d.className = 'step-dot' + (i < step ? ' done' : i === step ? ' active' : '');
+  }
+}
+
+function showStep(n) {
+  for (let i = 1; i <= state.totalSteps; i++) {
+    const el = document.getElementById(`step-${i}`);
+    if (el) el.style.display = i === n ? 'block' : 'none';
+  }
+  updateProgress(n);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ── TOAST ─────────────────────────────────────────────────
+function toast(msg, type = '') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'show ' + type;
+  setTimeout(() => { t.className = ''; }, 3000);
+}
+
+// ── CPF MASK ──────────────────────────────────────────────
+document.getElementById('cpf-input').addEventListener('input', function () {
+  let v = this.value.replace(/\D/g, '').slice(0, 11);
+  if (v.length > 9) v = v.slice(0,3)+'.'+v.slice(3,6)+'.'+v.slice(6,9)+'-'+v.slice(9);
+  else if (v.length > 6) v = v.slice(0,3)+'.'+v.slice(3,6)+'.'+v.slice(6);
+  else if (v.length > 3) v = v.slice(0,3)+'.'+v.slice(3);
+  this.value = v;
+  if (v.length === 14) lookupCPF(v);
+  else { document.getElementById('welcome-box').classList.remove('show'); document.getElementById('new-member-box').classList.remove('show'); }
+});
+
+// Nascimento mask
+document.getElementById('reg-nascimento').addEventListener('input', function () {
+  let v = this.value.replace(/\D/g, '').slice(0, 8);
+  if (v.length > 4) v = v.slice(0,2)+'/'+v.slice(2,4)+'/'+v.slice(4);
+  else if (v.length > 2) v = v.slice(0,2)+'/'+v.slice(2);
+  this.value = v;
+});
+
+// ── LOOKUP CPF ────────────────────────────────────────────
+async function lookupCPF(cpf) {
+  const { data, error } = await sb.from('cadastro_aluno').select('*').eq('cpf', cpf).maybeSingle();
+  if (error) { toast('Erro ao buscar CPF', 'error'); return; }
+  if (data) {
+    state.isNew = false;
+    state.cpf = cpf; state.nome = data.nome;
+    const wb = document.getElementById('welcome-box');
+    document.getElementById('welcome-avatar').textContent = data.nome.charAt(0).toUpperCase();
+    document.getElementById('welcome-name').textContent = `Olá, ${data.nome}!`;
+    document.getElementById('welcome-info').textContent = `Categoria: ${data.categoria} | Modalidade: ${data.modalidade}`;
+    wb.classList.add('show');
+    document.getElementById('new-member-box').classList.remove('show');
+  } else {
+    state.isNew = true; state.cpf = cpf;
+    document.getElementById('welcome-box').classList.remove('show');
+    document.getElementById('new-member-box').classList.add('show');
+  }
+}
+
+// ── STEP 1 ────────────────────────────────────────────────
+function goStep1() {
+  if (state.cpf.length !== 14) { toast('⚠️ Digite um CPF válido', 'error'); return; }
+  if (state.isNew) {
+    const nome = document.getElementById('reg-nome').value.trim();
+    const nasc = document.getElementById('reg-nascimento').value.trim();
+    const cat  = document.getElementById('reg-categoria').value.trim();
+    const mod  = document.getElementById('reg-modalidade').value.trim();
+    if (!nome || !nasc || !cat || !mod) { toast('⚠️ Preencha todos os campos', 'error'); return; }
+    if (nasc.length !== 10) { toast('⚠️ Data inválida (DD/MM/AAAA)', 'error'); return; }
+    state.regNome = nome; state.regNasc = nasc; state.regCat = cat; state.regMod = mod;
+    state.nome = nome;
+  }
+  showStep(2);
+}
+
+// ── SEXO ──────────────────────────────────────────────────
+function selectSexo(val, el) {
+  state.sexo = val;
+  document.querySelectorAll('.sex-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  const ms = document.getElementById('menst-section');
+  if (val === 'Feminino') ms.classList.add('show');
+  else {
+    ms.classList.remove('show');
+    state.menstruou = 'N/A'; state.menst_duracao = 'N/A'; state.menst_vezes = 'N/A';
+  }
+}
+
+// ── YES/NO CARDS ──────────────────────────────────────────
+function selectYN(field, val, el) {
+  state[field] = val;
+  const parent = el.closest('.yn-cards');
+  parent.querySelectorAll('.yn-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  if (field === 'menstruou') {
+    const sub = document.getElementById('menst-sub');
+    if (val === 'Sim') sub.classList.add('show');
+    else { sub.classList.remove('show'); state.menst_duracao = 'N/A'; state.menst_vezes = 'N/A'; }
+  }
+}
+
+// ── URINE ─────────────────────────────────────────────────
+function selectUrine(val, el) {
+  state.urina = val;
+  document.querySelectorAll('.urine-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+// ── STEP 2 ────────────────────────────────────────────────
+function goStep2() {
+  if (!state.sexo) { toast('⚠️ Selecione seu sexo', 'error'); return; }
+  const peso = parseFloat(document.getElementById('peso-input').value.replace(',','.'));
+  if (!peso || peso < 20) { toast('⚠️ Informe seu peso', 'error'); return; }
+  if (!state.urina) { toast('⚠️ Selecione a cor da urina', 'error'); return; }
+  const sono = parseFloat(document.getElementById('sono-input').value.replace(',','.'));
+  if (isNaN(sono) || sono < 0) { toast('⚠️ Informe as horas de sono', 'error'); return; }
+  state.peso = peso; state.horas_sono = sono;
+  showStep(3);
+}
+
+// ── RECOVERY CARDS ────────────────────────────────────────
+const recoveryLabels = {
+  1:'Muito pouca recuperação', 2:'Pouca recuperação', 3:'Recuperação moderada',
+  4:'Boa recuperação', 5:'Muito boa recuperação', 6:'', 7:'Muito, muito boa recuperação',
+  8:'', 9:'', 10:'Totalmente recuperado'
+};
+function buildRecoveryCards() {
+  const wrap = document.getElementById('recovery-cards');
+  wrap.innerHTML = '';
+  for (let i = 1; i <= 10; i++) {
+    const d = document.createElement('div');
+    d.className = 'recovery-card';
+    d.innerHTML = `<div class="rec-num">${i}</div><div class="rec-label">${recoveryLabels[i]}</div>`;
+    d.onclick = () => {
+      state.recuperado = recoveryLabels[i] || String(i);
+      document.querySelectorAll('.recovery-card').forEach(c => c.classList.remove('selected'));
+      d.classList.add('selected');
+    };
+    wrap.appendChild(d);
+  }
+}
+
+// ── STEP 3 ────────────────────────────────────────────────
+function goStep3() {
+  if (!state.recuperado) { toast('⚠️ Selecione seu nível de recuperação', 'error'); return; }
+  showStep(4);
+}
+
+// ── WELLBEING CARDS ───────────────────────────────────────
+const wellbeingDefs = {
+  cansaco: {
+    id: 'cansaco-cards', label: 'Cansaço',
+    opts: ['Muito cansado','Mais cansado do normal','Normal','Descansado','Muito descansado']
+  },
+  qualidade_sono: {
+    id: 'sono-cards', label: 'Qualidade do Sono',
+    opts: ['Insônia','Sono agitado','Dificuldade para adormecer','Bom sono','Muito tranquilo']
+  },
+  dor_muscular: {
+    id: 'dor-cards', label: 'Dor Muscular',
+    opts: ['Muito dolorido','Sinto-me dolorido','Normal','Sinto-me bem','Sinto-me ótimo']
+  },
+  estresse: {
+    id: 'estresse-cards', label: 'Estresse',
+    opts: ['Muito estressado','Sinto-me estressado','Normal','Sossegado','Muito sossegado']
+  },
+  humor: {
+    id: 'humor-cards', label: 'Humor',
+    opts: ['Irritado e para baixo','Bravo com todos','Pouco interessado','Bem humorado','Muito positivo']
+  }
+};
+
+function buildWellbeingCards() {
+  Object.entries(wellbeingDefs).forEach(([field, def]) => {
+    const wrap = document.getElementById(def.id);
+    wrap.innerHTML = '';
+    def.opts.forEach((label, i) => {
+      const num = i + 1;
+      const d = document.createElement('div');
+      d.className = 'option-card';
+      d.innerHTML = `<span class="opt-num">${num}</span><div class="opt-label">${label}</div>`;
+      d.onclick = () => {
+        state[field] = label;
+        wrap.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+        d.classList.add('selected');
+      };
+      wrap.appendChild(d);
+    });
+  });
+}
+
+// ── STEP 4 ────────────────────────────────────────────────
+function goStep4() {
+  const required = ['cansaco','qualidade_sono','dor_muscular','estresse','humor'];
+  for (const f of required) {
+    if (!state[f]) { toast('⚠️ Responda todas as perguntas de bem-estar', 'error'); return; }
+  }
+  showStep(5);
+}
+
+// ── PAIN TAGS ─────────────────────────────────────────────
+const painOptions = [
+  'Pescoço e Trapézio','Ombros','Costas (Parte Superior)','Lombar',
+  'Braços e Antebraços','Peitoral','Abdômen','Glúteos','Coxas','Panturrilhas','Outros'
+];
+function buildPainTags() {
+  const wrap = document.getElementById('pain-tags');
+  wrap.innerHTML = '';
+  painOptions.forEach(label => {
+    const t = document.createElement('div');
+    t.className = 'pain-tag';
+    t.textContent = label;
+    t.onclick = () => {
+      if (state.dores.includes(label)) {
+        state.dores = state.dores.filter(d => d !== label);
+        t.classList.remove('selected');
+      } else {
+        state.dores.push(label);
+        t.classList.add('selected');
+      }
+    };
+    wrap.appendChild(t);
+  });
+}
+
+// ── SUBMIT ────────────────────────────────────────────────
+async function submitForm() {
+  const btn = document.getElementById('btn-submit');
+  const txt = document.getElementById('submit-text');
+  const sp  = document.getElementById('submit-spinner');
+  btn.disabled = true; txt.style.display = 'none'; sp.style.display = 'block';
+
+  try {
+    // Cadastrar novo aluno
+    if (state.isNew) {
+      const { error: e1 } = await sb.from('cadastro_aluno').upsert({
+        cpf: state.cpf, nome: state.regNome,
+        nascimento: state.regNasc, categoria: state.regCat, modalidade: state.regMod
+      });
+      if (e1) throw e1;
+    }
+
+    // Formata data
+    const now = new Date();
+    const dd = String(now.getDate()).padStart(2,'0');
+    const mm = String(now.getMonth()+1).padStart(2,'0');
+    const yyyy = now.getFullYear();
+    const hh = String(now.getHours()).padStart(2,'0');
+    const min = String(now.getMinutes()).padStart(2,'0');
+    const data_resposta = `${dd}/${mm}/${yyyy} ${hh}:${min}`;
+
+    const dores_locais = state.dores.length ? state.dores.join(', ') : 'Nenhuma';
+
+    const { error: e2 } = await sb.from('respostas').insert({
+      data_resposta, cpf: state.cpf,
+      sexo: state.sexo, menstruou: state.menstruou,
+      menst_duracao: state.menst_duracao, menst_vezes: state.menst_vezes,
+      peso: state.peso, urina: state.urina,
+      horas_sono: state.horas_sono, recuperado: state.recuperado,
+      cansaco: state.cansaco, qualidade_sono: state.qualidade_sono,
+      dor_muscular: state.dor_muscular, estresse: state.estresse,
+      humor: state.humor, dores_locais
+    });
+    if (e2) throw e2;
+
+    // Show success
+    document.getElementById('progress-wrap').style.display = 'none';
+    for (let i = 1; i <= 5; i++) {
+      const el = document.getElementById(`step-${i}`);
+      if (el) el.style.display = 'none';
+    }
+    document.getElementById('success-screen').classList.add('show');
+
+  } catch (err) {
+    console.error(err);
+    toast('❌ Erro ao enviar. Tente novamente.', 'error');
+    btn.disabled = false; txt.style.display = 'block'; sp.style.display = 'none';
+  }
+}
+
+// ── RESET ─────────────────────────────────────────────────
+function resetForm() {
+  location.reload();
+}
+
+// ── INIT ──────────────────────────────────────────────────
+initDots();
+updateProgress(1);
+buildRecoveryCards();
+buildWellbeingCards();
+buildPainTags();
+</script>
+</body>
+</html>

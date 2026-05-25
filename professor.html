@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Painel do Professor — Clube Paineiras do Morumby</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --pink: #e0007a;
+    --pink-light: #ff3399;
+    --pink-glow: rgba(224,0,122,0.12);
+    --pink-border: rgba(224,0,122,0.25);
+    --bg: #f0f0f4;
+    --surface: #ffffff;
+    --surface2: #f8f8fb;
+    --border: #e4e4ec;
+    --text: #16162a;
+    --text2: #4a4a6a;
+    --text3: #8888aa;
+    --danger: #ff3b3b;
+    --danger-bg: #fff0f0;
+    --danger-border: #ffcccc;
+    --warn: #ff8800;
+    --warn-bg: #fff8f0;
+    --warn-border: #ffd4aa;
+    --success: #00b848;
+    --shadow: 0 2px 16px rgba(0,0,0,0.06);
+    --shadow-lg: 0 8px 40px rgba(0,0,0,0.1);
+    --radius: 14px;
+    --radius-sm: 8px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: #000;
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    height: 64px;
+    position: sticky; top: 0; z-index: 100;
+    box-shadow: 0 2px 24px rgba(0,0,0,0.5);
+  }
+  .logo-circle {
+    width: 40px; height: 40px; border-radius: 50%;
+    border: 2px solid var(--pink);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .logo-circle svg { width: 24px; height: 24px; }
+  .header-title h1 { font-family: 'Sora', sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--pink); }
+  .header-title p { font-size: 0.7rem; color: #888; margin-top: 1px; }
+  .header-badge {
+    margin-left: auto;
+    background: rgba(224,0,122,0.15);
+    border: 1px solid var(--pink-border);
+    color: var(--pink);
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 5px 12px;
+    border-radius: 99px;
+    display: flex; align-items: center; gap: 5px;
+  }
+  .header-badge::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--pink); display: block; }
+  .header-link {
+    color: #888; font-size: 0.78rem; text-decoration: none;
+    padding: 6px 14px; border: 1px solid #333; border-radius: 20px;
+    transition: all .2s; margin-left: 10px;
+  }
+  .header-link:hover { color: #fff; border-color: #666; }
+
+  /* ── MAIN ── */
+  main { max-width: 1200px; margin: 0 auto; padding: 32px 20px 60px; }
+
+  /* ── STATS ROW ── */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 22px;
+    box-shadow: var(--shadow);
+    transition: transform .2s, box-shadow .2s;
+  }
+  .stat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+  .stat-card.pink { border-left: 4px solid var(--pink); }
+  .stat-card.red  { border-left: 4px solid var(--danger); }
+  .stat-card.warn { border-left: 4px solid var(--warn); }
+  .stat-card.green{ border-left: 4px solid var(--success); }
+  .stat-label { font-size: 0.7rem; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; }
+  .stat-val { font-family: 'Sora', sans-serif; font-size: 2rem; font-weight: 800; color: var(--text); }
+  .stat-val.pink-v { color: var(--pink); }
+  .stat-val.red-v  { color: var(--danger); }
+  .stat-val.warn-v { color: var(--warn); }
+  .stat-val.green-v{ color: var(--success); }
+
+  /* ── CONTROLS ── */
+  .controls {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow);
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .search-wrap {
+    flex: 1; min-width: 220px;
+    position: relative;
+  }
+  .search-wrap svg {
+    position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+    width: 16px; height: 16px; stroke: var(--text3); fill: none;
+    stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+    pointer-events: none;
+  }
+  .search-wrap input {
+    width: 100%; padding: 10px 16px 10px 38px;
+    border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+    font-family: 'Inter', sans-serif; font-size: 0.88rem; color: var(--text);
+    background: var(--surface2); outline: none; transition: border-color .2s, box-shadow .2s;
+  }
+  .search-wrap input:focus { border-color: var(--pink); box-shadow: 0 0 0 3px rgba(224,0,122,0.1); }
+  .search-wrap input::placeholder { color: var(--text3); }
+  .filter-btns { display: flex; gap: 6px; flex-wrap: wrap; }
+  .filter-btn {
+    padding: 8px 14px; border-radius: 99px; font-size: 0.78rem; font-weight: 600;
+    border: 1.5px solid var(--border); background: var(--surface2);
+    color: var(--text2); cursor: pointer; transition: all .2s;
+    font-family: 'Inter', sans-serif;
+  }
+  .filter-btn:hover { border-color: var(--pink-border); color: var(--pink); }
+  .filter-btn.active { background: var(--pink); border-color: var(--pink); color: #fff; }
+  .refresh-btn {
+    padding: 9px 16px; border-radius: var(--radius-sm);
+    background: var(--pink); color: #fff; border: none;
+    font-family: 'Sora', sans-serif; font-size: 0.82rem; font-weight: 600;
+    cursor: pointer; transition: all .2s; display: flex; align-items: center; gap: 5px;
+    box-shadow: 0 2px 10px rgba(224,0,122,0.25);
+  }
+  .refresh-btn:hover { background: var(--pink-light); transform: translateY(-1px); }
+
+  /* ── TABLE WRAP ── */
+  .table-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  .table-header {
+    padding: 16px 20px 12px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 8px;
+  }
+  .table-title { font-family: 'Sora', sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--text); }
+  .table-count { font-size: 0.75rem; color: var(--text3); }
+  .table-container { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; }
+  thead { background: var(--surface2); }
+  th {
+    padding: 11px 14px;
+    text-align: left;
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+    cursor: pointer;
+    user-select: none;
+    transition: color .2s;
+  }
+  th:hover { color: var(--pink); }
+  td {
+    padding: 11px 14px;
+    font-size: 0.82rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+  }
+  tr:last-child td { border-bottom: none; }
+  tbody tr { transition: background .15s; }
+  tbody tr:hover { background: var(--surface2); }
+  tbody tr.row-risk { background: var(--danger-bg); }
+  tbody tr.row-risk:hover { background: #ffe8e8; }
+  tbody tr.row-warn { background: var(--warn-bg); }
+  tbody tr.row-warn:hover { background: #ffeedd; }
+
+  /* ── BADGES ── */
+  .badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 3px 9px; border-radius: 99px;
+    font-size: 0.65rem; font-weight: 700;
+  }
+  .badge-risk { background: var(--danger-bg); color: var(--danger); border: 1px solid var(--danger-border); }
+  .badge-warn { background: var(--warn-bg); color: var(--warn); border: 1px solid var(--warn-border); }
+  .badge-ok   { background: #f0fff6; color: var(--success); border: 1px solid #b3ecc8; }
+  .badge::before { content: '●'; font-size: 0.5rem; }
+
+  /* ── PAIN PILL ── */
+  .pain-cell { max-width: 200px; }
+  .pain-pills { display: flex; flex-wrap: wrap; gap: 3px; }
+  .pain-pill {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 99px; padding: 2px 7px;
+    font-size: 0.6rem; color: var(--text2);
+  }
+  .pain-pill.many { background: var(--danger-bg); border-color: var(--danger-border); color: var(--danger); }
+
+  /* ── PAGINATION ── */
+  .pagination {
+    display: flex; align-items: center; justify-content: center;
+    gap: 6px; padding: 16px 20px;
+    border-top: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+  .page-btn {
+    width: 34px; height: 34px; border-radius: var(--radius-sm);
+    border: 1.5px solid var(--border); background: var(--surface2);
+    font-family: 'Sora', sans-serif; font-size: 0.82rem; font-weight: 600;
+    color: var(--text2); cursor: pointer; transition: all .2s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .page-btn:hover { border-color: var(--pink-border); color: var(--pink); }
+  .page-btn.active { background: var(--pink); border-color: var(--pink); color: #fff; }
+  .page-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+  .page-info { font-size: 0.78rem; color: var(--text3); padding: 0 6px; }
+
+  /* ── EMPTY / LOADING ── */
+  .empty-state {
+    text-align: center; padding: 60px 20px;
+  }
+  .empty-state svg { width: 48px; height: 48px; stroke: var(--border); fill: none; stroke-width: 1.5; margin-bottom: 16px; }
+  .empty-state p { color: var(--text3); font-size: 0.88rem; }
+  .loading-state { text-align: center; padding: 60px; color: var(--text3); font-size: 0.88rem; }
+  .spinner { width: 28px; height: 28px; border: 3px solid var(--border); border-top-color: var(--pink); border-radius: 50%; animation: spin .7s linear infinite; margin: 0 auto 14px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── EXPAND ROW ── */
+  .detail-row { display: none; background: var(--surface2) !important; }
+  .detail-row.open { display: table-row; }
+  .detail-cell { padding: 14px 20px !important; }
+  .detail-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; }
+  .detail-item { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 12px; }
+  .detail-key { font-size: 0.65rem; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
+  .detail-val { font-size: 0.82rem; font-weight: 500; color: var(--text); }
+  .expand-btn { background: none; border: none; cursor: pointer; color: var(--text3); transition: color .2s; padding: 2px; }
+  .expand-btn:hover { color: var(--pink); }
+  .expand-btn svg { width: 16px; height: 16px; display: block; transition: transform .2s; }
+  .expand-btn.open svg { transform: rotate(180deg); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .stats-row { grid-template-columns: 1fr 1fr; }
+    th:nth-child(n+7), td:nth-child(n+7) { display: none; }
+    header { padding: 0 16px; }
+    .header-badge { display: none; }
+  }
+  @media (max-width: 480px) {
+    .stats-row { grid-template-columns: 1fr 1fr; }
+    th:nth-child(n+5), td:nth-child(n+5) { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-circle">
+    <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="20" cy="20" r="18" stroke="#e0007a" stroke-width="2"/>
+      <path d="M20 6 L20 20 M20 20 L28 13 M20 20 L12 13 M20 20 L26 27 M20 20 L14 27" stroke="#e0007a" stroke-width="2" stroke-linecap="round"/>
+      <circle cx="20" cy="20" r="2.5" fill="#e0007a"/>
+    </svg>
+  </div>
+  <div class="header-title">
+    <h1>Clube Paineiras do Morumby</h1>
+    <p>Painel do Professor</p>
+  </div>
+  <div class="header-badge">Ao vivo</div>
+  <a href="index.html" class="header-link">← Questionário</a>
+</header>
+
+<main>
+
+  <!-- STATS -->
+  <div class="stats-row" id="stats-row">
+    <div class="stat-card pink">
+      <div class="stat-label">Total de Respostas</div>
+      <div class="stat-val pink-v" id="stat-total">—</div>
+    </div>
+    <div class="stat-card red">
+      <div class="stat-label">⚠️ Risco</div>
+      <div class="stat-val red-v" id="stat-risk">—</div>
+    </div>
+    <div class="stat-card warn">
+      <div class="stat-label">Atenção</div>
+      <div class="stat-val warn-v" id="stat-warn">—</div>
+    </div>
+    <div class="stat-card green">
+      <div class="stat-label">✓ OK</div>
+      <div class="stat-val green-v" id="stat-ok">—</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Atletas únicos</div>
+      <div class="stat-val" id="stat-unique">—</div>
+    </div>
+  </div>
+
+  <!-- CONTROLS -->
+  <div class="controls">
+    <div class="search-wrap">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" id="search-input" placeholder="Buscar por CPF ou nome do atleta…" oninput="renderTable()"/>
+    </div>
+    <div class="filter-btns">
+      <button class="filter-btn active" onclick="setFilter('todos', this)">Todos</button>
+      <button class="filter-btn" onclick="setFilter('risco', this)">⚠️ Risco</button>
+      <button class="filter-btn" onclick="setFilter('atencao', this)">Atenção</button>
+      <button class="filter-btn" onclick="setFilter('ok', this)">✓ OK</button>
+    </div>
+    <button class="refresh-btn" onclick="loadData()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+      Atualizar
+    </button>
+  </div>
+
+  <!-- TABLE -->
+  <div class="table-wrap">
+    <div class="table-header">
+      <span class="table-title">Respostas dos Atletas</span>
+      <span class="table-count" id="table-count">—</span>
+    </div>
+    <div class="table-container">
+      <table id="main-table">
+        <thead>
+          <tr>
+            <th></th>
+            <th onclick="sortBy('data_resposta')">Data ↕</th>
+            <th onclick="sortBy('cpf')">CPF ↕</th>
+            <th>Atleta</th>
+            <th onclick="sortBy('peso')">Peso</th>
+            <th>Urina</th>
+            <th>Sono (h)</th>
+            <th>Recuperação</th>
+            <th>Cansaço</th>
+            <th>Estresse</th>
+            <th>Humor</th>
+            <th>Dores</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="table-body">
+          <tr>
+            <td colspan="13">
+              <div class="loading-state">
+                <div class="spinner"></div>
+                Carregando dados…
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="pagination" id="pagination"></div>
+  </div>
+
+</main>
+
+<script>
+// ── SUPABASE ──────────────────────────────────────────────
+const { createClient } = supabase;
+const sb = createClient(
+  "https://qgrqhyudrtaooqxggvkc.supabase.co",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFncnFoeXVkcnRhb29xeGdndmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk2NTI3MTMsImV4cCI6MjA5NTIyODcxM30.7m4vMCGCBZAbZ-5eJRCoavJjxQk6Kdhf_RVRugkeTkA"
+);
+
+// ── STATE ─────────────────────────────────────────────────
+let allData = [];
+let athletes = {}; // cpf -> name lookup
+let currentFilter = 'todos';
+let currentPage = 1;
+const PAGE_SIZE = 20;
+let sortField = 'data_resposta';
+let sortAsc = false;
+let expandedRow = null;
+
+// ── RISK LOGIC ────────────────────────────────────────────
+function calcRisk(row) {
+  let score = 0;
+  const HIGH_RISK_VALS = ['Muito cansado','Muito estressado','Muito dolorido','Insônia','Irritado e para baixo'];
+  const WARN_VALS = ['Mais cansado do normal','Sinto-me estressado','Sinto-me dolorido','Sono agitado','Bravo com todos'];
+  if (HIGH_RISK_VALS.includes(row.cansaco)) score += 2;
+  if (WARN_VALS.includes(row.cansaco)) score += 1;
+  if (HIGH_RISK_VALS.includes(row.estresse)) score += 2;
+  if (WARN_VALS.includes(row.estresse)) score += 1;
+  if (HIGH_RISK_VALS.includes(row.dor_muscular)) score += 1;
+  if (WARN_VALS.includes(row.dor_muscular)) score += 1;
+  if (HIGH_RISK_VALS.includes(row.humor)) score += 1;
+  if (WARN_VALS.includes(row.humor)) score += 1;
+  // Many pain locations
+  if (row.dores_locais && row.dores_locais !== 'Nenhuma') {
+    const count = row.dores_locais.split(',').length;
+    if (count >= 4) score += 2;
+    else if (count >= 2) score += 1;
+  }
+  // Recovery
+  if (row.recuperado && row.recuperado.toLowerCase().includes('muito pouca')) score += 2;
+  else if (row.recuperado && row.recuperado.toLowerCase().includes('pouca')) score += 1;
+  if (score >= 4) return 'risco';
+  if (score >= 2) return 'atencao';
+  return 'ok';
+}
+
+// ── LOAD DATA ─────────────────────────────────────────────
+async function loadData() {
+  document.getElementById('table-body').innerHTML = `
+    <tr><td colspan="13"><div class="loading-state"><div class="spinner"></div>Carregando dados…</div></td></tr>`;
+
+  // Load athletes for name lookup
+  const { data: aths } = await sb.from('cadastro_aluno').select('cpf,nome,categoria,modalidade');
+  if (aths) aths.forEach(a => { athletes[a.cpf] = a; });
+
+  // Load responses
+  const { data, error } = await sb.from('respostas').select('*').order('id', { ascending: false });
+  if (error) {
+    document.getElementById('table-body').innerHTML = `<tr><td colspan="13"><div class="empty-state"><p>Erro ao carregar dados: ${error.message}</p></div></td></tr>`;
+    return;
+  }
+
+  allData = (data || []).map(r => ({ ...r, _risk: calcRisk(r) }));
+  updateStats();
+  currentPage = 1;
+  renderTable();
+}
+
+// ── STATS ─────────────────────────────────────────────────
+function updateStats() {
+  const risk = allData.filter(r => r._risk === 'risco').length;
+  const warn = allData.filter(r => r._risk === 'atencao').length;
+  const ok   = allData.filter(r => r._risk === 'ok').length;
+  const unique = new Set(allData.map(r => r.cpf)).size;
+  document.getElementById('stat-total').textContent  = allData.length;
+  document.getElementById('stat-risk').textContent   = risk;
+  document.getElementById('stat-warn').textContent   = warn;
+  document.getElementById('stat-ok').textContent     = ok;
+  document.getElementById('stat-unique').textContent = unique;
+}
+
+// ── FILTER ────────────────────────────────────────────────
+function setFilter(f, btn) {
+  currentFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentPage = 1;
+  renderTable();
+}
+
+// ── SORT ──────────────────────────────────────────────────
+function sortBy(field) {
+  if (sortField === field) sortAsc = !sortAsc;
+  else { sortField = field; sortAsc = false; }
+  renderTable();
+}
+
+// ── RENDER TABLE ──────────────────────────────────────────
+function renderTable() {
+  const query = document.getElementById('search-input').value.toLowerCase().trim();
+
+  let rows = allData.filter(r => {
+    const matchFilter = currentFilter === 'todos' || r._risk === currentFilter;
+    const athName = athletes[r.cpf] ? athletes[r.cpf].nome.toLowerCase() : '';
+    const matchSearch = !query || r.cpf.includes(query) || athName.includes(query);
+    return matchFilter && matchSearch;
+  });
+
+  // Sort
+  rows.sort((a, b) => {
+    let va = a[sortField] ?? ''; let vb = b[sortField] ?? '';
+    if (!isNaN(va) && !isNaN(vb)) { va = Number(va); vb = Number(vb); }
+    if (va < vb) return sortAsc ? -1 : 1;
+    if (va > vb) return sortAsc ? 1 : -1;
+    return 0;
+  });
+
+  document.getElementById('table-count').textContent = `${rows.length} registro${rows.length !== 1 ? 's' : ''}`;
+
+  const totalPages = Math.max(1, Math.ceil(rows.length / PAGE_SIZE));
+  if (currentPage > totalPages) currentPage = totalPages;
+  const pageRows = rows.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+
+  const tbody = document.getElementById('table-body');
+
+  if (!rows.length) {
+    tbody.innerHTML = `<tr><td colspan="13"><div class="empty-state">
+      <svg viewBox="0 0 24 24"><path d="M9 9h.01M15 9h.01M9 13a3.5 3.5 0 0 0 6 0"/><circle cx="12" cy="12" r="10"/></svg>
+      <p>Nenhum resultado encontrado.</p></div></td></tr>`;
+    document.getElementById('pagination').innerHTML = '';
+    return;
+  }
+
+  tbody.innerHTML = '';
+  pageRows.forEach(row => {
+    const ath = athletes[row.cpf];
+    const nome = ath ? ath.nome : '—';
+    const riskCls = row._risk === 'risco' ? 'row-risk' : row._risk === 'atencao' ? 'row-warn' : '';
+    const badgeHtml = row._risk === 'risco'
+      ? `<span class="badge badge-risk">Risco</span>`
+      : row._risk === 'atencao'
+      ? `<span class="badge badge-warn">Atenção</span>`
+      : `<span class="badge badge-ok">OK</span>`;
+
+    // Pain pills
+    let painHtml = '—';
+    if (row.dores_locais && row.dores_locais !== 'Nenhuma') {
+      const parts = row.dores_locais.split(',').map(s => s.trim());
+      const many = parts.length >= 4;
+      painHtml = `<div class="pain-pills">${parts.map(p => `<span class="pain-pill${many?' many':''}">${p}</span>`).join('')}</div>`;
+    }
+
+    // Main row
+    const tr = document.createElement('tr');
+    tr.className = riskCls;
+    tr.id = `row-${row.id}`;
+    tr.innerHTML = `
+      <td>
+        <button class="expand-btn" id="expand-${row.id}" onclick="toggleDetail(${row.id})">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9"/>
+          </svg>
+        </button>
+      </td>
+      <td style="white-space:nowrap;color:var(--text3);font-size:0.75rem">${row.data_resposta || '—'}</td>
+      <td style="font-family:monospace;font-size:0.75rem;color:var(--text2)">${row.cpf}</td>
+      <td style="font-weight:600">${nome}</td>
+      <td>${row.peso ? row.peso + ' kg' : '—'}</td>
+      <td style="font-size:0.78rem">${row.urina || '—'}</td>
+      <td>${row.horas_sono !== null ? row.horas_sono + 'h' : '—'}</td>
+      <td style="font-size:0.75rem;max-width:130px">${row.recuperado || '—'}</td>
+      <td style="font-size:0.78rem">${row.cansaco || '—'}</td>
+      <td style="font-size:0.78rem">${row.estresse || '—'}</td>
+      <td style="font-size:0.78rem">${row.humor || '—'}</td>
+      <td class="pain-cell">${painHtml}</td>
+      <td>${badgeHtml}</td>
+    `;
+    tbody.appendChild(tr);
+
+    // Detail row
+    const dtr = document.createElement('tr');
+    dtr.className = 'detail-row';
+    dtr.id = `detail-${row.id}`;
+    dtr.innerHTML = `<td colspan="13" class="detail-cell">
+      <div class="detail-grid">
+        <div class="detail-item"><div class="detail-key">Sexo</div><div class="detail-val">${row.sexo || '—'}</div></div>
+        <div class="detail-item"><div class="detail-key">Menstruou</div><div class="detail-val">${row.menstruou || 'N/A'}</div></div>
+        <div class="detail-item"><div class="detail-key">Duração Normal</div><div class="detail-val">${row.menst_duracao || 'N/A'}</div></div>
+        <div class="detail-item"><div class="detail-key">Mais de 1x/mês</div><div class="detail-val">${row.menst_vezes || 'N/A'}</div></div>
+        <div class="detail-item"><div class="detail-key">Qualidade do Sono</div><div class="detail-val">${row.qualidade_sono || '—'}</div></div>
+        <div class="detail-item"><div class="detail-key">Dor Muscular (geral)</div><div class="detail-val">${row.dor_muscular || '—'}</div></div>
+        <div class="detail-item" style="grid-column: span 2"><div class="detail-key">Dores Locais</div><div class="detail-val">${row.dores_locais || 'Nenhuma'}</div></div>
+        ${ath ? `
+        <div class="detail-item"><div class="detail-key">Categoria</div><div class="detail-val">${ath.categoria}</div></div>
+        <div class="detail-item"><div class="detail-key">Modalidade</div><div class="detail-val">${ath.modalidade}</div></div>
+        ` : ''}
+      </div>
+    </td>`;
+    tbody.appendChild(dtr);
+  });
+
+  renderPagination(totalPages, rows.length);
+}
+
+// ── EXPAND DETAIL ─────────────────────────────────────────
+function toggleDetail(id) {
+  const dtr = document.getElementById(`detail-${id}`);
+  const btn = document.getElementById(`expand-${id}`);
+  if (!dtr) return;
+  const isOpen = dtr.classList.contains('open');
+  // Close all
+  document.querySelectorAll('.detail-row.open').forEach(r => r.classList.remove('open'));
+  document.querySelectorAll('.expand-btn.open').forEach(b => b.classList.remove('open'));
+  if (!isOpen) {
+    dtr.classList.add('open');
+    btn.classList.add('open');
+  }
+}
+
+// ── PAGINATION ────────────────────────────────────────────
+function renderPagination(totalPages, totalRows) {
+  const wrap = document.getElementById('pagination');
+  if (totalPages <= 1) { wrap.innerHTML = ''; return; }
+  let html = '';
+  html += `<button class="page-btn" onclick="goPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>‹</button>`;
+  const range = 2;
+  for (let i = 1; i <= totalPages; i++) {
+    if (i === 1 || i === totalPages || Math.abs(i - currentPage) <= range) {
+      html += `<button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="goPage(${i})">${i}</button>`;
+    } else if (Math.abs(i - currentPage) === range + 1) {
+      html += `<span class="page-info">…</span>`;
+    }
+  }
+  html += `<button class="page-btn" onclick="goPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>›</button>`;
+  html += `<span class="page-info">Página ${currentPage} de ${totalPages}</span>`;
+  wrap.innerHTML = html;
+}
+
+function goPage(n) {
+  currentPage = n;
+  renderTable();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ── INIT ──────────────────────────────────────────────────
+loadData();
+</script>
+</body>
+</html>
