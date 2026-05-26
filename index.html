@@ -215,41 +215,42 @@
   .sex-card .sex-icon { font-size: 1.8rem; margin-bottom: 6px; }
   .sex-card .sex-label { font-family: 'Sora', sans-serif; font-weight: 600; font-size: 0.9rem; color: var(--text); }
 
-  /* ── OPTION CARDS (1-5 scales) ── */
+  /* ── OPTION CARDS (descrições textuais - sem número) ── */
   .option-cards { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
   .option-card {
-    flex: 1; min-width: 80px;
+    flex: 1; min-width: 90px;
     border: 2px solid var(--border);
     border-radius: var(--radius-sm);
-    padding: 12px 8px;
+    padding: 13px 10px;
     cursor: pointer;
     text-align: center;
     transition: all .2s;
     background: var(--surface2);
+    display: flex; align-items: center; justify-content: center;
   }
   .option-card:hover { border-color: var(--pink-border); box-shadow: 0 4px 16px rgba(224,0,122,0.1); transform: translateY(-2px); }
   .option-card.selected { border-color: var(--pink); background: var(--pink-glow); }
-  .option-card .opt-num { font-family: 'Sora', sans-serif; font-weight: 700; font-size: 1.2rem; color: var(--pink); display: block; }
-  .option-card .opt-label { font-size: 0.65rem; color: var(--text2); line-height: 1.3; margin-top: 4px; }
+  .option-card .opt-label { font-size: 0.72rem; font-weight: 600; color: var(--text2); line-height: 1.3; }
   .option-card.selected .opt-label { color: var(--pink); }
 
-  /* ── RECOVERY CARDS (1-10) ── */
+  /* ── RECOVERY CARDS (1-10 - descrição apenas) ── */
   .recovery-cards { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
   .recovery-card {
     width: calc(20% - 7px);
-    min-width: 50px;
+    min-width: 80px;
     border: 2px solid var(--border);
     border-radius: var(--radius-sm);
-    padding: 10px 4px;
+    padding: 12px 6px;
     cursor: pointer;
     text-align: center;
     transition: all .2s;
     background: var(--surface2);
+    display: flex; align-items: center; justify-content: center;
   }
   .recovery-card:hover { border-color: var(--pink-border); transform: translateY(-2px); }
   .recovery-card.selected { border-color: var(--pink); background: var(--pink-glow); }
-  .recovery-card .rec-num { font-family: 'Sora', sans-serif; font-weight: 700; font-size: 1.1rem; color: var(--pink); }
-  .recovery-card .rec-label { font-size: 0.55rem; color: var(--text3); margin-top: 3px; line-height: 1.2; }
+  .recovery-card .rec-label { font-size: 0.62rem; font-weight: 600; color: var(--text2); line-height: 1.3; }
+  .recovery-card.selected .rec-label { color: var(--pink); }
 
   /* ── URINE CARDS ── */
   .urine-cards { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
@@ -291,23 +292,6 @@
   }
   .yn-card:hover { border-color: var(--pink-border); transform: translateY(-2px); }
   .yn-card.selected { border-color: var(--pink); background: var(--pink-glow); color: var(--pink); }
-
-  /* ── PAIN TAGS ── */
-  .pain-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
-  .pain-tag {
-    border: 2px solid var(--border);
-    border-radius: 99px;
-    padding: 8px 14px;
-    cursor: pointer;
-    font-size: 0.78rem;
-    font-weight: 500;
-    color: var(--text2);
-    background: var(--surface2);
-    transition: all .2s;
-    user-select: none;
-  }
-  .pain-tag:hover { border-color: var(--pink-border); color: var(--pink); }
-  .pain-tag.selected { border-color: var(--pink); background: var(--pink); color: #fff; }
 
   /* ── SECTION LABEL ── */
   .section-label {
@@ -364,7 +348,7 @@
     padding: 12px 24px; border-radius: 99px;
     font-size: 0.85rem; font-weight: 500;
     opacity: 0; transition: all .3s;
-    z-index: 999; white-space: nowrap;
+    z-index: 9999; white-space: nowrap;
     pointer-events: none;
   }
   #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
@@ -403,12 +387,194 @@
   }
   @keyframes spin { to { transform: rotate(360deg); } }
 
+  /* ── DUPLICATE DAY SCREEN ── */
+  #duplicate-screen {
+    display: none;
+    background: var(--surface);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    padding: 36px;
+    text-align: center;
+    animation: fadeUp .35s ease both;
+  }
+  #duplicate-screen.show { display: block; }
+  .dup-icon { font-size: 3rem; margin-bottom: 16px; }
+  .dup-title { font-family: 'Sora', sans-serif; font-size: 1.15rem; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+  .dup-sub { font-size: 0.84rem; color: var(--text3); margin-bottom: 28px; }
+  .dup-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .dup-btns .btn { flex: 0 1 180px; }
+
+  /* ── BODY MAP / SVG PAIN ── */
+  .body-map-wrap {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 16px;
+  }
+  .body-map-side {
+    flex: 1; min-width: 140px; max-width: 200px;
+  }
+  .body-map-label {
+    text-align: center;
+    font-family: 'Sora', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 6px;
+  }
+  .body-map-side svg {
+    width: 100%;
+    height: auto;
+    cursor: default;
+  }
+  .body-region {
+    fill: #e8e8ec;
+    stroke: #ccc;
+    stroke-width: 1;
+    cursor: pointer;
+    transition: fill 0.2s, stroke 0.2s;
+  }
+  .body-region:hover { fill: #d0d0e0; stroke: var(--pink); }
+  .body-region.pain-low { fill: #6eb4f7; stroke: #3a8fd4; }
+  .body-region.pain-med { fill: #f7d86e; stroke: #c9a800; }
+  .body-region.pain-high { fill: #f76e6e; stroke: #d43a3a; }
+
+  /* ── INTENSITY POPUP ── */
+  .intensity-popup {
+    display: none;
+    position: fixed;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--surface);
+    border: 1.5px solid var(--pink-border);
+    border-radius: var(--radius);
+    padding: 24px;
+    box-shadow: 0 16px 50px rgba(0,0,0,0.2);
+    z-index: 9000;
+    width: 90%; max-width: 320px;
+    animation: fadeUp .25s ease;
+  }
+  .intensity-popup.show { display: block; }
+  .popup-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 8999;
+  }
+  .popup-overlay.show { display: block; }
+  .popup-title { font-family: 'Sora', sans-serif; font-size: 1rem; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+  .popup-region { font-size: 0.8rem; color: var(--pink); font-weight: 600; margin-bottom: 18px; }
+  .intensity-btns { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 16px; }
+  .int-btn {
+    padding: 12px 6px;
+    border-radius: var(--radius-sm);
+    border: 2px solid var(--border);
+    background: var(--surface2);
+    font-family: 'Sora', sans-serif;
+    font-size: 0.75rem; font-weight: 700;
+    cursor: pointer;
+    transition: all .2s;
+    text-align: center;
+  }
+  .int-btn.low  { }
+  .int-btn.med  { }
+  .int-btn.high { }
+  .int-btn:hover { transform: translateY(-2px); }
+  .int-btn.sel-low  { background: #6eb4f7; border-color: #3a8fd4; color: #fff; }
+  .int-btn.sel-med  { background: #f7d86e; border-color: #c9a800; color: #555; }
+  .int-btn.sel-high { background: #f76e6e; border-color: #d43a3a; color: #fff; }
+  .popup-remove {
+    width: 100%;
+    padding: 9px;
+    border-radius: var(--radius-sm);
+    border: 1.5px solid var(--border);
+    background: transparent;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.8rem;
+    color: var(--text3);
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .popup-remove:hover { border-color: var(--danger); color: var(--danger); }
+
+  /* ── OUTROS (free text) ── */
+  .outros-box {
+    display: none;
+    background: var(--surface2);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 14px;
+    margin-top: 12px;
+    animation: fadeUp .3s ease;
+  }
+  .outros-box.show { display: block; }
+  .outros-box textarea {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    color: var(--text);
+    background: var(--surface);
+    resize: vertical;
+    min-height: 70px;
+    outline: none;
+    transition: border-color .2s;
+    margin-bottom: 10px;
+  }
+  .outros-box textarea:focus { border-color: var(--pink); }
+  .outros-box label { font-size: 0.75rem; font-weight: 600; color: var(--text2); display: block; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.04em; }
+  .outros-intensity { display: flex; gap: 8px; }
+  .outros-int-btn {
+    flex: 1; padding: 10px 6px;
+    border-radius: var(--radius-sm);
+    border: 2px solid var(--border);
+    background: var(--surface);
+    font-family: 'Sora', sans-serif; font-size: 0.75rem; font-weight: 700;
+    cursor: pointer; transition: all .2s; text-align: center;
+  }
+  .outros-int-btn:hover { transform: translateY(-1px); }
+  .outros-int-btn.sel-low  { background: #6eb4f7; border-color: #3a8fd4; color: #fff; }
+  .outros-int-btn.sel-med  { background: #f7d86e; border-color: #c9a800; color: #555; }
+  .outros-int-btn.sel-high { background: #f76e6e; border-color: #d43a3a; color: #fff; }
+
+  /* ── LEGEND ── */
+  .pain-legend {
+    display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 12px;
+  }
+  .legend-item { display: flex; align-items: center; gap: 5px; font-size: 0.72rem; color: var(--text2); }
+  .legend-dot { width: 12px; height: 12px; border-radius: 3px; }
+
+  /* ── OUTROS TOGGLE BTN ── */
+  .outros-tag {
+    border: 2px solid var(--border);
+    border-radius: 99px;
+    padding: 9px 18px;
+    cursor: pointer;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--text2);
+    background: var(--surface2);
+    transition: all .2s;
+    user-select: none;
+    margin-top: 4px;
+    display: inline-block;
+  }
+  .outros-tag:hover { border-color: var(--pink-border); color: var(--pink); }
+  .outros-tag.selected { border-color: var(--pink); background: var(--pink-glow); color: var(--pink); }
+
   /* ── RESPONSIVE ── */
   @media (max-width: 520px) {
     .step-card { padding: 24px 18px 20px; }
-    .recovery-card { width: calc(25% - 8px); }
+    .recovery-card { width: calc(33.33% - 8px); min-width: 70px; }
     .sex-cards { grid-template-columns: 1fr 1fr; }
-    .option-card { min-width: 60px; }
+    .option-card { min-width: 70px; }
+    .body-map-side { min-width: 130px; max-width: 160px; }
   }
 </style>
 </head>
@@ -463,20 +629,40 @@
       </div>
     </div>
 
+    <!-- Cadastro novo atleta — campos na ordem correta de UX -->
     <div class="new-member-box" id="new-member-box">
       <div class="new-member-title">⚠️ CPF não encontrado — Faça seu cadastro</div>
+
       <div class="field">
         <label>Nome Completo</label>
         <input type="text" id="reg-nome" placeholder="Seu nome completo"/>
       </div>
+
       <div class="field">
         <label>Data de Nascimento</label>
         <input type="text" id="reg-nascimento" placeholder="DD/MM/AAAA" maxlength="10"/>
       </div>
+
+      <!-- Sexo Biológico: SOMENTE no cadastro novo, logo após nascimento -->
+      <div class="field">
+        <label>Sexo Biológico</label>
+      </div>
+      <div class="sex-cards" id="reg-sex-cards">
+        <div class="sex-card" id="reg-sex-m" onclick="selectRegSexo('Masculino')">
+          <div class="sex-icon">♂</div>
+          <div class="sex-label">Masculino</div>
+        </div>
+        <div class="sex-card" id="reg-sex-f" onclick="selectRegSexo('Feminino')">
+          <div class="sex-icon">♀</div>
+          <div class="sex-label">Feminino</div>
+        </div>
+      </div>
+
       <div class="field">
         <label>Categoria</label>
         <input type="text" id="reg-categoria" placeholder="Ex: Sub-17, Adulto..."/>
       </div>
+
       <div class="field">
         <label>Modalidade</label>
         <input type="text" id="reg-modalidade" placeholder="Ex: Natação, Tênis..."/>
@@ -490,27 +676,26 @@
     </div>
   </div>
 
-  <!-- ════ STEP 2: Dados Pessoais + Físicos ════ -->
+  <!-- ════ TELA DUPLICADO ════ -->
+  <div id="duplicate-screen">
+    <div class="dup-icon">📋</div>
+    <div class="dup-title">Você já respondeu hoje!</div>
+    <div class="dup-sub">Já existe uma resposta sua para hoje. Deseja alterar sua resposta atual?</div>
+    <div class="dup-btns">
+      <button class="btn btn-secondary" onclick="duplicateNo()">Não, sair</button>
+      <button class="btn btn-primary" onclick="duplicateYes()">Sim, alterar</button>
+    </div>
+  </div>
+
+  <!-- ════ STEP 2: Dados Físicos ════ -->
   <div class="step-card" id="step-2" style="display:none">
     <div class="step-icon">
       <svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
     </div>
-    <div class="step-title">Dados Pessoais & Físicos</div>
+    <div class="step-title">Dados Físicos</div>
     <div class="step-sub">Informações sobre seu corpo hoje</div>
 
-    <div class="section-label">Sexo Biológico</div>
-    <div class="sex-cards">
-      <div class="sex-card" onclick="selectSexo('Masculino', this)">
-        <div class="sex-icon">♂</div>
-        <div class="sex-label">Masculino</div>
-      </div>
-      <div class="sex-card" onclick="selectSexo('Feminino', this)">
-        <div class="sex-icon">♀</div>
-        <div class="sex-label">Feminino</div>
-      </div>
-    </div>
-
-    <!-- Menstruação -->
+    <!-- Menstruação (apenas para Feminino) -->
     <div class="menst-section" id="menst-section">
       <div class="section-label">Ciclo Menstrual</div>
       <div class="field"><label>Você menstruou esse mês?</label></div>
@@ -530,9 +715,9 @@
           <div class="yn-card" onclick="selectYN('menst_vezes', 'Não', this)">✗ Não</div>
         </div>
       </div>
+      <div class="divider"></div>
     </div>
 
-    <div class="divider"></div>
     <div class="section-label">Peso & Hidratação</div>
     <div class="field">
       <label>Peso atual (kg)</label>
@@ -584,7 +769,7 @@
     <div class="step-title">Recuperação</div>
     <div class="step-sub">Como você se sente para o treino de hoje?</div>
 
-    <div class="section-label">Nível de Recuperação (1 a 10)</div>
+    <div class="section-label">Nível de Recuperação</div>
     <div class="recovery-cards" id="recovery-cards"></div>
 
     <div class="btn-row">
@@ -607,7 +792,7 @@
     <div class="section-label">Qualidade do Sono</div>
     <div class="option-cards" id="sono-cards"></div>
 
-    <div class="section-label">Dor Muscular</div>
+    <div class="section-label">Dor Muscular Geral</div>
     <div class="option-cards" id="dor-cards"></div>
 
     <div class="section-label">Nível de Estresse</div>
@@ -625,12 +810,112 @@
   <!-- ════ STEP 5: Dores Musculares ════ -->
   <div class="step-card" id="step-5" style="display:none">
     <div class="step-icon">
-      <svg viewBox="0 0 24 24"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>
+      <svg viewBox="0 0 24 24"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/></svg>
     </div>
     <div class="step-title">Dores Musculares</div>
-    <div class="step-sub">Selecione todas as regiões com desconforto (ou nenhuma)</div>
+    <div class="step-sub">Toque nas regiões com desconforto e escolha a intensidade</div>
 
-    <div class="pain-tags" id="pain-tags"></div>
+    <!-- Legenda -->
+    <div class="pain-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#6eb4f7;border:1px solid #3a8fd4"></div> Baixa</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#f7d86e;border:1px solid #c9a800"></div> Média</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#f76e6e;border:1px solid #d43a3a"></div> Alta</div>
+    </div>
+
+    <!-- Boneco anatômico SVG -->
+    <div class="body-map-wrap">
+      <!-- FRENTE -->
+      <div class="body-map-side">
+        <div class="body-map-label">Frente</div>
+        <svg viewBox="0 0 120 280" xmlns="http://www.w3.org/2000/svg">
+          <!-- Cabeça -->
+          <ellipse cx="60" cy="22" rx="16" ry="18" fill="#e0e0e8" stroke="#ccc" stroke-width="1"/>
+          <!-- Pescoço/Trapézio FRENTE -->
+          <path id="f-pescoco" class="body-region" d="M52,38 Q60,34 68,38 L70,50 Q60,47 50,50 Z" onclick="openPainPopup('Pescoço e Trapézio', 'f-pescoco')"/>
+          <!-- Peitoral esquerdo -->
+          <path id="f-peitoral-e" class="body-region" d="M42,52 L58,52 L58,72 Q50,76 42,72 Z" onclick="openPainPopup('Peitoral', 'f-peitoral-e')"/>
+          <!-- Peitoral direito -->
+          <path id="f-peitoral-d" class="body-region" d="M62,52 L78,52 L78,72 Q70,76 62,72 Z" onclick="openPainPopup('Peitoral', 'f-peitoral-d')"/>
+          <!-- Abdômen -->
+          <path id="f-abdomen" class="body-region" d="M46,74 L74,74 L72,104 Q60,108 48,104 Z" onclick="openPainPopup('Abdômen', 'f-abdomen')"/>
+          <!-- Ombro esquerdo -->
+          <path id="f-ombro-e" class="body-region" d="M32,52 Q36,44 42,50 L42,68 Q34,68 30,62 Z" onclick="openPainPopup('Ombros', 'f-ombro-e')"/>
+          <!-- Ombro direito -->
+          <path id="f-ombro-d" class="body-region" d="M88,52 Q84,44 78,50 L78,68 Q86,68 90,62 Z" onclick="openPainPopup('Ombros', 'f-ombro-d')"/>
+          <!-- Braço/Antebraço esquerdo -->
+          <path id="f-braco-e" class="body-region" d="M28,64 Q24,66 22,80 L24,106 Q28,110 32,106 L34,80 Z" onclick="openPainPopup('Braços e Antebraços', 'f-braco-e')"/>
+          <!-- Braço/Antebraço direito -->
+          <path id="f-braco-d" class="body-region" d="M92,64 Q96,66 98,80 L96,106 Q92,110 88,106 L86,80 Z" onclick="openPainPopup('Braços e Antebraços', 'f-braco-d')"/>
+          <!-- Quadril/Glúteo frente -->
+          <path id="f-gluteo" class="body-region" d="M46,104 L74,104 L76,118 Q60,122 44,118 Z" onclick="openPainPopup('Glúteos', 'f-gluteo')"/>
+          <!-- Coxa esquerda -->
+          <path id="f-coxa-e" class="body-region" d="M44,120 L59,120 L58,168 Q52,172 44,168 Z" onclick="openPainPopup('Coxas', 'f-coxa-e')"/>
+          <!-- Coxa direita -->
+          <path id="f-coxa-d" class="body-region" d="M61,120 L76,120 L76,168 Q68,172 62,168 Z" onclick="openPainPopup('Coxas', 'f-coxa-d')"/>
+          <!-- Panturrilha esquerda frente/joelho -->
+          <path id="f-pant-e" class="body-region" d="M44,170 L58,170 L58,220 Q52,224 44,220 Z" onclick="openPainPopup('Panturrilhas', 'f-pant-e')"/>
+          <!-- Panturrilha direita frente/joelho -->
+          <path id="f-pant-d" class="body-region" d="M62,170 L76,170 L76,220 Q70,224 62,220 Z" onclick="openPainPopup('Panturrilhas', 'f-pant-d')"/>
+          <!-- Pés -->
+          <ellipse cx="51" cy="228" rx="9" ry="6" fill="#e0e0e8" stroke="#ccc" stroke-width="1"/>
+          <ellipse cx="69" cy="228" rx="9" ry="6" fill="#e0e0e8" stroke="#ccc" stroke-width="1"/>
+        </svg>
+      </div>
+      <!-- COSTAS -->
+      <div class="body-map-side">
+        <div class="body-map-label">Costas</div>
+        <svg viewBox="0 0 120 280" xmlns="http://www.w3.org/2000/svg">
+          <!-- Cabeça costas -->
+          <ellipse cx="60" cy="22" rx="16" ry="18" fill="#e0e0e8" stroke="#ccc" stroke-width="1"/>
+          <!-- Pescoço/Trapézio COSTAS -->
+          <path id="b-pescoco" class="body-region" d="M50,38 Q60,34 70,38 L72,52 Q60,49 48,52 Z" onclick="openPainPopup('Pescoço e Trapézio', 'b-pescoco')"/>
+          <!-- Costas superior -->
+          <path id="b-costas-sup" class="body-region" d="M42,52 L78,52 L80,82 Q60,86 40,82 Z" onclick="openPainPopup('Costas (Parte Superior)', 'b-costas-sup')"/>
+          <!-- Lombar -->
+          <path id="b-lombar" class="body-region" d="M44,84 L76,84 L74,108 Q60,112 46,108 Z" onclick="openPainPopup('Lombar', 'b-lombar')"/>
+          <!-- Ombro esquerdo costas -->
+          <path id="b-ombro-e" class="body-region" d="M30,52 Q34,44 42,50 L40,68 Q32,68 28,62 Z" onclick="openPainPopup('Ombros', 'b-ombro-e')"/>
+          <!-- Ombro direito costas -->
+          <path id="b-ombro-d" class="body-region" d="M90,52 Q86,44 78,50 L80,68 Q88,68 92,62 Z" onclick="openPainPopup('Ombros', 'b-ombro-d')"/>
+          <!-- Braço esquerdo costas -->
+          <path id="b-braco-e" class="body-region" d="M26,64 Q22,66 20,80 L22,106 Q26,110 30,106 L32,80 Z" onclick="openPainPopup('Braços e Antebraços', 'b-braco-e')"/>
+          <!-- Braço direito costas -->
+          <path id="b-braco-d" class="body-region" d="M94,64 Q98,66 100,80 L98,106 Q94,110 90,106 L88,80 Z" onclick="openPainPopup('Braços e Antebraços', 'b-braco-d')"/>
+          <!-- Glúteo esquerdo costas -->
+          <path id="b-gluteo-e" class="body-region" d="M44,108 L60,108 L60,128 Q52,132 44,128 Z" onclick="openPainPopup('Glúteos', 'b-gluteo-e')"/>
+          <!-- Glúteo direito costas -->
+          <path id="b-gluteo-d" class="body-region" d="M60,108 L76,108 L76,128 Q68,132 60,128 Z" onclick="openPainPopup('Glúteos', 'b-gluteo-d')"/>
+          <!-- Coxa esquerda costas -->
+          <path id="b-coxa-e" class="body-region" d="M44,130 L59,130 L58,168 Q52,172 44,168 Z" onclick="openPainPopup('Coxas', 'b-coxa-e')"/>
+          <!-- Coxa direita costas -->
+          <path id="b-coxa-d" class="body-region" d="M61,130 L76,130 L76,168 Q68,172 62,168 Z" onclick="openPainPopup('Coxas', 'b-coxa-d')"/>
+          <!-- Panturrilha esquerda costas -->
+          <path id="b-pant-e" class="body-region" d="M44,170 L58,170 L58,220 Q52,224 44,220 Z" onclick="openPainPopup('Panturrilhas', 'b-pant-e')"/>
+          <!-- Panturrilha direita costas -->
+          <path id="b-pant-d" class="body-region" d="M62,170 L76,170 L76,220 Q70,224 62,220 Z" onclick="openPainPopup('Panturrilhas', 'b-pant-d')"/>
+          <!-- Pés costas -->
+          <ellipse cx="51" cy="228" rx="9" ry="6" fill="#e0e0e8" stroke="#ccc" stroke-width="1"/>
+          <ellipse cx="69" cy="228" rx="9" ry="6" fill="#e0e0e8" stroke="#ccc" stroke-width="1"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Botão Outros -->
+    <div style="margin-bottom:8px">
+      <span class="outros-tag" id="outros-tag" onclick="toggleOutros()">+ Outros</span>
+    </div>
+
+    <!-- Campo livre Outros -->
+    <div class="outros-box" id="outros-box">
+      <label>Descreva a região (ex: Canela, Cotovelo...)</label>
+      <textarea id="outros-text" placeholder="Digite a região aqui..."></textarea>
+      <label>Intensidade</label>
+      <div class="outros-intensity">
+        <button class="outros-int-btn low" onclick="selectOutrosInt('Baixa', this)">BAIXO</button>
+        <button class="outros-int-btn med" onclick="selectOutrosInt('Média', this)">MÉDIO</button>
+        <button class="outros-int-btn high" onclick="selectOutrosInt('Alta', this)">ALTO</button>
+      </div>
+    </div>
 
     <div class="btn-row">
       <button class="btn btn-secondary" onclick="showStep(4)">← Voltar</button>
@@ -653,6 +938,19 @@
 
 </div><!-- /container -->
 
+<!-- Popup intensidade -->
+<div class="popup-overlay" id="popup-overlay" onclick="closePainPopup()"></div>
+<div class="intensity-popup" id="intensity-popup">
+  <div class="popup-title">Intensidade da Dor</div>
+  <div class="popup-region" id="popup-region-name">—</div>
+  <div class="intensity-btns">
+    <button class="int-btn low" onclick="selectIntensity('Baixa')">BAIXO</button>
+    <button class="int-btn med" onclick="selectIntensity('Média')">MÉDIO</button>
+    <button class="int-btn high" onclick="selectIntensity('Alta')">ALTO</button>
+  </div>
+  <button class="popup-remove" onclick="removePainRegion()">Remover esta região</button>
+</div>
+
 <div id="toast"></div>
 
 <script>
@@ -666,10 +964,22 @@ const sb = createClient(
 // ── STATE ─────────────────────────────────────────────────
 const state = {
   cpf: '', nome: '', isNew: false,
-  sexo: '', menstruou: 'N/A', menst_duracao: 'N/A', menst_vezes: 'N/A',
+  regSexo: '',
+  sexo: '',
+  menstruou: 'N/A', menst_duracao: 'N/A', menst_vezes: 'N/A',
   peso: null, urina: '', horas_sono: null,
-  recuperado: '', cansaco: '', qualidade_sono: '', dor_muscular: '', estresse: '', humor: '',
-  dores: [],
+  recuperado: '', recuperadoNum: null,
+  cansaco: '', cansacoNum: null,
+  qualidade_sono: '', qualidadeSonoNum: null,
+  dor_muscular: '', dorMuscularNum: null,
+  estresse: '', estresseNum: null,
+  humor: '', humorNum: null,
+  // Dores: { regionName -> { intensity: 'Baixa'|'Média'|'Alta', svgIds: [...] } }
+  doresMap: {},
+  outrosText: '',
+  outrosIntensity: '',
+  outrosEnabled: false,
+  existingResponseId: null,
   currentStep: 1,
   totalSteps: 5
 };
@@ -702,7 +1012,9 @@ function updateProgress(step) {
 }
 
 function showStep(n) {
-  for (let i = 1; i <= state.totalSteps; i++) {
+  document.getElementById('duplicate-screen').style.display = 'none';
+  document.getElementById('step-1').style.display = n === 1 ? 'block' : 'none';
+  for (let i = 2; i <= state.totalSteps; i++) {
     const el = document.getElementById(`step-${i}`);
     if (el) el.style.display = i === n ? 'block' : 'none';
   }
@@ -715,7 +1027,24 @@ function toast(msg, type = '') {
   const t = document.getElementById('toast');
   t.textContent = msg;
   t.className = 'show ' + type;
-  setTimeout(() => { t.className = ''; }, 3000);
+  setTimeout(() => { t.className = ''; }, 3200);
+}
+
+// ── VALIDAÇÃO OFICIAL DE CPF ──────────────────────────────
+function validarCPF(cpf) {
+  cpf = cpf.replace(/\D/g, '');
+  if (cpf.length !== 11) return false;
+  if (/^(\d)\1+$/.test(cpf)) return false;
+  let soma = 0;
+  for (let i = 0; i < 9; i++) soma += parseInt(cpf[i]) * (10 - i);
+  let r = (soma * 10) % 11;
+  if (r === 10 || r === 11) r = 0;
+  if (r !== parseInt(cpf[9])) return false;
+  soma = 0;
+  for (let i = 0; i < 10; i++) soma += parseInt(cpf[i]) * (11 - i);
+  r = (soma * 10) % 11;
+  if (r === 10 || r === 11) r = 0;
+  return r === parseInt(cpf[10]);
 }
 
 // ── CPF MASK ──────────────────────────────────────────────
@@ -726,7 +1055,10 @@ document.getElementById('cpf-input').addEventListener('input', function () {
   else if (v.length > 3) v = v.slice(0,3)+'.'+v.slice(3);
   this.value = v;
   if (v.length === 14) lookupCPF(v);
-  else { document.getElementById('welcome-box').classList.remove('show'); document.getElementById('new-member-box').classList.remove('show'); }
+  else {
+    document.getElementById('welcome-box').classList.remove('show');
+    document.getElementById('new-member-box').classList.remove('show');
+  }
 });
 
 // Nascimento mask
@@ -737,13 +1069,23 @@ document.getElementById('reg-nascimento').addEventListener('input', function () 
   this.value = v;
 });
 
+// ── SEXO NO CADASTRO ──────────────────────────────────────
+function selectRegSexo(val) {
+  state.regSexo = val;
+  document.getElementById('reg-sex-m').classList.toggle('selected', val === 'Masculino');
+  document.getElementById('reg-sex-f').classList.toggle('selected', val === 'Feminino');
+}
+
 // ── LOOKUP CPF ────────────────────────────────────────────
 async function lookupCPF(cpf) {
+  const raw = cpf.replace(/\D/g, '');
+  if (!validarCPF(raw)) return; // aguarda finalizar digitação antes de alertar
   const { data, error } = await sb.from('cadastro_aluno').select('*').eq('cpf', cpf).maybeSingle();
   if (error) { toast('Erro ao buscar CPF', 'error'); return; }
   if (data) {
     state.isNew = false;
     state.cpf = cpf; state.nome = data.nome;
+    state.sexo = data.sexo || '';
     const wb = document.getElementById('welcome-box');
     document.getElementById('welcome-avatar').textContent = data.nome.charAt(0).toUpperCase();
     document.getElementById('welcome-name').textContent = `Olá, ${data.nome}!`;
@@ -751,15 +1093,38 @@ async function lookupCPF(cpf) {
     wb.classList.add('show');
     document.getElementById('new-member-box').classList.remove('show');
   } else {
-    state.isNew = true; state.cpf = cpf;
+    state.isNew = true; state.cpf = cpf; state.sexo = '';
     document.getElementById('welcome-box').classList.remove('show');
     document.getElementById('new-member-box').classList.add('show');
   }
 }
 
+// ── CHECK TODAY DUPLICATE ─────────────────────────────────
+function getTodayStr() {
+  const now = new Date();
+  const dd = String(now.getDate()).padStart(2,'0');
+  const mm = String(now.getMonth()+1).padStart(2,'0');
+  const yyyy = now.getFullYear();
+  return `${dd}/${mm}/${yyyy}`;
+}
+
+async function checkDuplicate(cpf) {
+  const today = getTodayStr();
+  // data_resposta formato "DD/MM/YYYY HH:MM"
+  const { data, error } = await sb.from('respostas')
+    .select('id, data_resposta')
+    .eq('cpf', cpf)
+    .like('data_resposta', today + '%');
+  if (error) return null;
+  return data && data.length > 0 ? data[0].id : null;
+}
+
 // ── STEP 1 ────────────────────────────────────────────────
-function goStep1() {
-  if (state.cpf.length !== 14) { toast('⚠️ Digite um CPF válido', 'error'); return; }
+async function goStep1() {
+  const cpfRaw = state.cpf.replace(/\D/g,'');
+  if (cpfRaw.length !== 11) { toast('⚠️ Digite um CPF completo', 'error'); return; }
+  if (!validarCPF(cpfRaw)) { toast('⚠️ CPF matematicamente inválido. Verifique os dígitos.', 'error'); return; }
+
   if (state.isNew) {
     const nome = document.getElementById('reg-nome').value.trim();
     const nasc = document.getElementById('reg-nascimento').value.trim();
@@ -767,20 +1132,45 @@ function goStep1() {
     const mod  = document.getElementById('reg-modalidade').value.trim();
     if (!nome || !nasc || !cat || !mod) { toast('⚠️ Preencha todos os campos', 'error'); return; }
     if (nasc.length !== 10) { toast('⚠️ Data inválida (DD/MM/AAAA)', 'error'); return; }
+    if (!state.regSexo) { toast('⚠️ Selecione o Sexo Biológico', 'error'); return; }
     state.regNome = nome; state.regNasc = nasc; state.regCat = cat; state.regMod = mod;
     state.nome = nome;
+    state.sexo = state.regSexo;
   }
+
+  // Verificar duplicata do dia
+  const dupId = await checkDuplicate(state.cpf);
+  if (dupId !== null) {
+    state.existingResponseId = dupId;
+    // Mostrar tela intermediária
+    document.getElementById('step-1').style.display = 'none';
+    document.getElementById('duplicate-screen').style.display = 'block';
+    document.getElementById('progress-wrap').style.display = 'none';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    return;
+  }
+
+  // Configurar seção menstruação baseado no sexo
+  configureMenst();
   showStep(2);
 }
 
-// ── SEXO ──────────────────────────────────────────────────
-function selectSexo(val, el) {
-  state.sexo = val;
-  document.querySelectorAll('.sex-card').forEach(c => c.classList.remove('selected'));
-  el.classList.add('selected');
+function duplicateNo() {
+  location.reload();
+}
+
+function duplicateYes() {
+  document.getElementById('duplicate-screen').style.display = 'none';
+  document.getElementById('progress-wrap').style.display = '';
+  configureMenst();
+  showStep(2);
+}
+
+function configureMenst() {
   const ms = document.getElementById('menst-section');
-  if (val === 'Feminino') ms.classList.add('show');
-  else {
+  if (state.sexo === 'Feminino') {
+    ms.classList.add('show');
+  } else {
     ms.classList.remove('show');
     state.menstruou = 'N/A'; state.menst_duracao = 'N/A'; state.menst_vezes = 'N/A';
   }
@@ -808,7 +1198,6 @@ function selectUrine(val, el) {
 
 // ── STEP 2 ────────────────────────────────────────────────
 function goStep2() {
-  if (!state.sexo) { toast('⚠️ Selecione seu sexo', 'error'); return; }
   const peso = parseFloat(document.getElementById('peso-input').value.replace(',','.'));
   if (!peso || peso < 20) { toast('⚠️ Informe seu peso', 'error'); return; }
   if (!state.urina) { toast('⚠️ Selecione a cor da urina', 'error'); return; }
@@ -818,26 +1207,35 @@ function goStep2() {
   showStep(3);
 }
 
-// ── RECOVERY CARDS ────────────────────────────────────────
-const recoveryLabels = {
-  1:'Muito pouca recuperação', 2:'Pouca recuperação', 3:'Recuperação moderada',
-  4:'Boa recuperação', 5:'Muito boa recuperação', 6:'', 7:'Muito, muito boa recuperação',
-  8:'', 9:'', 10:'Totalmente recuperado'
-};
+// ── RECOVERY CARDS (sem número, apenas descrição) ─────────
+const recoveryDefs = [
+  { num: 1, label: 'Pouquíssima recuperação' },
+  { num: 2, label: 'Pouca recuperação' },
+  { num: 3, label: 'Recuperação moderada' },
+  { num: 4, label: 'Boa recuperação' },
+  { num: 5, label: 'Notável recuperação' },
+  { num: 6, label: 'Muito boa recuperação' },
+  { num: 7, label: 'Ótima recuperação' },
+  { num: 8, label: 'Excelente recuperação' },
+  { num: 9, label: 'Recuperação quase completa' },
+  { num: 10, label: 'Totalmente recuperado' },
+];
+
 function buildRecoveryCards() {
   const wrap = document.getElementById('recovery-cards');
   wrap.innerHTML = '';
-  for (let i = 1; i <= 10; i++) {
+  recoveryDefs.forEach(def => {
     const d = document.createElement('div');
     d.className = 'recovery-card';
-    d.innerHTML = `<div class="rec-num">${i}</div><div class="rec-label">${recoveryLabels[i]}</div>`;
+    d.innerHTML = `<div class="rec-label">${def.label}</div>`;
     d.onclick = () => {
-      state.recuperado = recoveryLabels[i] || String(i);
+      state.recuperado = def.label;
+      state.recuperadoNum = def.num;
       document.querySelectorAll('.recovery-card').forEach(c => c.classList.remove('selected'));
       d.classList.add('selected');
     };
     wrap.appendChild(d);
-  }
+  });
 }
 
 // ── STEP 3 ────────────────────────────────────────────────
@@ -846,41 +1244,79 @@ function goStep3() {
   showStep(4);
 }
 
-// ── WELLBEING CARDS ───────────────────────────────────────
+// ── WELLBEING CARDS (sem número) ──────────────────────────
 const wellbeingDefs = {
   cansaco: {
-    id: 'cansaco-cards', label: 'Cansaço',
-    opts: ['Muito cansado','Mais cansado do normal','Normal','Descansado','Muito descansado']
+    id: 'cansaco-cards',
+    opts: [
+      { num:1, label:'Muito cansado' },
+      { num:2, label:'Cansado' },
+      { num:3, label:'Normal' },
+      { num:4, label:'Descansado' },
+      { num:5, label:'Muito descansado' },
+    ]
   },
   qualidade_sono: {
-    id: 'sono-cards', label: 'Qualidade do Sono',
-    opts: ['Insônia','Sono agitado','Dificuldade para adormecer','Bom sono','Muito tranquilo']
+    id: 'sono-cards',
+    opts: [
+      { num:1, label:'Insônia / Péssimo' },
+      { num:2, label:'Ruim (ou Agitado)' },
+      { num:3, label:'Regular' },
+      { num:4, label:'Bom sono' },
+      { num:5, label:'Muito tranquilo' },
+    ]
   },
   dor_muscular: {
-    id: 'dor-cards', label: 'Dor Muscular',
-    opts: ['Muito dolorido','Sinto-me dolorido','Normal','Sinto-me bem','Sinto-me ótimo']
+    id: 'dor-cards',
+    opts: [
+      { num:1, label:'Muito dolorido' },
+      { num:2, label:'Dolorido' },
+      { num:3, label:'Normal' },
+      { num:4, label:'Bem' },
+      { num:5, label:'Ótimo' },
+    ]
   },
   estresse: {
-    id: 'estresse-cards', label: 'Estresse',
-    opts: ['Muito estressado','Sinto-me estressado','Normal','Sossegado','Muito sossegado']
+    id: 'estresse-cards',
+    opts: [
+      { num:1, label:'Muito estressado' },
+      { num:2, label:'Estressado' },
+      { num:3, label:'Normal' },
+      { num:4, label:'Sossegado' },
+      { num:5, label:'Muito sossegado' },
+    ]
   },
   humor: {
-    id: 'humor-cards', label: 'Humor',
-    opts: ['Irritado e para baixo','Bravo com todos','Pouco interessado','Bem humorado','Muito positivo']
+    id: 'humor-cards',
+    opts: [
+      { num:1, label:'Irritado e desanimado' },
+      { num:2, label:'Mal-humorado' },
+      { num:3, label:'Neutro' },
+      { num:4, label:'Bem-humorado' },
+      { num:5, label:'Muito positivo' },
+    ]
   }
+};
+
+const numFieldMap = {
+  cansaco: 'cansacoNum',
+  qualidade_sono: 'qualidadeSonoNum',
+  dor_muscular: 'dorMuscularNum',
+  estresse: 'estresseNum',
+  humor: 'humorNum',
 };
 
 function buildWellbeingCards() {
   Object.entries(wellbeingDefs).forEach(([field, def]) => {
     const wrap = document.getElementById(def.id);
     wrap.innerHTML = '';
-    def.opts.forEach((label, i) => {
-      const num = i + 1;
+    def.opts.forEach(opt => {
       const d = document.createElement('div');
       d.className = 'option-card';
-      d.innerHTML = `<span class="opt-num">${num}</span><div class="opt-label">${label}</div>`;
+      d.innerHTML = `<div class="opt-label">${opt.label}</div>`;
       d.onclick = () => {
-        state[field] = label;
+        state[field] = opt.label;
+        state[numFieldMap[field]] = opt.num;
         wrap.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
         d.classList.add('selected');
       };
@@ -898,29 +1334,115 @@ function goStep4() {
   showStep(5);
 }
 
-// ── PAIN TAGS ─────────────────────────────────────────────
-const painOptions = [
-  'Pescoço e Trapézio','Ombros','Costas (Parte Superior)','Lombar',
-  'Braços e Antebraços','Peitoral','Abdômen','Glúteos','Coxas','Panturrilhas','Outros'
-];
-function buildPainTags() {
-  const wrap = document.getElementById('pain-tags');
-  wrap.innerHTML = '';
-  painOptions.forEach(label => {
-    const t = document.createElement('div');
-    t.className = 'pain-tag';
-    t.textContent = label;
-    t.onclick = () => {
-      if (state.dores.includes(label)) {
-        state.dores = state.dores.filter(d => d !== label);
-        t.classList.remove('selected');
-      } else {
-        state.dores.push(label);
-        t.classList.add('selected');
-      }
-    };
-    wrap.appendChild(t);
+// ── PAIN MAP ──────────────────────────────────────────────
+// Map region name -> list of svg element IDs that represent it
+const regionSvgIds = {
+  'Pescoço e Trapézio':      ['f-pescoco','b-pescoco'],
+  'Ombros':                  ['f-ombro-e','f-ombro-d','b-ombro-e','b-ombro-d'],
+  'Costas (Parte Superior)': ['b-costas-sup'],
+  'Lombar':                  ['b-lombar'],
+  'Braços e Antebraços':     ['f-braco-e','f-braco-d','b-braco-e','b-braco-d'],
+  'Peitoral':                ['f-peitoral-e','f-peitoral-d'],
+  'Abdômen':                 ['f-abdomen'],
+  'Glúteos':                 ['f-gluteo','b-gluteo-e','b-gluteo-d'],
+  'Coxas':                   ['f-coxa-e','f-coxa-d','b-coxa-e','b-coxa-d'],
+  'Panturrilhas':            ['f-pant-e','f-pant-d','b-pant-e','b-pant-d'],
+};
+
+let currentPopupRegion = null;
+
+function openPainPopup(regionName, svgId) {
+  currentPopupRegion = regionName;
+  document.getElementById('popup-region-name').textContent = regionName;
+
+  // Highlight currently selected intensity on buttons
+  const current = state.doresMap[regionName];
+  document.querySelectorAll('.int-btn').forEach(b => {
+    b.className = 'int-btn ' + b.classList[1];
+    if (current) {
+      const intVal = current.intensity;
+      if (intVal === 'Baixa' && b.classList.contains('low')) b.classList.add('sel-low');
+      if (intVal === 'Média' && b.classList.contains('med')) b.classList.add('sel-med');
+      if (intVal === 'Alta'  && b.classList.contains('high')) b.classList.add('sel-high');
+    }
   });
+
+  document.getElementById('popup-overlay').classList.add('show');
+  document.getElementById('intensity-popup').classList.add('show');
+}
+
+function closePainPopup() {
+  document.getElementById('popup-overlay').classList.remove('show');
+  document.getElementById('intensity-popup').classList.remove('show');
+  currentPopupRegion = null;
+}
+
+function selectIntensity(intensity) {
+  if (!currentPopupRegion) return;
+  state.doresMap[currentPopupRegion] = { intensity };
+  applyRegionColor(currentPopupRegion, intensity);
+  closePainPopup();
+}
+
+function removePainRegion() {
+  if (!currentPopupRegion) return;
+  delete state.doresMap[currentPopupRegion];
+  // Reset SVG colors
+  const ids = regionSvgIds[currentPopupRegion] || [];
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.className.baseVal = 'body-region';
+  });
+  closePainPopup();
+}
+
+function applyRegionColor(regionName, intensity) {
+  const ids = regionSvgIds[regionName] || [];
+  const cls = intensity === 'Baixa' ? 'pain-low' : intensity === 'Média' ? 'pain-med' : 'pain-high';
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.className.baseVal = 'body-region ' + cls;
+  });
+}
+
+// ── OUTROS ────────────────────────────────────────────────
+function toggleOutros() {
+  state.outrosEnabled = !state.outrosEnabled;
+  document.getElementById('outros-box').classList.toggle('show', state.outrosEnabled);
+  document.getElementById('outros-tag').classList.toggle('selected', state.outrosEnabled);
+  if (!state.outrosEnabled) {
+    state.outrosText = '';
+    state.outrosIntensity = '';
+    document.getElementById('outros-text').value = '';
+    document.querySelectorAll('.outros-int-btn').forEach(b => {
+      b.classList.remove('sel-low','sel-med','sel-high');
+    });
+  }
+}
+
+function selectOutrosInt(val, el) {
+  state.outrosIntensity = val;
+  document.querySelectorAll('.outros-int-btn').forEach(b => b.classList.remove('sel-low','sel-med','sel-high'));
+  if (val === 'Baixa') el.classList.add('sel-low');
+  else if (val === 'Média') el.classList.add('sel-med');
+  else el.classList.add('sel-high');
+}
+
+// ── BUILD DORES_LOCAIS STRING ──────────────────────────────
+function buildDoresLocais() {
+  const parts = [];
+  Object.entries(state.doresMap).forEach(([region, data]) => {
+    parts.push(`${region} (${data.intensity})`);
+  });
+  if (state.outrosEnabled) {
+    const txt = document.getElementById('outros-text').value.trim();
+    if (txt && state.outrosIntensity) {
+      parts.push(`Outros: ${txt} (${state.outrosIntensity})`);
+    } else if (txt) {
+      parts.push(`Outros: ${txt}`);
+    }
+  }
+  return parts.length ? parts.join(', ') : 'Nenhuma';
 }
 
 // ── SUBMIT ────────────────────────────────────────────────
@@ -935,7 +1457,9 @@ async function submitForm() {
     if (state.isNew) {
       const { error: e1 } = await sb.from('cadastro_aluno').upsert({
         cpf: state.cpf, nome: state.regNome,
-        nascimento: state.regNasc, categoria: state.regCat, modalidade: state.regMod
+        nascimento: state.regNasc,
+        sexo: state.regSexo,
+        categoria: state.regCat, modalidade: state.regMod
       });
       if (e1) throw e1;
     }
@@ -949,19 +1473,31 @@ async function submitForm() {
     const min = String(now.getMinutes()).padStart(2,'0');
     const data_resposta = `${dd}/${mm}/${yyyy} ${hh}:${min}`;
 
-    const dores_locais = state.dores.length ? state.dores.join(', ') : 'Nenhuma';
+    const dores_locais = buildDoresLocais();
 
-    const { error: e2 } = await sb.from('respostas').insert({
+    const payload = {
       data_resposta, cpf: state.cpf,
       sexo: state.sexo, menstruou: state.menstruou,
       menst_duracao: state.menst_duracao, menst_vezes: state.menst_vezes,
       peso: state.peso, urina: state.urina,
-      horas_sono: state.horas_sono, recuperado: state.recuperado,
-      cansaco: state.cansaco, qualidade_sono: state.qualidade_sono,
-      dor_muscular: state.dor_muscular, estresse: state.estresse,
-      humor: state.humor, dores_locais
-    });
-    if (e2) throw e2;
+      horas_sono: state.horas_sono,
+      recuperado: state.recuperadoNum,
+      cansaco: state.cansacoNum,
+      qualidade_sono: state.qualidadeSonoNum,
+      dor_muscular: state.dorMuscularNum,
+      estresse: state.estresseNum,
+      humor: state.humorNum,
+      dores_locais
+    };
+
+    let error;
+    if (state.existingResponseId) {
+      // UPDATE resposta existente de hoje
+      ({ error } = await sb.from('respostas').update(payload).eq('id', state.existingResponseId));
+    } else {
+      ({ error } = await sb.from('respostas').insert(payload));
+    }
+    if (error) throw error;
 
     // Show success
     document.getElementById('progress-wrap').style.display = 'none';
@@ -988,7 +1524,6 @@ initDots();
 updateProgress(1);
 buildRecoveryCards();
 buildWellbeingCards();
-buildPainTags();
 </script>
 </body>
 </html>
