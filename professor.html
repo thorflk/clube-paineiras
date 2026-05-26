@@ -262,7 +262,7 @@
   .table-title { font-family: 'Sora', sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--text); }
   .table-count { font-size: 0.75rem; color: var(--text3); }
   .table-container { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-  table { width: 100%; border-collapse: collapse; min-width: 900px; }
+  table { width: 100%; border-collapse: collapse; min-width: 1100px; }
   thead { background: var(--surface2); }
   th {
     padding: 11px 14px; text-align: left; font-size: 0.68rem; font-weight: 700;
@@ -292,10 +292,11 @@
   .badge::before { content: '●'; font-size: 0.5rem; }
 
   /* ── PAIN PILL ── */
-  .pain-cell { max-width: 200px; }
+  .pain-cell { width: 180px; max-width: 180px; }
   .pain-pills { display: flex; flex-wrap: wrap; gap: 3px; }
-  .pain-pill { background: var(--surface2); border: 1px solid var(--border); border-radius: 99px; padding: 2px 7px; font-size: 0.6rem; color: var(--text2); }
+  .pain-pill { background: var(--surface2); border: 1px solid var(--border); border-radius: 99px; padding: 2px 7px; font-size: 0.6rem; color: var(--text2); white-space: nowrap; }
   .pain-pill.many { background: var(--danger-bg); border-color: var(--danger-border); color: var(--danger); }
+  .pain-more { font-size: 0.6rem; color: var(--text3); font-style: italic; margin-top: 2px; display: block; }
 
   /* ── PAGINATION ── */
   .pagination {
@@ -564,7 +565,7 @@
         <table id="main-table">
           <thead>
             <tr>
-              <th></th>
+              <th style="width:36px"></th>
               <th onclick="sortBy('data_resposta')">Data ↕</th>
               <th onclick="sortBy('cpf')">CPF ↕</th>
               <th>Atleta</th>
@@ -575,8 +576,8 @@
               <th>Cansaço</th>
               <th>Estresse</th>
               <th>Humor</th>
-              <th>Dores</th>
-              <th>Status</th>
+              <th style="width:180px">Dores</th>
+              <th style="width:90px;white-space:nowrap">Status</th>
             </tr>
           </thead>
           <tbody id="table-body">
@@ -889,7 +890,10 @@ function renderTable() {
     if (row.dores_locais && row.dores_locais !== 'Nenhuma') {
       const parts = row.dores_locais.split(',').map(s => s.trim());
       const many = parts.length >= 4;
-      painHtml = `<div class="pain-pills">${parts.map(p => `<span class="pain-pill${many?' many':''}">${p}</span>`).join('')}</div>`;
+      const MAX_SHOW = 3;
+      const shown = parts.slice(0, MAX_SHOW);
+      const extra = parts.length - MAX_SHOW;
+      painHtml = `<div class="pain-pills">${shown.map(p => `<span class="pain-pill${many?' many':''}">${p}</span>`).join('')}${extra > 0 ? `<span class="pain-more">+${extra} mais…</span>` : ''}</div>`;
     }
 
     const tr = document.createElement('tr');
