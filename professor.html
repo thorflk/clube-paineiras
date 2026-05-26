@@ -459,18 +459,59 @@
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    padding: 16px;
     margin-bottom: 12px;
     box-shadow: var(--shadow);
     position: relative;
+    overflow: hidden;
     transition: box-shadow .2s;
   }
   .athlete-card-mobile.card-risk { border-left: 4px solid var(--danger); background: var(--danger-bg); }
   .athlete-card-mobile.card-warn { border-left: 4px solid var(--warn); background: var(--warn-bg); }
   .athlete-card-mobile.card-ok  { border-left: 4px solid var(--success); }
+
+  /* Header clicável do card */
+  .card-mob-header {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    padding: 16px 16px 0;
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
   .card-mob-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
   .card-mob-name { font-family: 'Sora', sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--text); }
   .card-mob-date { font-size: 0.7rem; color: var(--text3); margin-top: 2px; }
+
+  /* Botão de expansão */
+  .card-expand-btn {
+    display: flex; align-items: center; gap: 5px;
+    padding: 6px 12px;
+    border: 1.5px solid var(--border);
+    border-radius: 99px;
+    background: var(--surface2);
+    font-family: 'Sora', sans-serif; font-size: 0.7rem; font-weight: 700;
+    color: var(--text3);
+    cursor: pointer;
+    transition: all .25s;
+    flex-shrink: 0;
+    margin-left: 8px;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .card-expand-btn svg {
+    width: 12px; height: 12px;
+    stroke: currentColor; fill: none;
+    stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round;
+    transition: transform .3s cubic-bezier(.4,0,.2,1);
+    flex-shrink: 0;
+  }
+  .athlete-card-mobile.card-expanded .card-expand-btn {
+    border-color: var(--pink-border);
+    background: var(--pink-glow);
+    color: var(--pink);
+  }
+  .athlete-card-mobile.card-expanded .card-expand-btn svg { transform: rotate(180deg); }
+
+  /* Área visível sempre */
+  .card-mob-summary { padding: 0 16px 14px; }
   .card-mob-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 10px; }
   .card-mob-metric { background: var(--surface2); border-radius: var(--radius-sm); padding: 8px; text-align: center; border: 1px solid var(--border); }
   .card-mob-metric-label { font-size: 0.6rem; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 3px; }
@@ -486,6 +527,48 @@
   .card-mob-pill { background: var(--surface2); border: 1px solid var(--border); border-radius: 99px; padding: 2px 8px; font-size: 0.62rem; color: var(--text2); }
   .card-mob-pill.pill-risk { background: var(--danger-bg); border-color: var(--danger-border); color: var(--danger); }
 
+  /* Área expansível — oculta por padrão */
+  .card-mob-detail {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height .35s cubic-bezier(.4,0,.2,1);
+  }
+  .athlete-card-mobile.card-expanded .card-mob-detail {
+    max-height: 600px;
+  }
+  .card-mob-detail-inner {
+    border-top: 1px solid var(--border);
+    padding: 14px 16px 16px;
+    animation: fadeDetailIn .25s ease;
+  }
+  @keyframes fadeDetailIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .card-detail-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+  }
+  .card-detail-item {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); padding: 9px 11px;
+  }
+  .card-detail-item.full { grid-column: span 2; }
+  .card-detail-key {
+    font-size: 0.6rem; font-weight: 700; color: var(--text3);
+    text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 3px;
+  }
+  .card-detail-val { font-size: 0.8rem; font-weight: 500; color: var(--text); word-break: break-word; }
+
+  /* ── STAT TREND INDICATORS ── */
+  .stat-trend {
+    display: inline-flex; align-items: center; gap: 3px;
+    font-size: 0.67rem; font-weight: 600;
+    margin-top: 6px; padding: 2px 7px; border-radius: 99px;
+  }
+  .stat-trend.trend-up  { background: rgba(255,59,59,0.1);   color: var(--danger); }
+  .stat-trend.trend-down{ background: rgba(0,184,72,0.1);    color: var(--success); }
+  .stat-trend.trend-neu { background: rgba(136,136,170,0.1); color: var(--text3); }
+
   /* ── TOAST ── */
   #toast {
     position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(20px);
@@ -498,6 +581,14 @@
   #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
   #toast.success { background: var(--success); }
   #toast.error { background: var(--danger); }
+  /* Toast responsivo */
+  @media (max-width: 520px) {
+    #toast {
+      white-space: normal; text-align: center;
+      width: calc(100% - 40px); max-width: 340px;
+      border-radius: 12px; font-size: 0.8rem; padding: 10px 16px;
+    }
+  }
 
   /* ── RESPONSIVE ── */
   @media (max-width: 768px) {
@@ -589,11 +680,11 @@
 
     <!-- STATS -->
     <div class="stats-row" id="stats-row">
-      <div class="stat-card pink"><div class="stat-label">Total de Respostas</div><div class="stat-val pink-v" id="stat-total">—</div></div>
-      <div class="stat-card red"><div class="stat-label">⚠️ Risco</div><div class="stat-val red-v" id="stat-risk">—</div></div>
-      <div class="stat-card warn"><div class="stat-label">Atenção</div><div class="stat-val warn-v" id="stat-warn">—</div></div>
-      <div class="stat-card green"><div class="stat-label">✓ OK</div><div class="stat-val green-v" id="stat-ok">—</div></div>
-      <div class="stat-card"><div class="stat-label">Atletas únicos</div><div class="stat-val" id="stat-unique">—</div></div>
+      <div class="stat-card pink"><div class="stat-label">Total de Respostas</div><div class="stat-val pink-v" id="stat-total">—</div><div class="stat-trend trend-neu" id="stat-total-trend"></div></div>
+      <div class="stat-card red"><div class="stat-label">⚠️ Risco</div><div class="stat-val red-v" id="stat-risk">—</div><div class="stat-trend trend-neu" id="stat-risk-trend"></div></div>
+      <div class="stat-card warn"><div class="stat-label">Atenção</div><div class="stat-val warn-v" id="stat-warn">—</div><div class="stat-trend trend-neu" id="stat-warn-trend"></div></div>
+      <div class="stat-card green"><div class="stat-label">✓ OK</div><div class="stat-val green-v" id="stat-ok">—</div><div class="stat-trend trend-neu" id="stat-ok-trend"></div></div>
+      <div class="stat-card"><div class="stat-label">Atletas únicos</div><div class="stat-val" id="stat-unique">—</div><div class="stat-trend trend-neu" id="stat-unique-trend"></div></div>
     </div>
 
     <!-- CONTROLS -->
@@ -893,15 +984,47 @@ async function loadData() {
 
 // ── STATS ─────────────────────────────────────────────────
 function updateStats() {
+  const total  = allData.length;
   const risk   = allData.filter(r => r._risk === 'risco').length;
   const warn   = allData.filter(r => r._risk === 'atencao').length;
   const ok     = allData.filter(r => r._risk === 'ok').length;
   const unique = new Set(allData.map(r => r.cpf)).size;
-  document.getElementById('stat-total').textContent  = allData.length;
+
+  document.getElementById('stat-total').textContent  = total;
   document.getElementById('stat-risk').textContent   = risk;
   document.getElementById('stat-warn').textContent   = warn;
   document.getElementById('stat-ok').textContent     = ok;
   document.getElementById('stat-unique').textContent = unique;
+
+  // Indicadores de tendência
+  if (!total) return;
+  const riskPct = Math.round(risk / total * 100);
+  const warnPct = Math.round(warn / total * 100);
+  const okPct   = Math.round(ok   / total * 100);
+
+  const el = id => document.getElementById(id);
+
+  // Total → mostra atletas únicos como contexto
+  el('stat-total-trend').textContent = `${unique} atleta${unique !== 1 ? 's' : ''} único${unique !== 1 ? 's' : ''}`;
+  el('stat-total-trend').className   = 'stat-trend trend-neu';
+
+  // Risco → alto % é ruim (vermelho), baixo % é bom (verde)
+  if (riskPct >= 30) { el('stat-risk-trend').className = 'stat-trend trend-up';   el('stat-risk-trend').textContent = `▲ ${riskPct}% do total`; }
+  else if (riskPct < 10) { el('stat-risk-trend').className = 'stat-trend trend-down'; el('stat-risk-trend').textContent = `▼ ${riskPct}% do total`; }
+  else { el('stat-risk-trend').className = 'stat-trend trend-neu'; el('stat-risk-trend').textContent = `${riskPct}% do total`; }
+
+  // Atenção → idem
+  if (warnPct >= 40) { el('stat-warn-trend').className = 'stat-trend trend-up';   el('stat-warn-trend').textContent = `▲ ${warnPct}% do total`; }
+  else if (warnPct < 15) { el('stat-warn-trend').className = 'stat-trend trend-down'; el('stat-warn-trend').textContent = `▼ ${warnPct}% do total`; }
+  else { el('stat-warn-trend').className = 'stat-trend trend-neu'; el('stat-warn-trend').textContent = `${warnPct}% do total`; }
+
+  // OK → alto % é bom (verde)
+  if (okPct >= 70) { el('stat-ok-trend').className = 'stat-trend trend-down'; el('stat-ok-trend').textContent = `▲ ${okPct}% do total`; }
+  else { el('stat-ok-trend').className = 'stat-trend trend-neu'; el('stat-ok-trend').textContent = `${okPct}% do total`; }
+
+  // Unique → contexto de respostas
+  el('stat-unique-trend').textContent = `de ${total} resposta${total !== 1 ? 's' : ''}`;
+  el('stat-unique-trend').className   = 'stat-trend trend-neu';
 }
 
 // ── DATE FILTER HELPERS ───────────────────────────────────
@@ -1112,12 +1235,12 @@ function renderCards(rows) {
     const can = row.cansaco   !== null && row.cansaco   !== undefined ? row.cansaco   : '—';
     const est = row.estresse  !== null && row.estresse  !== undefined ? row.estresse  : '—';
     const hum = row.humor     !== null && row.humor     !== undefined ? row.humor     : '—';
+    const qso = row.qualidade_sono !== null && row.qualidade_sono !== undefined ? row.qualidade_sono : '—';
+    const dmu = row.dor_muscular   !== null && row.dor_muscular   !== undefined ? row.dor_muscular   : '—';
 
-    // Cor das métricas
-    const metricCls = (v, lowBad) => {
+    const metricCls = v => {
       if (v === '—') return '';
       const n = Number(v);
-      if (lowBad) return n <= 2 ? 'val-risk' : n <= 4 ? 'val-warn' : 'val-ok';
       return n <= 2 ? 'val-risk' : n <= 4 ? 'val-warn' : 'val-ok';
     };
 
@@ -1130,41 +1253,75 @@ function renderCards(rows) {
 
     const card = document.createElement('div');
     card.className = `athlete-card-mobile ${riskCls}`;
+    card.id = `mob-card-${row.id}`;
     card.innerHTML = `
-      <div class="card-mob-top">
+      <div class="card-mob-header" onclick="toggleCard(${row.id})">
         <div>
           <div class="card-mob-name">${nome}</div>
-          <div class="card-mob-date">${row.data_resposta || '—'} · ${row.peso ? row.peso + 'kg' : '—'} · ${row.horas_sono !== null ? row.horas_sono + 'h sono' : '—'}</div>
+          <div class="card-mob-date">${row.data_resposta || '—'} · ${row.peso ? row.peso + 'kg' : '—'} · ${row.horas_sono !== null && row.horas_sono !== undefined ? row.horas_sono + 'h sono' : '—'}</div>
         </div>
-        ${badgeHtml}
-      </div>
-      <div class="card-mob-metrics">
-        <div class="card-mob-metric">
-          <div class="card-mob-metric-label">Recuperação</div>
-          <div class="card-mob-metric-val ${metricCls(rec, true)}">${rec}</div>
-        </div>
-        <div class="card-mob-metric">
-          <div class="card-mob-metric-label">Cansaço</div>
-          <div class="card-mob-metric-val ${metricCls(can, true)}">${can}</div>
-        </div>
-        <div class="card-mob-metric">
-          <div class="card-mob-metric-label">Estresse</div>
-          <div class="card-mob-metric-val ${metricCls(est, true)}">${est}</div>
+        <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
+          ${badgeHtml}
+          <button class="card-expand-btn" onclick="event.stopPropagation();toggleCard(${row.id})">
+            Ver Detalhes
+            <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
         </div>
       </div>
-      <div class="card-mob-row">
-        <span>Humor</span><span>${hum}</span>
+      <div class="card-mob-summary">
+        <div class="card-mob-metrics">
+          <div class="card-mob-metric">
+            <div class="card-mob-metric-label">Recuperação</div>
+            <div class="card-mob-metric-val ${metricCls(rec)}">${rec}</div>
+          </div>
+          <div class="card-mob-metric">
+            <div class="card-mob-metric-label">Cansaço</div>
+            <div class="card-mob-metric-val ${metricCls(can)}">${can}</div>
+          </div>
+          <div class="card-mob-metric">
+            <div class="card-mob-metric-label">Estresse</div>
+            <div class="card-mob-metric-val ${metricCls(est)}">${est}</div>
+          </div>
+        </div>
+        <div class="card-mob-row"><span>Humor</span><span>${hum}</span></div>
+        <div class="card-mob-row"><span>Urina</span><span>${row.urina || '—'}</span></div>
+        <div class="card-mob-dores">
+          <div class="card-mob-dores-label">Dores Locais</div>
+          ${painHtml}
+        </div>
       </div>
-      <div class="card-mob-row">
-        <span>Urina</span><span>${row.urina || '—'}</span>
-      </div>
-      <div class="card-mob-dores">
-        <div class="card-mob-dores-label">Dores</div>
-        ${painHtml}
+      <div class="card-mob-detail" id="mob-detail-${row.id}">
+        <div class="card-mob-detail-inner">
+          <div class="card-detail-grid">
+            <div class="card-detail-item"><div class="card-detail-key">CPF</div><div class="card-detail-val" style="font-family:monospace;font-size:0.75rem">${row.cpf}</div></div>
+            <div class="card-detail-item"><div class="card-detail-key">Sexo</div><div class="card-detail-val">${row.sexo || '—'}</div></div>
+            <div class="card-detail-item"><div class="card-detail-key">Qualidade do Sono</div><div class="card-detail-val">${qso}</div></div>
+            <div class="card-detail-item"><div class="card-detail-key">Dor Muscular Geral</div><div class="card-detail-val">${dmu}</div></div>
+            <div class="card-detail-item"><div class="card-detail-key">Menstruou</div><div class="card-detail-val">${row.menstruou || 'N/A'}</div></div>
+            <div class="card-detail-item"><div class="card-detail-key">Duração Normal</div><div class="card-detail-val">${row.menst_duracao || 'N/A'}</div></div>
+            <div class="card-detail-item"><div class="card-detail-key">Mais de 1x/mês</div><div class="card-detail-val">${row.menst_vezes || 'N/A'}</div></div>
+            ${ath ? `
+            <div class="card-detail-item"><div class="card-detail-key">Categoria</div><div class="card-detail-val">${ath.categoria || '—'}</div></div>
+            ` : ''}
+            ${ath ? `
+            <div class="card-detail-item full"><div class="card-detail-key">Modalidade</div><div class="card-detail-val">${ath.modalidade || '—'}</div></div>
+            ` : ''}
+          </div>
+        </div>
       </div>
     `;
     container.appendChild(card);
   });
+}
+
+// ── TOGGLE MOBILE CARD ────────────────────────────────────
+function toggleCard(id) {
+  const card = document.getElementById(`mob-card-${id}`);
+  if (!card) return;
+  const isExpanded = card.classList.contains('card-expanded');
+  // Fecha todos os outros cards abertos
+  document.querySelectorAll('.athlete-card-mobile.card-expanded').forEach(c => c.classList.remove('card-expanded'));
+  if (!isExpanded) card.classList.add('card-expanded');
 }
 
 // ── EXPAND DETAIL ─────────────────────────────────────────
