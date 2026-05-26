@@ -399,6 +399,77 @@
   .modal-btn-save:hover { background: var(--pink-light); }
   .modal-btn-save:disabled { opacity: 0.5; cursor: not-allowed; }
 
+  /* ── FILTER ACTIVE BADGE ── */
+  #filter-status-bar {
+    display: none;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    padding: 10px 16px;
+    background: linear-gradient(90deg, rgba(224,0,122,0.06), rgba(224,0,122,0.02));
+    border: 1px solid var(--pink-border);
+    border-radius: var(--radius-sm);
+    margin-bottom: 12px;
+    animation: fadeUp .2s ease;
+  }
+  #filter-status-bar.show { display: flex; }
+  .filter-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    background: var(--pink); color: #fff;
+    font-size: 0.72rem; font-weight: 700;
+    padding: 3px 10px; border-radius: 99px;
+    font-family: 'Sora', sans-serif;
+  }
+  .filter-badge-clear {
+    background: none; border: none; cursor: pointer;
+    color: var(--pink); font-size: 0.75rem; font-weight: 600;
+    padding: 3px 8px; border-radius: 99px;
+    border: 1px solid var(--pink-border);
+    transition: all .2s; font-family: 'Inter', sans-serif;
+  }
+  .filter-badge-clear:hover { background: var(--pink); color: #fff; }
+  #filter-status-text { font-size: 0.78rem; color: var(--text2); font-weight: 500; }
+
+  /* ── LAST UPDATED ── */
+  #last-updated {
+    font-size: 0.72rem; color: var(--text3);
+    display: flex; align-items: center; gap: 5px;
+  }
+  #last-updated svg { width: 12px; height: 12px; stroke: var(--text3); fill: none; stroke-width: 2; stroke-linecap: round; }
+
+  /* ── MOBILE CARDS ── */
+  #cards-container { display: none; }
+  .athlete-card-mobile {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+    margin-bottom: 12px;
+    box-shadow: var(--shadow);
+    position: relative;
+    transition: box-shadow .2s;
+  }
+  .athlete-card-mobile.card-risk { border-left: 4px solid var(--danger); background: var(--danger-bg); }
+  .athlete-card-mobile.card-warn { border-left: 4px solid var(--warn); background: var(--warn-bg); }
+  .athlete-card-mobile.card-ok  { border-left: 4px solid var(--success); }
+  .card-mob-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+  .card-mob-name { font-family: 'Sora', sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--text); }
+  .card-mob-date { font-size: 0.7rem; color: var(--text3); margin-top: 2px; }
+  .card-mob-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 10px; }
+  .card-mob-metric { background: var(--surface2); border-radius: var(--radius-sm); padding: 8px; text-align: center; border: 1px solid var(--border); }
+  .card-mob-metric-label { font-size: 0.6rem; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 3px; }
+  .card-mob-metric-val { font-family: 'Sora', sans-serif; font-size: 1.1rem; font-weight: 800; color: var(--text); }
+  .card-mob-metric-val.val-risk { color: var(--danger); }
+  .card-mob-metric-val.val-warn { color: var(--warn); }
+  .card-mob-metric-val.val-ok   { color: var(--success); }
+  .card-mob-row { display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: var(--text2); margin-bottom: 6px; }
+  .card-mob-row span:first-child { color: var(--text3); font-weight: 600; text-transform: uppercase; font-size: 0.65rem; letter-spacing: 0.05em; }
+  .card-mob-dores { margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border); }
+  .card-mob-dores-label { font-size: 0.65rem; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 5px; }
+  .card-mob-pills { display: flex; flex-wrap: wrap; gap: 4px; }
+  .card-mob-pill { background: var(--surface2); border: 1px solid var(--border); border-radius: 99px; padding: 2px 8px; font-size: 0.62rem; color: var(--text2); }
+  .card-mob-pill.pill-risk { background: var(--danger-bg); border-color: var(--danger-border); color: var(--danger); }
+
   /* ── TOAST ── */
   #toast {
     position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(20px);
@@ -417,36 +488,24 @@
     .stats-row { grid-template-columns: 1fr 1fr; }
     header { padding: 0 16px; }
     .header-badge { display: none; }
-    th:nth-child(3), td:nth-child(3),
-    th:nth-child(7), td:nth-child(7),
-    th:nth-child(8), td:nth-child(8),
-    th:nth-child(9), td:nth-child(9),
-    th:nth-child(10), td:nth-child(10),
-    th:nth-child(11), td:nth-child(11),
-    th:nth-child(12), td:nth-child(12) { display: none; }
-    td:nth-child(5), td:nth-child(6) { font-size: 0.75rem; padding: 9px 8px; white-space: nowrap; }
-    th:nth-child(5), th:nth-child(6) { padding: 9px 8px; }
     .export-wrap { width: 100%; }
     .export-select, .export-btn { font-size: 0.78rem; }
     .tab-btn { font-size: 0.78rem; padding: 9px 12px; }
   }
-  @media (max-width: 480px) {
+  @media (max-width: 640px) {
     main { padding: 20px 12px 60px; }
     .stats-row { grid-template-columns: 1fr 1fr; gap: 10px; }
     .stat-val { font-size: 1.6rem; }
     .controls { padding: 14px 12px; gap: 10px; }
     .search-wrap { min-width: 100%; }
-    th:nth-child(2), td:nth-child(2),
-    th:nth-child(3), td:nth-child(3) { display: none; }
-    td:nth-child(4) { font-size: 0.78rem; font-weight: 600; max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    td:nth-child(5) { font-size: 0.72rem; padding: 8px 6px; white-space: nowrap; }
-    td:nth-child(6) { font-size: 0.7rem; padding: 8px 6px; white-space: nowrap; max-width: 80px; overflow: hidden; text-overflow: ellipsis; }
-    td:nth-child(13) { padding: 8px 6px; }
     .filter-btns { gap: 4px; }
     .filter-btn { padding: 6px 10px; font-size: 0.72rem; }
     .refresh-btn { font-size: 0.75rem; padding: 8px 12px; }
     .export-btn { font-size: 0.75rem; padding: 8px 12px; }
     .export-select { font-size: 0.75rem; padding: 8px 28px 8px 10px; }
+    /* Oculta tabela, exibe cards */
+    .table-wrap { display: none; }
+    #cards-container { display: block; }
   }
 </style>
 </head>
@@ -555,11 +614,23 @@
       </button>
     </div>
 
+    <!-- FILTER ACTIVE BAR -->
+    <div id="filter-status-bar">
+      <span id="filter-status-text"></span>
+      <button class="filter-badge-clear" onclick="clearAllFilters()">✕ Limpar filtros</button>
+    </div>
+
     <!-- TABLE -->
     <div class="table-wrap">
       <div class="table-header">
         <span class="table-title">Respostas dos Atletas</span>
-        <span class="table-count" id="table-count">—</span>
+        <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+          <span class="table-count" id="table-count">—</span>
+          <span id="last-updated" style="display:none">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <span id="last-updated-text">—</span>
+          </span>
+        </div>
       </div>
       <div class="table-container">
         <table id="main-table">
@@ -594,6 +665,9 @@
       </div>
       <div class="pagination" id="pagination"></div>
     </div>
+
+    <!-- MOBILE CARDS -->
+    <div id="cards-container"></div>
 
   </div><!-- /tab-1 -->
 
@@ -769,6 +843,7 @@ function calcRisk(row) {
 async function loadData() {
   document.getElementById('table-body').innerHTML = `
     <tr><td colspan="13"><div class="loading-state"><div class="spinner"></div>Carregando dados…</div></td></tr>`;
+  document.getElementById('cards-container').innerHTML = '';
 
   const { data: aths } = await sb.from('cadastro_aluno').select('cpf,nome,categoria,modalidade');
   if (aths) aths.forEach(a => { athletes[a.cpf] = a; });
@@ -782,6 +857,15 @@ async function loadData() {
   allData = (data || []).map(r => ({ ...r, _risk: calcRisk(r) }));
   updateStats();
   currentPage = 1;
+
+  // Timestamp de atualização
+  const now = new Date();
+  const hh = String(now.getHours()).padStart(2,'0');
+  const min = String(now.getMinutes()).padStart(2,'0');
+  const lu = document.getElementById('last-updated');
+  const lut = document.getElementById('last-updated-text');
+  if (lu && lut) { lut.textContent = `Atualizado às ${hh}:${min}`; lu.style.display = 'flex'; }
+
   renderTable();
 }
 
@@ -816,6 +900,37 @@ function clearDateFilter() {
   document.getElementById('date-filter').value = '';
   currentPage = 1;
   renderTable();
+}
+
+function clearAllFilters() {
+  document.getElementById('date-filter').value = '';
+  document.getElementById('search-input').value = '';
+  currentFilter = 'todos';
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector('.filter-btn').classList.add('active');
+  currentPage = 1;
+  renderTable();
+}
+
+function updateFilterBar(dateFilter, query, count) {
+  const bar = document.getElementById('filter-status-bar');
+  const txt = document.getElementById('filter-status-text');
+  const hasDate   = !!dateFilter;
+  const hasSearch = !!query;
+  const hasRisk   = currentFilter !== 'todos';
+  if (!hasDate && !hasSearch && !hasRisk) { bar.classList.remove('show'); return; }
+  bar.classList.add('show');
+  const parts = [];
+  if (hasDate) {
+    const [yyyy, mm, dd] = dateFilter.split('-');
+    parts.push(`📅 ${dd}/${mm}/${yyyy}`);
+  }
+  if (hasSearch) parts.push(`🔍 "${query}"`);
+  if (hasRisk) {
+    const labels = { risco: '⚠️ Risco', atencao: 'Atenção', ok: '✓ OK' };
+    parts.push(labels[currentFilter]);
+  }
+  txt.innerHTML = `<span style="font-size:0.72rem;color:var(--text3);margin-right:4px">Filtrando por</span><strong style="color:var(--pink)">${parts.join(' · ')}</strong><span style="color:var(--text2);margin-left:6px">— ${count} resultado${count !== 1 ? 's' : ''}</span>`;
 }
 
 // ── FILTER ────────────────────────────────────────────────
@@ -860,6 +975,8 @@ function renderTable() {
   });
 
   document.getElementById('table-count').textContent = `${rows.length} registro${rows.length !== 1 ? 's' : ''}`;
+  updateFilterBar(dateFilter, query, rows.length);
+  renderCards(rows);
 
   const totalPages = Math.max(1, Math.ceil(rows.length / PAGE_SIZE));
   if (currentPage > totalPages) currentPage = totalPages;
@@ -945,6 +1062,87 @@ function renderTable() {
   });
 
   renderPagination(totalPages, rows.length);
+}
+
+// ── MOBILE CARDS ──────────────────────────────────────────
+function renderCards(rows) {
+  const container = document.getElementById('cards-container');
+  if (!container) return;
+  if (!rows.length) {
+    container.innerHTML = `<div class="empty-state" style="background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);padding:40px 20px">
+      <svg viewBox="0 0 24 24"><path d="M9 9h.01M15 9h.01M9 13a3.5 3.5 0 0 0 6 0"/><circle cx="12" cy="12" r="10"/></svg>
+      <p>Nenhum resultado encontrado.</p></div>`;
+    return;
+  }
+  const pageRows = rows.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+  container.innerHTML = '';
+  pageRows.forEach(row => {
+    const ath = athletes[row.cpf];
+    const nome = ath ? ath.nome : row.cpf;
+    const riskCls = row._risk === 'risco' ? 'card-risk' : row._risk === 'atencao' ? 'card-warn' : 'card-ok';
+    const badgeHtml = row._risk === 'risco'
+      ? `<span class="badge badge-risk">Risco</span>`
+      : row._risk === 'atencao'
+      ? `<span class="badge badge-warn">Atenção</span>`
+      : `<span class="badge badge-ok">OK</span>`;
+
+    const rec = row.recuperado !== null && row.recuperado !== undefined ? row.recuperado : '—';
+    const can = row.cansaco   !== null && row.cansaco   !== undefined ? row.cansaco   : '—';
+    const est = row.estresse  !== null && row.estresse  !== undefined ? row.estresse  : '—';
+    const hum = row.humor     !== null && row.humor     !== undefined ? row.humor     : '—';
+
+    // Cor das métricas
+    const metricCls = (v, lowBad) => {
+      if (v === '—') return '';
+      const n = Number(v);
+      if (lowBad) return n <= 2 ? 'val-risk' : n <= 4 ? 'val-warn' : 'val-ok';
+      return n <= 2 ? 'val-risk' : n <= 4 ? 'val-warn' : 'val-ok';
+    };
+
+    let painHtml = '<span style="color:var(--text3);font-size:0.72rem">Nenhuma dor relatada</span>';
+    if (row.dores_locais && row.dores_locais !== 'Nenhuma') {
+      const parts = row.dores_locais.split(',').map(s => s.trim());
+      const many = parts.length >= 4;
+      painHtml = `<div class="card-mob-pills">${parts.map(p => `<span class="card-mob-pill${many?' pill-risk':''}">${p}</span>`).join('')}</div>`;
+    }
+
+    const card = document.createElement('div');
+    card.className = `athlete-card-mobile ${riskCls}`;
+    card.innerHTML = `
+      <div class="card-mob-top">
+        <div>
+          <div class="card-mob-name">${nome}</div>
+          <div class="card-mob-date">${row.data_resposta || '—'} · ${row.peso ? row.peso + 'kg' : '—'} · ${row.horas_sono !== null ? row.horas_sono + 'h sono' : '—'}</div>
+        </div>
+        ${badgeHtml}
+      </div>
+      <div class="card-mob-metrics">
+        <div class="card-mob-metric">
+          <div class="card-mob-metric-label">Recuperação</div>
+          <div class="card-mob-metric-val ${metricCls(rec, true)}">${rec}</div>
+        </div>
+        <div class="card-mob-metric">
+          <div class="card-mob-metric-label">Cansaço</div>
+          <div class="card-mob-metric-val ${metricCls(can, true)}">${can}</div>
+        </div>
+        <div class="card-mob-metric">
+          <div class="card-mob-metric-label">Estresse</div>
+          <div class="card-mob-metric-val ${metricCls(est, true)}">${est}</div>
+        </div>
+      </div>
+      <div class="card-mob-row">
+        <span>Humor</span><span>${hum}</span>
+      </div>
+      <div class="card-mob-row">
+        <span>Urina</span><span>${row.urina || '—'}</span>
+      </div>
+      <div class="card-mob-dores">
+        <div class="card-mob-dores-label">Dores</div>
+        ${painHtml}
+      </div>
+    `;
+    container.appendChild(card);
+  });
 }
 
 // ── EXPAND DETAIL ─────────────────────────────────────────
