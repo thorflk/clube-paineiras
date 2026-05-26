@@ -529,9 +529,9 @@
   }
   .outros-box textarea:focus { border-color: var(--pink); }
   .outros-box label { font-size: 0.75rem; font-weight: 600; color: var(--text2); display: block; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.04em; }
-  .outros-intensity { display: flex; gap: 8px; }
+  .outros-intensity { display: flex; gap: 8px; flex-wrap: wrap; }
   .outros-int-btn {
-    flex: 1; padding: 10px 6px;
+    flex: 1; min-width: 70px; padding: 10px 6px;
     border-radius: var(--radius-sm);
     border: 2px solid var(--border);
     background: var(--surface);
@@ -564,7 +564,7 @@
     cursor: pointer; white-space: nowrap; flex-shrink: 0; transition: background .2s;
   }
   .outros-add-btn:hover { background: var(--pink-light); }
-  @media (max-width: 400px) {
+  @media (max-width: 520px) {
     .outros-input-row { flex-direction: column; }
     .outros-text-input { width: 100%; }
     .outros-add-btn { width: 100%; }
@@ -615,11 +615,36 @@
 
   /* ── RESPONSIVE ── */
   @media (max-width: 520px) {
+    /* Header compacto */
+    header { padding: 12px 14px; gap: 10px; }
+    .logo-circle { width: 36px; height: 36px; }
+    .logo-circle svg { width: 20px; height: 20px; }
+    .header-title h1 { font-size: 0.82rem; }
+    .header-title p { display: none; }
+    .header-link { font-size: 0.7rem; padding: 5px 10px; }
+
+    /* Toast responsivo — não corta em telas pequenas */
+    #toast {
+      white-space: normal;
+      text-align: center;
+      width: calc(100% - 40px);
+      max-width: 340px;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      padding: 10px 16px;
+    }
+
     .step-card { padding: 24px 18px 20px; }
-    .recovery-card { width: calc(33.33% - 8px); min-width: 70px; }
+
+    /* Recovery cards: 2 por linha em vez de 3 */
+    .recovery-card { width: calc(50% - 6px); min-width: 0; }
+
     .sex-cards { grid-template-columns: 1fr 1fr; }
     .option-card { min-width: 70px; }
     .body-map-side { min-width: 130px; max-width: 160px; }
+  }
+  @media (max-width: 380px) {
+    .header-link { display: none; }
   }
 </style>
 </head>
