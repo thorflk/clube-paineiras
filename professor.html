@@ -58,8 +58,7 @@
     border: 1px solid rgba(224,0,122,0.2);
     border-radius: 20px;
     padding: 44px 40px 40px;
-    width: 100%;
-    max-width: 400px;
+    width: 100%; max-width: 400px;
     box-shadow: 0 24px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(224,0,122,0.08);
     position: relative;
     backdrop-filter: blur(12px);
@@ -69,127 +68,98 @@
     from { opacity: 0; transform: translateY(18px); }
     to   { opacity: 1; transform: translateY(0); }
   }
-  .login-logo {
-    display: flex; flex-direction: column; align-items: center; margin-bottom: 32px;
-  }
+  .login-logo { display: flex; flex-direction: column; align-items: center; margin-bottom: 32px; }
   .login-logo-circle {
     width: 56px; height: 56px; border-radius: 50%;
     border: 2px solid var(--pink);
     display: flex; align-items: center; justify-content: center;
-    margin-bottom: 14px;
-    box-shadow: 0 0 24px rgba(224,0,122,0.25);
+    margin-bottom: 14px; box-shadow: 0 0 24px rgba(224,0,122,0.25);
   }
   .login-logo-circle svg { width: 32px; height: 32px; }
-  .login-logo h2 {
-    font-family: 'Sora', sans-serif; font-size: 1.05rem; font-weight: 700;
-    color: var(--pink); text-align: center; line-height: 1.3;
-  }
-  .login-logo p {
-    font-size: 0.72rem; color: #666; margin-top: 4px; text-align: center;
-  }
+  .login-logo h2 { font-family: 'Sora', sans-serif; font-size: 1.05rem; font-weight: 700; color: var(--pink); text-align: center; line-height: 1.3; }
+  .login-logo p { font-size: 0.72rem; color: #666; margin-top: 4px; text-align: center; }
   .login-field { margin-bottom: 16px; }
-  .login-field label {
-    display: block; font-size: 0.72rem; font-weight: 600;
-    color: #888; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 7px;
-  }
+  .login-field label { display: block; font-size: 0.72rem; font-weight: 600; color: #888; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 7px; }
   .login-field input {
     width: 100%; padding: 12px 16px;
-    background: rgba(255,255,255,0.06);
-    border: 1.5px solid rgba(255,255,255,0.1);
-    border-radius: var(--radius-sm);
-    font-family: 'Inter', sans-serif; font-size: 0.9rem;
-    color: #fff; outline: none;
-    transition: border-color .2s, box-shadow .2s;
+    background: rgba(255,255,255,0.06); border: 1.5px solid rgba(255,255,255,0.1);
+    border-radius: var(--radius-sm); font-family: 'Inter', sans-serif; font-size: 0.9rem;
+    color: #fff; outline: none; transition: border-color .2s, box-shadow .2s;
   }
   .login-field input::placeholder { color: #555; }
-  .login-field input:focus {
-    border-color: var(--pink);
-    box-shadow: 0 0 0 3px rgba(224,0,122,0.12);
-  }
+  .login-field input:focus { border-color: var(--pink); box-shadow: 0 0 0 3px rgba(224,0,122,0.12); }
   .login-btn {
-    width: 100%; padding: 13px;
-    background: var(--pink);
-    border: none; border-radius: var(--radius-sm);
-    font-family: 'Sora', sans-serif; font-size: 0.92rem; font-weight: 700;
-    color: #fff; cursor: pointer; margin-top: 8px;
-    transition: background .2s, transform .15s, box-shadow .2s;
-    box-shadow: 0 4px 20px rgba(224,0,122,0.35);
-    letter-spacing: 0.02em;
+    width: 100%; padding: 13px; background: var(--pink); border: none;
+    border-radius: var(--radius-sm); font-family: 'Sora', sans-serif; font-size: 0.92rem; font-weight: 700;
+    color: #fff; cursor: pointer; margin-top: 8px; transition: background .2s, transform .15s, box-shadow .2s;
+    box-shadow: 0 4px 20px rgba(224,0,122,0.35); letter-spacing: 0.02em;
   }
-  .login-btn:hover { background: var(--pink-light); transform: translateY(-1px); box-shadow: 0 6px 28px rgba(224,0,122,0.45); }
-  .login-btn:active { transform: translateY(0); }
+  .login-btn:hover { background: var(--pink-light); transform: translateY(-1px); }
   .login-error {
-    display: none;
-    margin-top: 14px; padding: 10px 14px;
+    display: none; margin-top: 14px; padding: 10px 14px;
     background: rgba(255,59,59,0.12); border: 1px solid rgba(255,59,59,0.3);
-    border-radius: var(--radius-sm); color: #ff7070; font-size: 0.8rem;
-    text-align: center;
+    border-radius: var(--radius-sm); color: #ff7070; font-size: 0.8rem; text-align: center;
   }
   .login-error.show { display: block; animation: shake .3s ease; }
-  @keyframes shake {
-    0%,100% { transform: translateX(0); }
-    25%      { transform: translateX(-6px); }
-    75%      { transform: translateX(6px); }
-  }
+  @keyframes shake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
 
-  /* ── APP (hidden until login) ── */
+  /* ── APP ── */
   #app { display: none; }
 
   /* ── HEADER ── */
   header {
-    background: #000;
-    padding: 0 32px;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    height: 64px;
+    background: #000; padding: 0 32px;
+    display: flex; align-items: center; gap: 16px; height: 64px;
     position: sticky; top: 0; z-index: 100;
     box-shadow: 0 2px 24px rgba(0,0,0,0.5);
   }
   .logo-circle {
     width: 40px; height: 40px; border-radius: 50%;
     border: 2px solid var(--pink);
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
   }
   .logo-circle svg { width: 24px; height: 24px; }
   .header-title h1 { font-family: 'Sora', sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--pink); }
   .header-title p { font-size: 0.7rem; color: #888; margin-top: 1px; }
   .header-badge {
-    margin-left: auto;
-    background: rgba(224,0,122,0.15);
-    border: 1px solid var(--pink-border);
-    color: var(--pink);
-    font-size: 0.72rem;
-    font-weight: 600;
-    padding: 5px 12px;
-    border-radius: 99px;
+    margin-left: auto; background: rgba(224,0,122,0.15); border: 1px solid var(--pink-border);
+    color: var(--pink); font-size: 0.72rem; font-weight: 600; padding: 5px 12px; border-radius: 99px;
     display: flex; align-items: center; gap: 5px;
   }
   .header-badge::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--pink); display: block; }
-  .header-link {
-    color: #888; font-size: 0.78rem; text-decoration: none;
-    padding: 6px 14px; border: 1px solid #333; border-radius: 20px;
-    transition: all .2s; margin-left: 10px;
-  }
+  .header-link { color: #888; font-size: 0.78rem; text-decoration: none; padding: 6px 14px; border: 1px solid #333; border-radius: 20px; transition: all .2s; margin-left: 10px; }
   .header-link:hover { color: #fff; border-color: #666; }
 
   /* ── MAIN ── */
   main { max-width: 1200px; margin: 0 auto; padding: 32px 20px 60px; }
 
+  /* ── TABS ── */
+  .tabs-nav {
+    display: flex; gap: 4px; margin-bottom: 24px;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 6px;
+    box-shadow: var(--shadow);
+  }
+  .tab-btn {
+    flex: 1; padding: 10px 20px;
+    border: none; border-radius: 10px;
+    font-family: 'Sora', sans-serif; font-size: 0.85rem; font-weight: 600;
+    cursor: pointer; transition: all .2s;
+    background: transparent; color: var(--text2);
+  }
+  .tab-btn:hover { background: var(--surface2); color: var(--text); }
+  .tab-btn.active { background: var(--pink); color: #fff; box-shadow: 0 4px 14px rgba(224,0,122,0.3); }
+  .tab-pane { display: none; }
+  .tab-pane.active { display: block; }
+
   /* ── STATS ROW ── */
   .stats-row {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 14px;
-    margin-bottom: 28px;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 14px; margin-bottom: 28px;
   }
   .stat-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 20px 22px;
-    box-shadow: var(--shadow);
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 20px 22px; box-shadow: var(--shadow);
     transition: transform .2s, box-shadow .2s;
   }
   .stat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
@@ -206,26 +176,15 @@
 
   /* ── CONTROLS ── */
   .controls {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 18px 20px;
-    margin-bottom: 20px;
-    box-shadow: var(--shadow);
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-    align-items: center;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 18px 20px; margin-bottom: 20px;
+    box-shadow: var(--shadow); display: flex; gap: 12px; flex-wrap: wrap; align-items: center;
   }
-  .search-wrap {
-    flex: 1; min-width: 220px;
-    position: relative;
-  }
+  .search-wrap { flex: 1; min-width: 220px; position: relative; }
   .search-wrap svg {
     position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
     width: 16px; height: 16px; stroke: var(--text3); fill: none;
-    stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
-    pointer-events: none;
+    stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; pointer-events: none;
   }
   .search-wrap input {
     width: 100%; padding: 10px 16px 10px 38px;
@@ -238,12 +197,30 @@
   .filter-btns { display: flex; gap: 6px; flex-wrap: wrap; }
   .filter-btn {
     padding: 8px 14px; border-radius: 99px; font-size: 0.78rem; font-weight: 600;
-    border: 1.5px solid var(--border); background: var(--surface2);
-    color: var(--text2); cursor: pointer; transition: all .2s;
-    font-family: 'Inter', sans-serif;
+    border: 1.5px solid var(--border); background: var(--surface2); color: var(--text2);
+    cursor: pointer; transition: all .2s; font-family: 'Inter', sans-serif;
   }
   .filter-btn:hover { border-color: var(--pink-border); color: var(--pink); }
   .filter-btn.active { background: var(--pink); border-color: var(--pink); color: #fff; }
+
+  /* Date filter */
+  .date-filter-wrap { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .date-filter-wrap label { font-size: 0.78rem; font-weight: 600; color: var(--text2); white-space: nowrap; }
+  .date-input {
+    padding: 9px 12px; border-radius: var(--radius-sm);
+    border: 1.5px solid var(--border); background: var(--surface2);
+    font-family: 'Inter', sans-serif; font-size: 0.82rem; color: var(--text2);
+    outline: none; cursor: pointer; transition: border-color .2s;
+  }
+  .date-input:focus { border-color: var(--pink); }
+  .date-clear-btn {
+    padding: 8px 12px; border-radius: var(--radius-sm);
+    border: 1.5px solid var(--border); background: transparent;
+    font-family: 'Inter', sans-serif; font-size: 0.78rem; color: var(--text3);
+    cursor: pointer; transition: all .2s;
+  }
+  .date-clear-btn:hover { border-color: var(--danger); color: var(--danger); }
+
   .refresh-btn {
     padding: 9px 16px; border-radius: var(--radius-sm);
     background: var(--pink); color: #fff; border: none;
@@ -254,46 +231,33 @@
   .refresh-btn:hover { background: var(--pink-light); transform: translateY(-1px); }
 
   /* ── EXPORT CONTROLS ── */
-  .export-wrap {
-    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
-  }
+  .export-wrap { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
   .export-select {
     padding: 9px 12px; border-radius: var(--radius-sm);
     border: 1.5px solid var(--border); background: var(--surface2);
     font-family: 'Inter', sans-serif; font-size: 0.82rem; color: var(--text2);
-    outline: none; cursor: pointer; transition: border-color .2s;
-    appearance: none;
+    outline: none; cursor: pointer; transition: border-color .2s; appearance: none;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238888aa' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 10px center;
-    padding-right: 30px;
+    background-repeat: no-repeat; background-position: right 10px center; padding-right: 30px;
   }
   .export-select:focus { border-color: var(--pink); }
   .export-btn {
     padding: 9px 16px; border-radius: var(--radius-sm);
-    background: transparent; color: var(--pink);
-    border: 1.5px solid var(--pink-border);
+    background: transparent; color: var(--pink); border: 1.5px solid var(--pink-border);
     font-family: 'Sora', sans-serif; font-size: 0.82rem; font-weight: 600;
-    cursor: pointer; transition: all .2s;
-    display: flex; align-items: center; gap: 6px;
-    white-space: nowrap;
+    cursor: pointer; transition: all .2s; display: flex; align-items: center; gap: 6px; white-space: nowrap;
   }
   .export-btn:hover { background: var(--pink); color: #fff; box-shadow: 0 2px 10px rgba(224,0,122,0.25); transform: translateY(-1px); }
   .export-btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 
   /* ── TABLE WRAP ── */
   .table-wrap {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    overflow: hidden;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden;
   }
   .table-header {
-    padding: 16px 20px 12px;
-    border-bottom: 1px solid var(--border);
-    display: flex; align-items: center; justify-content: space-between;
-    flex-wrap: wrap; gap: 8px;
+    padding: 16px 20px 12px; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;
   }
   .table-title { font-family: 'Sora', sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--text); }
   .table-count { font-size: 0.75rem; color: var(--text3); }
@@ -301,26 +265,13 @@
   table { width: 100%; border-collapse: collapse; }
   thead { background: var(--surface2); }
   th {
-    padding: 11px 14px;
-    text-align: left;
-    font-size: 0.68rem;
-    font-weight: 700;
-    color: var(--text3);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    border-bottom: 1px solid var(--border);
-    white-space: nowrap;
-    cursor: pointer;
-    user-select: none;
-    transition: color .2s;
+    padding: 11px 14px; text-align: left; font-size: 0.68rem; font-weight: 700;
+    color: var(--text3); text-transform: uppercase; letter-spacing: 0.06em;
+    border-bottom: 1px solid var(--border); white-space: nowrap; cursor: pointer;
+    user-select: none; transition: color .2s;
   }
   th:hover { color: var(--pink); }
-  td {
-    padding: 11px 14px;
-    font-size: 0.82rem;
-    border-bottom: 1px solid var(--border);
-    vertical-align: middle;
-  }
+  td { padding: 11px 14px; font-size: 0.82rem; border-bottom: 1px solid var(--border); vertical-align: middle; }
   tr:last-child td { border-bottom: none; }
   tbody tr { transition: background .15s; }
   tbody tr:hover { background: var(--surface2); }
@@ -332,8 +283,7 @@
   /* ── BADGES ── */
   .badge {
     display: inline-flex; align-items: center; gap: 4px;
-    padding: 3px 9px; border-radius: 99px;
-    font-size: 0.65rem; font-weight: 700;
+    padding: 3px 9px; border-radius: 99px; font-size: 0.65rem; font-weight: 700;
   }
   .badge-risk { background: var(--danger-bg); color: var(--danger); border: 1px solid var(--danger-border); }
   .badge-warn { background: var(--warn-bg); color: var(--warn); border: 1px solid var(--warn-border); }
@@ -343,19 +293,13 @@
   /* ── PAIN PILL ── */
   .pain-cell { max-width: 200px; }
   .pain-pills { display: flex; flex-wrap: wrap; gap: 3px; }
-  .pain-pill {
-    background: var(--surface2); border: 1px solid var(--border);
-    border-radius: 99px; padding: 2px 7px;
-    font-size: 0.6rem; color: var(--text2);
-  }
+  .pain-pill { background: var(--surface2); border: 1px solid var(--border); border-radius: 99px; padding: 2px 7px; font-size: 0.6rem; color: var(--text2); }
   .pain-pill.many { background: var(--danger-bg); border-color: var(--danger-border); color: var(--danger); }
 
   /* ── PAGINATION ── */
   .pagination {
     display: flex; align-items: center; justify-content: center;
-    gap: 6px; padding: 16px 20px;
-    border-top: 1px solid var(--border);
-    flex-wrap: wrap;
+    gap: 6px; padding: 16px 20px; border-top: 1px solid var(--border); flex-wrap: wrap;
   }
   .page-btn {
     width: 34px; height: 34px; border-radius: var(--radius-sm);
@@ -370,9 +314,7 @@
   .page-info { font-size: 0.78rem; color: var(--text3); padding: 0 6px; }
 
   /* ── EMPTY / LOADING ── */
-  .empty-state {
-    text-align: center; padding: 60px 20px;
-  }
+  .empty-state { text-align: center; padding: 60px 20px; }
   .empty-state svg { width: 48px; height: 48px; stroke: var(--border); fill: none; stroke-width: 1.5; margin-bottom: 16px; }
   .empty-state p { color: var(--text3); font-size: 0.88rem; }
   .loading-state { text-align: center; padding: 60px; color: var(--text3); font-size: 0.88rem; }
@@ -392,35 +334,87 @@
   .expand-btn svg { width: 16px; height: 16px; display: block; transition: transform .2s; }
   .expand-btn.open svg { transform: rotate(180deg); }
 
+  /* ── ABA 2: ATLETAS ── */
+  .athletes-controls {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 18px 20px; margin-bottom: 20px;
+    box-shadow: var(--shadow); display: flex; gap: 12px; align-items: center; flex-wrap: wrap;
+  }
+  .athletes-table-wrap {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden;
+  }
+  .athletes-table-wrap .table-header { padding: 16px 20px 12px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+  .athletes-table-wrap table { width: 100%; border-collapse: collapse; }
+  .athletes-table-wrap th { padding: 11px 14px; font-size: 0.68rem; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: 0.06em; border-bottom: 1px solid var(--border); text-align: left; white-space: nowrap; }
+  .athletes-table-wrap td { padding: 11px 14px; font-size: 0.82rem; border-bottom: 1px solid var(--border); vertical-align: middle; }
+  .athletes-table-wrap tr:last-child td { border-bottom: none; }
+  .athletes-table-wrap tbody tr:hover { background: var(--surface2); }
+
+  .edit-btn {
+    padding: 6px 14px; border-radius: var(--radius-sm);
+    border: 1.5px solid var(--pink-border); background: transparent;
+    color: var(--pink); font-family: 'Sora', sans-serif; font-size: 0.75rem; font-weight: 600;
+    cursor: pointer; transition: all .2s;
+  }
+  .edit-btn:hover { background: var(--pink); color: #fff; }
+
+  /* ── MODAL ── */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.45); z-index: 8000;
+    align-items: center; justify-content: center; padding: 20px;
+  }
+  .modal-overlay.show { display: flex; }
+  .modal-card {
+    background: var(--surface); border-radius: var(--radius);
+    border: 1px solid var(--border); box-shadow: var(--shadow-lg);
+    padding: 32px; width: 100%; max-width: 460px;
+    animation: fadeUp .25s ease;
+    max-height: 90vh; overflow-y: auto;
+  }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+  .modal-title { font-family: 'Sora', sans-serif; font-size: 1.1rem; font-weight: 700; color: var(--text); margin-bottom: 22px; }
+  .modal-field { margin-bottom: 16px; }
+  .modal-field label { display: block; font-size: 0.76rem; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 6px; }
+  .modal-field input, .modal-field select {
+    width: 100%; padding: 11px 14px;
+    border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+    font-family: 'Inter', sans-serif; font-size: 0.92rem; color: var(--text);
+    background: var(--surface2); outline: none; transition: border-color .2s, box-shadow .2s;
+    -webkit-appearance: none;
+  }
+  .modal-field input:focus, .modal-field select:focus { border-color: var(--pink); box-shadow: 0 0 0 3px var(--pink-glow); }
+  .modal-btns { display: flex; gap: 10px; margin-top: 24px; }
+  .modal-btn {
+    flex: 1; padding: 12px 20px; border-radius: var(--radius-sm);
+    font-family: 'Sora', sans-serif; font-size: 0.88rem; font-weight: 600;
+    border: none; cursor: pointer; transition: all .2s;
+  }
+  .modal-btn-cancel { background: transparent; border: 1.5px solid var(--border); color: var(--text2); }
+  .modal-btn-cancel:hover { border-color: var(--pink-border); color: var(--pink); }
+  .modal-btn-save { background: var(--pink); color: #fff; box-shadow: 0 4px 14px rgba(224,0,122,0.25); }
+  .modal-btn-save:hover { background: var(--pink-light); }
+  .modal-btn-save:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  /* ── TOAST ── */
+  #toast {
+    position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(20px);
+    background: var(--text); color: #fff;
+    padding: 12px 24px; border-radius: 99px;
+    font-size: 0.85rem; font-weight: 500;
+    opacity: 0; transition: all .3s;
+    z-index: 9999; white-space: nowrap; pointer-events: none;
+  }
+  #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  #toast.success { background: var(--success); }
+  #toast.error { background: var(--danger); }
+
   /* ── RESPONSIVE ── */
-  /*
-    Colunas por posição (th/td):
-    1 = expand btn
-    2 = Data
-    3 = CPF
-    4 = Atleta
-    5 = Peso
-    6 = Urina
-    7 = Sono
-    8 = Recuperação
-    9 = Cansaço
-    10 = Estresse
-    11 = Humor
-    12 = Dores
-    13 = Status
-
-    Tablet (≤768px): mostrar btn, Data, Atleta, Peso, Urina, Status
-    → ocultar CPF(3), Sono(7), Recuperação(8), Cansaço(9), Estresse(10), Humor(11), Dores(12)
-
-    Mobile (≤480px): mostrar btn, Atleta, Peso, Urina, Status
-    → ocultar tb Data(2), CPF(3)
-  */
   @media (max-width: 768px) {
     .stats-row { grid-template-columns: 1fr 1fr; }
     header { padding: 0 16px; }
     .header-badge { display: none; }
-
-    /* Ocultar: CPF(3), Sono(7), Recuperação(8), Cansaço(9), Estresse(10), Humor(11), Dores(12) */
     th:nth-child(3), td:nth-child(3),
     th:nth-child(7), td:nth-child(7),
     th:nth-child(8), td:nth-child(8),
@@ -428,36 +422,24 @@
     th:nth-child(10), td:nth-child(10),
     th:nth-child(11), td:nth-child(11),
     th:nth-child(12), td:nth-child(12) { display: none; }
-
-    /* Compactar colunas visíveis no tablet */
-    td:nth-child(5), td:nth-child(6) {
-      font-size: 0.75rem;
-      padding: 9px 8px;
-      white-space: nowrap;
-    }
+    td:nth-child(5), td:nth-child(6) { font-size: 0.75rem; padding: 9px 8px; white-space: nowrap; }
     th:nth-child(5), th:nth-child(6) { padding: 9px 8px; }
-
     .export-wrap { width: 100%; }
     .export-select, .export-btn { font-size: 0.78rem; }
+    .tab-btn { font-size: 0.78rem; padding: 9px 12px; }
   }
-
   @media (max-width: 480px) {
     main { padding: 20px 12px 60px; }
     .stats-row { grid-template-columns: 1fr 1fr; gap: 10px; }
     .stat-val { font-size: 1.6rem; }
     .controls { padding: 14px 12px; gap: 10px; }
     .search-wrap { min-width: 100%; }
-
-    /* Ocultar tb: Data(2), CPF(3) */
     th:nth-child(2), td:nth-child(2),
     th:nth-child(3), td:nth-child(3) { display: none; }
-
-    /* Linha principal mobile: expand + Atleta + Peso + Urina + Status */
     td:nth-child(4) { font-size: 0.78rem; font-weight: 600; max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     td:nth-child(5) { font-size: 0.72rem; padding: 8px 6px; white-space: nowrap; }
     td:nth-child(6) { font-size: 0.7rem; padding: 8px 6px; white-space: nowrap; max-width: 80px; overflow: hidden; text-overflow: ellipsis; }
     td:nth-child(13) { padding: 8px 6px; }
-
     .filter-btns { gap: 4px; }
     .filter-btn { padding: 6px 10px; font-size: 0.72rem; }
     .refresh-btn { font-size: 0.75rem; padding: 8px 12px; }
@@ -482,7 +464,6 @@
       <h2>Clube Paineiras do Morumby</h2>
       <p>Painel do Professor — Acesso Restrito</p>
     </div>
-
     <div class="login-field">
       <label for="login-user">Usuário</label>
       <input type="text" id="login-user" placeholder="Digite seu usuário" autocomplete="username" onkeydown="if(event.key==='Enter')doLogin()"/>
@@ -517,104 +498,184 @@
 
 <main>
 
-  <!-- STATS -->
-  <div class="stats-row" id="stats-row">
-    <div class="stat-card pink">
-      <div class="stat-label">Total de Respostas</div>
-      <div class="stat-val pink-v" id="stat-total">—</div>
-    </div>
-    <div class="stat-card red">
-      <div class="stat-label">⚠️ Risco</div>
-      <div class="stat-val red-v" id="stat-risk">—</div>
-    </div>
-    <div class="stat-card warn">
-      <div class="stat-label">Atenção</div>
-      <div class="stat-val warn-v" id="stat-warn">—</div>
-    </div>
-    <div class="stat-card green">
-      <div class="stat-label">✓ OK</div>
-      <div class="stat-val green-v" id="stat-ok">—</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Atletas únicos</div>
-      <div class="stat-val" id="stat-unique">—</div>
-    </div>
+  <!-- ── TABS NAV ── -->
+  <div class="tabs-nav">
+    <button class="tab-btn active" id="tab-btn-1" onclick="switchTab(1)">📊 Respostas do Questionário</button>
+    <button class="tab-btn" id="tab-btn-2" onclick="switchTab(2)">👥 Cadastro de Atletas</button>
   </div>
 
-  <!-- CONTROLS -->
-  <div class="controls">
-    <div class="search-wrap">
-      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-      <input type="text" id="search-input" placeholder="Buscar por CPF ou nome do atleta…" oninput="renderTable()"/>
+  <!-- ══════ ABA 1: RESPOSTAS ══════════════════════════════ -->
+  <div class="tab-pane active" id="tab-1">
+
+    <!-- STATS -->
+    <div class="stats-row" id="stats-row">
+      <div class="stat-card pink"><div class="stat-label">Total de Respostas</div><div class="stat-val pink-v" id="stat-total">—</div></div>
+      <div class="stat-card red"><div class="stat-label">⚠️ Risco</div><div class="stat-val red-v" id="stat-risk">—</div></div>
+      <div class="stat-card warn"><div class="stat-label">Atenção</div><div class="stat-val warn-v" id="stat-warn">—</div></div>
+      <div class="stat-card green"><div class="stat-label">✓ OK</div><div class="stat-val green-v" id="stat-ok">—</div></div>
+      <div class="stat-card"><div class="stat-label">Atletas únicos</div><div class="stat-val" id="stat-unique">—</div></div>
     </div>
-    <div class="filter-btns">
-      <button class="filter-btn active" onclick="setFilter('todos', this)">Todos</button>
-      <button class="filter-btn" onclick="setFilter('risco', this)">⚠️ Risco</button>
-      <button class="filter-btn" onclick="setFilter('atencao', this)">Atenção</button>
-      <button class="filter-btn" onclick="setFilter('ok', this)">✓ OK</button>
-    </div>
-    <!-- EXPORT CSV -->
-    <div class="export-wrap">
-      <select class="export-select" id="export-days" title="Período para exportação">
-        <option value="7">Últimos 7 dias</option>
-        <option value="15">Últimos 15 dias</option>
-        <option value="30" selected>Últimos 30 dias</option>
-        <option value="0">Tudo</option>
-      </select>
-      <button class="export-btn" onclick="exportCSV()">
-        <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        Exportar CSV
+
+    <!-- CONTROLS -->
+    <div class="controls">
+      <div class="search-wrap">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="text" id="search-input" placeholder="Buscar por CPF ou nome do atleta…" oninput="currentPage=1;renderTable()"/>
+      </div>
+      <div class="filter-btns">
+        <button class="filter-btn active" onclick="setFilter('todos', this)">Todos</button>
+        <button class="filter-btn" onclick="setFilter('risco', this)">⚠️ Risco</button>
+        <button class="filter-btn" onclick="setFilter('atencao', this)">Atenção</button>
+        <button class="filter-btn" onclick="setFilter('ok', this)">✓ OK</button>
+      </div>
+      <!-- Filtro de data em tela -->
+      <div class="date-filter-wrap">
+        <label>Filtrar data:</label>
+        <input type="date" class="date-input" id="date-filter" oninput="currentPage=1;renderTable()"/>
+        <button class="date-clear-btn" onclick="clearDateFilter()">✕ Limpar</button>
+      </div>
+      <!-- EXPORT CSV -->
+      <div class="export-wrap">
+        <select class="export-select" id="export-days" title="Período para exportação">
+          <option value="7">Últimos 7 dias</option>
+          <option value="15">Últimos 15 dias</option>
+          <option value="30" selected>Últimos 30 dias</option>
+          <option value="0">Tudo</option>
+        </select>
+        <button class="export-btn" onclick="exportCSV()">
+          <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Exportar CSV
+        </button>
+      </div>
+      <button class="refresh-btn" onclick="loadData()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+        Atualizar
       </button>
     </div>
-    <button class="refresh-btn" onclick="loadData()">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
-      Atualizar
-    </button>
-  </div>
 
-  <!-- TABLE -->
-  <div class="table-wrap">
-    <div class="table-header">
-      <span class="table-title">Respostas dos Atletas</span>
-      <span class="table-count" id="table-count">—</span>
+    <!-- TABLE -->
+    <div class="table-wrap">
+      <div class="table-header">
+        <span class="table-title">Respostas dos Atletas</span>
+        <span class="table-count" id="table-count">—</span>
+      </div>
+      <div class="table-container">
+        <table id="main-table">
+          <thead>
+            <tr>
+              <th></th>
+              <th onclick="sortBy('data_resposta')">Data ↕</th>
+              <th onclick="sortBy('cpf')">CPF ↕</th>
+              <th>Atleta</th>
+              <th onclick="sortBy('peso')">Peso</th>
+              <th>Urina</th>
+              <th>Sono (h)</th>
+              <th>Recuperação</th>
+              <th>Cansaço</th>
+              <th>Estresse</th>
+              <th>Humor</th>
+              <th>Dores</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="table-body">
+            <tr>
+              <td colspan="13">
+                <div class="loading-state">
+                  <div class="spinner"></div>
+                  Carregando dados…
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="pagination" id="pagination"></div>
     </div>
-    <div class="table-container">
-      <table id="main-table">
-        <thead>
-          <tr>
-            <th></th>
-            <th onclick="sortBy('data_resposta')">Data ↕</th>
-            <th onclick="sortBy('cpf')">CPF ↕</th>
-            <th>Atleta</th>
-            <th onclick="sortBy('peso')">Peso</th>
-            <th>Urina</th>
-            <th>Sono (h)</th>
-            <th>Recuperação</th>
-            <th>Cansaço</th>
-            <th>Estresse</th>
-            <th>Humor</th>
-            <th>Dores</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody id="table-body">
-          <tr>
-            <td colspan="13">
-              <div class="loading-state">
-                <div class="spinner"></div>
-                Carregando dados…
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+
+  </div><!-- /tab-1 -->
+
+  <!-- ══════ ABA 2: CADASTRO DE ATLETAS ═════════════════════ -->
+  <div class="tab-pane" id="tab-2">
+
+    <div class="athletes-controls">
+      <div class="search-wrap" style="flex:1;min-width:200px;">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="text" id="ath-search" placeholder="Buscar por Nome ou CPF…" oninput="renderAthletes()"/>
+      </div>
+      <button class="refresh-btn" onclick="loadAthletes()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+        Atualizar
+      </button>
     </div>
-    <div class="pagination" id="pagination"></div>
-  </div>
+
+    <div class="athletes-table-wrap">
+      <div class="table-header">
+        <span class="table-title">Atletas Cadastrados</span>
+        <span class="table-count" id="ath-count">—</span>
+      </div>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>CPF</th>
+              <th>Nome</th>
+              <th>Nascimento</th>
+              <th>Sexo</th>
+              <th>Categoria</th>
+              <th>Modalidade</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="ath-table-body">
+            <tr><td colspan="7"><div class="loading-state"><div class="spinner"></div>Carregando atletas…</div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div><!-- /tab-2 -->
 
 </main>
-
 </div><!-- /#app -->
+
+<!-- ── MODAL EDITAR ATLETA ── -->
+<div class="modal-overlay" id="edit-modal">
+  <div class="modal-card">
+    <div class="modal-title">✏️ Editar Cadastro</div>
+    <input type="hidden" id="edit-cpf"/>
+    <div class="modal-field">
+      <label>Nome Completo</label>
+      <input type="text" id="edit-nome" placeholder="Nome completo"/>
+    </div>
+    <div class="modal-field">
+      <label>Data de Nascimento</label>
+      <input type="text" id="edit-nascimento" placeholder="DD/MM/AAAA" maxlength="10"/>
+    </div>
+    <div class="modal-field">
+      <label>Sexo Biológico</label>
+      <select id="edit-sexo">
+        <option value="">Selecione…</option>
+        <option value="Masculino">Masculino</option>
+        <option value="Feminino">Feminino</option>
+      </select>
+    </div>
+    <div class="modal-field">
+      <label>Categoria</label>
+      <input type="text" id="edit-categoria" placeholder="Ex: Sub-17, Adulto…"/>
+    </div>
+    <div class="modal-field">
+      <label>Modalidade</label>
+      <input type="text" id="edit-modalidade" placeholder="Ex: Natação, Tênis…"/>
+    </div>
+    <div class="modal-btns">
+      <button class="modal-btn modal-btn-cancel" onclick="closeEditModal()">Cancelar</button>
+      <button class="modal-btn modal-btn-save" id="edit-save-btn" onclick="saveAthleteEdit()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
 
 <script>
 // ── LOGIN ─────────────────────────────────────────────────
@@ -629,6 +690,7 @@ function doLogin() {
     document.getElementById('login-overlay').style.display = 'none';
     document.getElementById('app').style.display = 'block';
     loadData();
+    loadAthletes();
   } else {
     err.classList.add('show');
     document.getElementById('login-pass').value = '';
@@ -646,33 +708,56 @@ const sb = createClient(
 // ── STATE ─────────────────────────────────────────────────
 let allData = [];
 let athletes = {};
+let allAthletes = [];
 let currentFilter = 'todos';
 let currentPage = 1;
 const PAGE_SIZE = 20;
 let sortField = 'data_resposta';
 let sortAsc = false;
-let expandedRow = null;
 
-// ── RISK LOGIC ────────────────────────────────────────────
+// ── TOAST ─────────────────────────────────────────────────
+function toast(msg, type = '') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'show ' + type;
+  setTimeout(() => { t.className = ''; }, 3200);
+}
+
+// ── TABS ──────────────────────────────────────────────────
+function switchTab(n) {
+  document.getElementById('tab-1').classList.toggle('active', n === 1);
+  document.getElementById('tab-2').classList.toggle('active', n === 2);
+  document.getElementById('tab-btn-1').classList.toggle('active', n === 1);
+  document.getElementById('tab-btn-2').classList.toggle('active', n === 2);
+}
+
+// ── RISK LOGIC (usando valores numéricos agora) ────────────
 function calcRisk(row) {
   let score = 0;
-  const HIGH_RISK_VALS = ['Muito cansado','Muito estressado','Muito dolorido','Insônia','Irritado e para baixo'];
-  const WARN_VALS = ['Mais cansado do normal','Sinto-me estressado','Sinto-me dolorido','Sono agitado','Bravo com todos'];
-  if (HIGH_RISK_VALS.includes(row.cansaco)) score += 2;
-  if (WARN_VALS.includes(row.cansaco)) score += 1;
-  if (HIGH_RISK_VALS.includes(row.estresse)) score += 2;
-  if (WARN_VALS.includes(row.estresse)) score += 1;
-  if (HIGH_RISK_VALS.includes(row.dor_muscular)) score += 1;
-  if (WARN_VALS.includes(row.dor_muscular)) score += 1;
-  if (HIGH_RISK_VALS.includes(row.humor)) score += 1;
-  if (WARN_VALS.includes(row.humor)) score += 1;
+  const num = v => parseInt(v) || 0;
+  // Cansaço: 1=muito cansado (alto risco), 2=cansado (atenção)
+  if (num(row.cansaco) === 1) score += 2;
+  else if (num(row.cansaco) === 2) score += 1;
+  // Estresse
+  if (num(row.estresse) === 1) score += 2;
+  else if (num(row.estresse) === 2) score += 1;
+  // Dor muscular
+  if (num(row.dor_muscular) === 1) score += 1;
+  else if (num(row.dor_muscular) === 2) score += 1;
+  // Humor
+  if (num(row.humor) === 1) score += 1;
+  else if (num(row.humor) === 2) score += 1;
+  // Dores locais
   if (row.dores_locais && row.dores_locais !== 'Nenhuma') {
     const count = row.dores_locais.split(',').length;
     if (count >= 4) score += 2;
     else if (count >= 2) score += 1;
+    // Intensidade alta
+    if (row.dores_locais.includes('(Alta)')) score += 1;
   }
-  if (row.recuperado && row.recuperado.toLowerCase().includes('muito pouca')) score += 2;
-  else if (row.recuperado && row.recuperado.toLowerCase().includes('pouca')) score += 1;
+  // Recuperação: 1-2 ruim
+  if (num(row.recuperado) <= 2 && num(row.recuperado) >= 1) score += 2;
+  else if (num(row.recuperado) <= 4 && num(row.recuperado) >= 3) score += 1;
   if (score >= 4) return 'risco';
   if (score >= 2) return 'atencao';
   return 'ok';
@@ -711,6 +796,23 @@ function updateStats() {
   document.getElementById('stat-unique').textContent = unique;
 }
 
+// ── DATE FILTER HELPERS ───────────────────────────────────
+function parseRowDate(raw) {
+  if (!raw) return null;
+  if (/^\d{4}-\d{2}-\d{2}/.test(raw)) return raw.substring(0, 10);
+  if (/^\d{2}\/\d{2}\/\d{4}/.test(raw)) {
+    const [dd, mm, yyyy] = raw.split('/');
+    return `${yyyy}-${mm.padStart(2,'0')}-${dd.padStart(2,'0')}`;
+  }
+  return null;
+}
+
+function clearDateFilter() {
+  document.getElementById('date-filter').value = '';
+  currentPage = 1;
+  renderTable();
+}
+
 // ── FILTER ────────────────────────────────────────────────
 function setFilter(f, btn) {
   currentFilter = f;
@@ -730,12 +832,18 @@ function sortBy(field) {
 // ── RENDER TABLE ──────────────────────────────────────────
 function renderTable() {
   const query = document.getElementById('search-input').value.toLowerCase().trim();
+  const dateFilter = document.getElementById('date-filter').value; // YYYY-MM-DD
 
   let rows = allData.filter(r => {
     const matchFilter = currentFilter === 'todos' || r._risk === currentFilter;
     const athName = athletes[r.cpf] ? athletes[r.cpf].nome.toLowerCase() : '';
     const matchSearch = !query || r.cpf.includes(query) || athName.includes(query);
-    return matchFilter && matchSearch;
+    let matchDate = true;
+    if (dateFilter) {
+      const rowDate = parseRowDate(r.data_resposta);
+      matchDate = rowDate === dateFilter;
+    }
+    return matchFilter && matchSearch && matchDate;
   });
 
   rows.sort((a, b) => {
@@ -783,6 +891,7 @@ function renderTable() {
     const tr = document.createElement('tr');
     tr.className = riskCls;
     tr.id = `row-${row.id}`;
+    // Exibir valores numéricos puros para o professor (A.I.)
     tr.innerHTML = `
       <td>
         <button class="expand-btn" id="expand-${row.id}" onclick="toggleDetail(${row.id})">
@@ -796,11 +905,11 @@ function renderTable() {
       <td style="font-weight:600">${nome}</td>
       <td>${row.peso ? row.peso + ' kg' : '—'}</td>
       <td style="font-size:0.78rem">${row.urina || '—'}</td>
-      <td>${row.horas_sono !== null ? row.horas_sono + 'h' : '—'}</td>
-      <td style="font-size:0.75rem;max-width:130px">${row.recuperado || '—'}</td>
-      <td style="font-size:0.78rem">${row.cansaco || '—'}</td>
-      <td style="font-size:0.78rem">${row.estresse || '—'}</td>
-      <td style="font-size:0.78rem">${row.humor || '—'}</td>
+      <td>${row.horas_sono !== null && row.horas_sono !== undefined ? row.horas_sono + 'h' : '—'}</td>
+      <td style="font-weight:700;font-size:0.92rem">${row.recuperado !== null && row.recuperado !== undefined ? row.recuperado : '—'}</td>
+      <td style="font-weight:700;font-size:0.92rem">${row.cansaco !== null && row.cansaco !== undefined ? row.cansaco : '—'}</td>
+      <td style="font-weight:700;font-size:0.92rem">${row.estresse !== null && row.estresse !== undefined ? row.estresse : '—'}</td>
+      <td style="font-weight:700;font-size:0.92rem">${row.humor !== null && row.humor !== undefined ? row.humor : '—'}</td>
       <td class="pain-cell">${painHtml}</td>
       <td>${badgeHtml}</td>
     `;
@@ -815,8 +924,8 @@ function renderTable() {
         <div class="detail-item"><div class="detail-key">Menstruou</div><div class="detail-val">${row.menstruou || 'N/A'}</div></div>
         <div class="detail-item"><div class="detail-key">Duração Normal</div><div class="detail-val">${row.menst_duracao || 'N/A'}</div></div>
         <div class="detail-item"><div class="detail-key">Mais de 1x/mês</div><div class="detail-val">${row.menst_vezes || 'N/A'}</div></div>
-        <div class="detail-item"><div class="detail-key">Qualidade do Sono</div><div class="detail-val">${row.qualidade_sono || '—'}</div></div>
-        <div class="detail-item"><div class="detail-key">Dor Muscular (geral)</div><div class="detail-val">${row.dor_muscular || '—'}</div></div>
+        <div class="detail-item"><div class="detail-key">Qualidade do Sono</div><div class="detail-val">${row.qualidade_sono !== null && row.qualidade_sono !== undefined ? row.qualidade_sono : '—'}</div></div>
+        <div class="detail-item"><div class="detail-key">Dor Muscular (geral)</div><div class="detail-val">${row.dor_muscular !== null && row.dor_muscular !== undefined ? row.dor_muscular : '—'}</div></div>
         <div class="detail-item" style="grid-column: span 2"><div class="detail-key">Dores Locais</div><div class="detail-val">${row.dores_locais || 'Nenhuma'}</div></div>
         ${ath ? `
         <div class="detail-item"><div class="detail-key">Categoria</div><div class="detail-val">${ath.categoria}</div></div>
@@ -838,10 +947,7 @@ function toggleDetail(id) {
   const isOpen = dtr.classList.contains('open');
   document.querySelectorAll('.detail-row.open').forEach(r => r.classList.remove('open'));
   document.querySelectorAll('.expand-btn.open').forEach(b => b.classList.remove('open'));
-  if (!isOpen) {
-    dtr.classList.add('open');
-    btn.classList.add('open');
-  }
+  if (!isOpen) { dtr.classList.add('open'); btn.classList.add('open'); }
 }
 
 // ── PAGINATION ────────────────────────────────────────────
@@ -872,83 +978,56 @@ function goPage(n) {
 // ── EXPORT CSV ────────────────────────────────────────────
 function exportCSV() {
   const days = parseInt(document.getElementById('export-days').value, 10);
-
-  // Calcular data de corte
   let cutoff = null;
   if (days > 0) {
     cutoff = new Date();
     cutoff.setHours(0, 0, 0, 0);
     cutoff.setDate(cutoff.getDate() - days);
   }
-
-  // Filtrar dados
   const filtered = allData.filter(r => {
     if (!cutoff) return true;
     if (!r.data_resposta) return false;
-    // data_resposta pode ser "YYYY-MM-DD" ou "DD/MM/YYYY"
-    let d;
-    if (/^\d{4}-\d{2}-\d{2}/.test(r.data_resposta)) {
-      d = new Date(r.data_resposta.substring(0, 10));
-    } else if (/^\d{2}\/\d{2}\/\d{4}/.test(r.data_resposta)) {
-      const [dd, mm, yyyy] = r.data_resposta.split('/');
-      d = new Date(`${yyyy}-${mm}-${dd}`);
-    } else {
-      d = new Date(r.data_resposta);
-    }
+    const dateStr = parseRowDate(r.data_resposta);
+    if (!dateStr) return false;
+    const d = new Date(dateStr);
     return !isNaN(d) && d >= cutoff;
   });
-
-  if (!filtered.length) {
-    alert('Nenhum dado encontrado para o período selecionado.');
-    return;
-  }
-
-  // Colunas do CSV
+  if (!filtered.length) { alert('Nenhum dado encontrado para o período selecionado.'); return; }
   const cols = [
-    { key: 'data_resposta',  label: 'Data Resposta' },
-    { key: 'cpf',            label: 'CPF' },
-    { key: '_nome',          label: 'Nome Atleta' },
-    { key: '_categoria',     label: 'Categoria' },
-    { key: '_modalidade',    label: 'Modalidade' },
-    { key: 'sexo',           label: 'Sexo' },
-    { key: 'peso',           label: 'Peso (kg)' },
-    { key: 'urina',          label: 'Cor da Urina' },
-    { key: 'horas_sono',     label: 'Horas de Sono' },
+    { key: 'data_resposta', label: 'Data Resposta' },
+    { key: 'cpf', label: 'CPF' },
+    { key: '_nome', label: 'Nome Atleta' },
+    { key: '_categoria', label: 'Categoria' },
+    { key: '_modalidade', label: 'Modalidade' },
+    { key: 'sexo', label: 'Sexo' },
+    { key: 'peso', label: 'Peso (kg)' },
+    { key: 'urina', label: 'Cor da Urina' },
+    { key: 'horas_sono', label: 'Horas de Sono' },
     { key: 'qualidade_sono', label: 'Qualidade do Sono' },
-    { key: 'recuperado',     label: 'Recuperação' },
-    { key: 'cansaco',        label: 'Cansaço' },
-    { key: 'estresse',       label: 'Estresse' },
-    { key: 'humor',          label: 'Humor' },
-    { key: 'dor_muscular',   label: 'Dor Muscular (Geral)' },
-    { key: 'dores_locais',   label: 'Dores Locais' },
-    { key: 'menstruou',      label: 'Menstruou' },
-    { key: 'menst_duracao',  label: 'Duração Normal (Menst.)' },
-    { key: 'menst_vezes',    label: 'Mais de 1x/mês (Menst.)' },
-    { key: '_risk',          label: 'Status de Risco' },
+    { key: 'recuperado', label: 'Recuperação' },
+    { key: 'cansaco', label: 'Cansaço' },
+    { key: 'estresse', label: 'Estresse' },
+    { key: 'humor', label: 'Humor' },
+    { key: 'dor_muscular', label: 'Dor Muscular (Geral)' },
+    { key: 'dores_locais', label: 'Dores Locais' },
+    { key: 'menstruou', label: 'Menstruou' },
+    { key: 'menst_duracao', label: 'Duração Normal (Menst.)' },
+    { key: 'menst_vezes', label: 'Mais de 1x/mês (Menst.)' },
+    { key: '_risk', label: 'Status de Risco' },
   ];
-
-  // Montar CSV
   const escape = v => {
     if (v === null || v === undefined) return '';
     const s = String(v).replace(/"/g, '""');
     return /[,"\n\r]/.test(s) ? `"${s}"` : s;
   };
-
   const header = cols.map(c => escape(c.label)).join(',');
   const rowsCSV = filtered.map(r => {
     const ath = athletes[r.cpf] || {};
-    const enriched = {
-      ...r,
-      _nome:       ath.nome       || '',
-      _categoria:  ath.categoria  || '',
-      _modalidade: ath.modalidade || '',
-    };
-    // Traduzir risco
+    const enriched = { ...r, _nome: ath.nome || '', _categoria: ath.categoria || '', _modalidade: ath.modalidade || '' };
     enriched._risk = r._risk === 'risco' ? 'Risco' : r._risk === 'atencao' ? 'Atenção' : 'OK';
     return cols.map(c => escape(enriched[c.key])).join(',');
   });
-
-  const csv = '\uFEFF' + [header, ...rowsCSV].join('\r\n'); // BOM para Excel reconhecer UTF-8
+  const csv = '\uFEFF' + [header, ...rowsCSV].join('\r\n');
   const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
@@ -956,11 +1035,108 @@ function exportCSV() {
   const hoje = new Date().toISOString().slice(0, 10);
   a.href = url;
   a.download = `paineiras_respostas_${periodo}_${hoje}.csv`;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a); URL.revokeObjectURL(url);
 }
+
+// ── LOAD ATHLETES (ABA 2) ─────────────────────────────────
+async function loadAthletes() {
+  document.getElementById('ath-table-body').innerHTML = `<tr><td colspan="7"><div class="loading-state"><div class="spinner"></div>Carregando atletas…</div></td></tr>`;
+  const { data, error } = await sb.from('cadastro_aluno').select('*').order('nome', { ascending: true });
+  if (error) {
+    document.getElementById('ath-table-body').innerHTML = `<tr><td colspan="7"><div class="empty-state"><p>Erro: ${error.message}</p></div></td></tr>`;
+    return;
+  }
+  allAthletes = data || [];
+  // Also refresh athletes map
+  allAthletes.forEach(a => { athletes[a.cpf] = a; });
+  renderAthletes();
+}
+
+function renderAthletes() {
+  const q = (document.getElementById('ath-search').value || '').toLowerCase().trim();
+  const filtered = allAthletes.filter(a => {
+    if (!q) return true;
+    return a.nome.toLowerCase().includes(q) || (a.cpf || '').includes(q);
+  });
+  document.getElementById('ath-count').textContent = `${filtered.length} atleta${filtered.length !== 1 ? 's' : ''}`;
+  const tbody = document.getElementById('ath-table-body');
+  if (!filtered.length) {
+    tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><p>Nenhum atleta encontrado.</p></div></td></tr>`;
+    return;
+  }
+  tbody.innerHTML = '';
+  filtered.forEach(ath => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td style="font-family:monospace;font-size:0.78rem;color:var(--text2)">${ath.cpf || '—'}</td>
+      <td style="font-weight:600">${ath.nome || '—'}</td>
+      <td style="font-size:0.8rem;color:var(--text3)">${ath.nascimento || '—'}</td>
+      <td style="font-size:0.8rem">${ath.sexo || '—'}</td>
+      <td style="font-size:0.8rem">${ath.categoria || '—'}</td>
+      <td style="font-size:0.8rem">${ath.modalidade || '—'}</td>
+      <td><button class="edit-btn" onclick="openEditModal('${ath.cpf}')">✏️ Editar</button></td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+// ── EDIT MODAL ────────────────────────────────────────────
+function openEditModal(cpf) {
+  const ath = allAthletes.find(a => a.cpf === cpf);
+  if (!ath) return;
+  document.getElementById('edit-cpf').value = cpf;
+  document.getElementById('edit-nome').value = ath.nome || '';
+  document.getElementById('edit-nascimento').value = ath.nascimento || '';
+  document.getElementById('edit-sexo').value = ath.sexo || '';
+  document.getElementById('edit-categoria').value = ath.categoria || '';
+  document.getElementById('edit-modalidade').value = ath.modalidade || '';
+  document.getElementById('edit-modal').classList.add('show');
+}
+
+function closeEditModal() {
+  document.getElementById('edit-modal').classList.remove('show');
+}
+
+// Nascimento mask no modal
+document.getElementById('edit-nascimento').addEventListener('input', function() {
+  let v = this.value.replace(/\D/g,'').slice(0,8);
+  if (v.length > 4) v = v.slice(0,2)+'/'+v.slice(2,4)+'/'+v.slice(4);
+  else if (v.length > 2) v = v.slice(0,2)+'/'+v.slice(2);
+  this.value = v;
+});
+
+async function saveAthleteEdit() {
+  const cpf  = document.getElementById('edit-cpf').value;
+  const nome = document.getElementById('edit-nome').value.trim();
+  const nasc = document.getElementById('edit-nascimento').value.trim();
+  const sexo = document.getElementById('edit-sexo').value;
+  const cat  = document.getElementById('edit-categoria').value.trim();
+  const mod  = document.getElementById('edit-modalidade').value.trim();
+
+  if (!nome || !cat || !mod) { toast('⚠️ Preencha todos os campos obrigatórios', 'error'); return; }
+
+  const btn = document.getElementById('edit-save-btn');
+  btn.disabled = true;
+  btn.textContent = 'Salvando…';
+
+  const { error } = await sb.from('cadastro_aluno').update({
+    nome, nascimento: nasc, sexo, categoria: cat, modalidade: mod
+  }).eq('cpf', cpf);
+
+  btn.disabled = false;
+  btn.textContent = 'Salvar';
+
+  if (error) { toast('❌ Erro ao salvar: ' + error.message, 'error'); return; }
+  toast('✅ Cadastro atualizado com sucesso!', 'success');
+  closeEditModal();
+  await loadAthletes();
+}
+
+// Close modal on overlay click
+document.getElementById('edit-modal').addEventListener('click', function(e) {
+  if (e.target === this) closeEditModal();
+});
 </script>
 </body>
 </html>
