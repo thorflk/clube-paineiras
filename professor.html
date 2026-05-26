@@ -261,8 +261,8 @@
   }
   .table-title { font-family: 'Sora', sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--text); }
   .table-count { font-size: 0.75rem; color: var(--text3); }
-  .table-container { overflow-x: auto; }
-  table { width: 100%; border-collapse: collapse; }
+  .table-container { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  table { width: 100%; border-collapse: collapse; min-width: 1100px; }
   thead { background: var(--surface2); }
   th {
     padding: 11px 14px; text-align: left; font-size: 0.68rem; font-weight: 700;
@@ -272,6 +272,7 @@
   }
   th:hover { color: var(--pink); }
   td { padding: 11px 14px; font-size: 0.82rem; border-bottom: 1px solid var(--border); vertical-align: middle; }
+  td.td-status { white-space: nowrap; }
   tr:last-child td { border-bottom: none; }
   tbody tr { transition: background .15s; }
   tbody tr:hover { background: var(--surface2); }
@@ -291,10 +292,11 @@
   .badge::before { content: '●'; font-size: 0.5rem; }
 
   /* ── PAIN PILL ── */
-  .pain-cell { max-width: 200px; }
+  .pain-cell { width: 180px; max-width: 180px; }
   .pain-pills { display: flex; flex-wrap: wrap; gap: 3px; }
-  .pain-pill { background: var(--surface2); border: 1px solid var(--border); border-radius: 99px; padding: 2px 7px; font-size: 0.6rem; color: var(--text2); }
+  .pain-pill { background: var(--surface2); border: 1px solid var(--border); border-radius: 99px; padding: 2px 7px; font-size: 0.6rem; color: var(--text2); white-space: nowrap; }
   .pain-pill.many { background: var(--danger-bg); border-color: var(--danger-border); color: var(--danger); }
+  .pain-more { font-size: 0.6rem; color: var(--text3); font-style: italic; margin-top: 2px; display: block; }
 
   /* ── PAGINATION ── */
   .pagination {
@@ -345,11 +347,27 @@
     border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden;
   }
   .athletes-table-wrap .table-header { padding: 16px 20px 12px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
-  .athletes-table-wrap table { width: 100%; border-collapse: collapse; }
+  .athletes-table-wrap .table-container { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .athletes-table-wrap table { width: 100%; border-collapse: collapse; min-width: 620px; }
   .athletes-table-wrap th { padding: 11px 14px; font-size: 0.68rem; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: 0.06em; border-bottom: 1px solid var(--border); text-align: left; white-space: nowrap; }
   .athletes-table-wrap td { padding: 11px 14px; font-size: 0.82rem; border-bottom: 1px solid var(--border); vertical-align: middle; }
   .athletes-table-wrap tr:last-child td { border-bottom: none; }
   .athletes-table-wrap tbody tr:hover { background: var(--surface2); }
+
+  /* ── ATHLETE MOBILE CARDS ── */
+  #ath-cards-container { display: none; }
+  .ath-card-mobile {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 16px; margin-bottom: 12px;
+    box-shadow: var(--shadow);
+  }
+  .ath-card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+  .ath-card-name { font-family: 'Sora', sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--text); }
+  .ath-card-cpf { font-size: 0.7rem; color: var(--text3); font-family: monospace; margin-top: 2px; }
+  .ath-card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+  .ath-card-field { background: var(--surface2); border-radius: var(--radius-sm); padding: 8px 10px; border: 1px solid var(--border); }
+  .ath-card-field-label { font-size: 0.6rem; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 3px; }
+  .ath-card-field-val { font-size: 0.82rem; color: var(--text); font-weight: 500; }
 
   .edit-btn {
     padding: 6px 14px; border-radius: var(--radius-sm);
@@ -397,6 +415,77 @@
   .modal-btn-save:hover { background: var(--pink-light); }
   .modal-btn-save:disabled { opacity: 0.5; cursor: not-allowed; }
 
+  /* ── FILTER ACTIVE BADGE ── */
+  #filter-status-bar {
+    display: none;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    padding: 10px 16px;
+    background: linear-gradient(90deg, rgba(224,0,122,0.06), rgba(224,0,122,0.02));
+    border: 1px solid var(--pink-border);
+    border-radius: var(--radius-sm);
+    margin-bottom: 12px;
+    animation: fadeUp .2s ease;
+  }
+  #filter-status-bar.show { display: flex; }
+  .filter-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    background: var(--pink); color: #fff;
+    font-size: 0.72rem; font-weight: 700;
+    padding: 3px 10px; border-radius: 99px;
+    font-family: 'Sora', sans-serif;
+  }
+  .filter-badge-clear {
+    background: none; border: none; cursor: pointer;
+    color: var(--pink); font-size: 0.75rem; font-weight: 600;
+    padding: 3px 8px; border-radius: 99px;
+    border: 1px solid var(--pink-border);
+    transition: all .2s; font-family: 'Inter', sans-serif;
+  }
+  .filter-badge-clear:hover { background: var(--pink); color: #fff; }
+  #filter-status-text { font-size: 0.78rem; color: var(--text2); font-weight: 500; }
+
+  /* ── LAST UPDATED ── */
+  #last-updated {
+    font-size: 0.72rem; color: var(--text3);
+    display: flex; align-items: center; gap: 5px;
+  }
+  #last-updated svg { width: 12px; height: 12px; stroke: var(--text3); fill: none; stroke-width: 2; stroke-linecap: round; }
+
+  /* ── MOBILE CARDS ── */
+  #cards-container { display: none; }
+  .athlete-card-mobile {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+    margin-bottom: 12px;
+    box-shadow: var(--shadow);
+    position: relative;
+    transition: box-shadow .2s;
+  }
+  .athlete-card-mobile.card-risk { border-left: 4px solid var(--danger); background: var(--danger-bg); }
+  .athlete-card-mobile.card-warn { border-left: 4px solid var(--warn); background: var(--warn-bg); }
+  .athlete-card-mobile.card-ok  { border-left: 4px solid var(--success); }
+  .card-mob-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+  .card-mob-name { font-family: 'Sora', sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--text); }
+  .card-mob-date { font-size: 0.7rem; color: var(--text3); margin-top: 2px; }
+  .card-mob-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 10px; }
+  .card-mob-metric { background: var(--surface2); border-radius: var(--radius-sm); padding: 8px; text-align: center; border: 1px solid var(--border); }
+  .card-mob-metric-label { font-size: 0.6rem; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 3px; }
+  .card-mob-metric-val { font-family: 'Sora', sans-serif; font-size: 1.1rem; font-weight: 800; color: var(--text); }
+  .card-mob-metric-val.val-risk { color: var(--danger); }
+  .card-mob-metric-val.val-warn { color: var(--warn); }
+  .card-mob-metric-val.val-ok   { color: var(--success); }
+  .card-mob-row { display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: var(--text2); margin-bottom: 6px; }
+  .card-mob-row span:first-child { color: var(--text3); font-weight: 600; text-transform: uppercase; font-size: 0.65rem; letter-spacing: 0.05em; }
+  .card-mob-dores { margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border); }
+  .card-mob-dores-label { font-size: 0.65rem; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 5px; }
+  .card-mob-pills { display: flex; flex-wrap: wrap; gap: 4px; }
+  .card-mob-pill { background: var(--surface2); border: 1px solid var(--border); border-radius: 99px; padding: 2px 8px; font-size: 0.62rem; color: var(--text2); }
+  .card-mob-pill.pill-risk { background: var(--danger-bg); border-color: var(--danger-border); color: var(--danger); }
+
   /* ── TOAST ── */
   #toast {
     position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(20px);
@@ -410,196 +499,32 @@
   #toast.success { background: var(--success); }
   #toast.error { background: var(--danger); }
 
-  /* ── TOAST responsivo ── */
-  @media (max-width: 520px) {
-    #toast {
-      white-space: normal;
-      text-align: center;
-      width: calc(100% - 40px);
-      max-width: 340px;
-      border-radius: 12px;
-      font-size: 0.8rem;
-      padding: 10px 16px;
-    }
-  }
-
-  /* ── STAT CARD: indicador visual de tendência ── */
-  .stat-trend {
-    display: inline-flex;
-    align-items: center;
-    gap: 3px;
-    font-size: 0.68rem;
-    font-weight: 600;
-    margin-top: 6px;
-    padding: 2px 7px;
-    border-radius: 99px;
-  }
-  .stat-trend.trend-up   { background: rgba(255,59,59,0.1);  color: var(--danger); }
-  .stat-trend.trend-down { background: rgba(0,184,72,0.1);   color: var(--success); }
-  .stat-trend.trend-neu  { background: rgba(136,136,170,0.1); color: var(--text3); }
-
-  /* ── MOBILE CARDS: substitui tabela em telas pequenas ── */
-  .mobile-cards-list { display: none; }
-
   /* ── RESPONSIVE ── */
   @media (max-width: 768px) {
     .stats-row { grid-template-columns: 1fr 1fr; }
     header { padding: 0 16px; }
     .header-badge { display: none; }
-    th:nth-child(3), td:nth-child(3),
-    th:nth-child(7), td:nth-child(7),
-    th:nth-child(8), td:nth-child(8),
-    th:nth-child(9), td:nth-child(9),
-    th:nth-child(10), td:nth-child(10),
-    th:nth-child(11), td:nth-child(11),
-    th:nth-child(12), td:nth-child(12) { display: none; }
-    td:nth-child(5), td:nth-child(6) { font-size: 0.75rem; padding: 9px 8px; white-space: nowrap; }
-    th:nth-child(5), th:nth-child(6) { padding: 9px 8px; }
     .export-wrap { width: 100%; }
     .export-select, .export-btn { font-size: 0.78rem; }
     .tab-btn { font-size: 0.78rem; padding: 9px 12px; }
   }
-
-  @media (max-width: 480px) {
+  @media (max-width: 640px) {
     main { padding: 20px 12px 60px; }
     .stats-row { grid-template-columns: 1fr 1fr; gap: 10px; }
     .stat-val { font-size: 1.6rem; }
     .controls { padding: 14px 12px; gap: 10px; }
     .search-wrap { min-width: 100%; }
-
-    /* Esconde a tabela e mostra os cards no mobile */
-    .table-container { display: none; }
-    .mobile-cards-list { display: block; }
-
     .filter-btns { gap: 4px; }
     .filter-btn { padding: 6px 10px; font-size: 0.72rem; }
     .refresh-btn { font-size: 0.75rem; padding: 8px 12px; }
     .export-btn { font-size: 0.75rem; padding: 8px 12px; }
     .export-select { font-size: 0.75rem; padding: 8px 28px 8px 10px; }
-  }
-
-  /* ── MOBILE RESPONSE CARD ── */
-  .m-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    margin-bottom: 10px;
-    box-shadow: var(--shadow);
-    overflow: hidden;
-    transition: box-shadow .2s;
-  }
-  .m-card.m-risk  { border-left: 4px solid var(--danger); background: var(--danger-bg); }
-  .m-card.m-warn  { border-left: 4px solid var(--warn);   background: var(--warn-bg); }
-  .m-card.m-ok    { border-left: 4px solid var(--success); }
-
-  .m-card-header {
-    display: flex;
-    align-items: center;
-    padding: 14px 14px 12px;
-    gap: 10px;
-    cursor: pointer;
-    user-select: none;
-    -webkit-tap-highlight-color: transparent;
-  }
-  .m-card-info { flex: 1; min-width: 0; }
-  .m-card-name {
-    font-family: 'Sora', sans-serif;
-    font-size: 0.92rem;
-    font-weight: 700;
-    color: var(--text);
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  }
-  .m-card-meta {
-    font-size: 0.7rem;
-    color: var(--text3);
-    margin-top: 2px;
-  }
-  .m-card-right {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-shrink: 0;
-  }
-  .m-expand-btn {
-    width: 30px; height: 30px;
-    border: 1.5px solid var(--border);
-    border-radius: 50%;
-    background: var(--surface2);
-    display: flex; align-items: center; justify-content: center;
-    transition: all .25s;
-    flex-shrink: 0;
-  }
-  .m-expand-btn svg {
-    width: 14px; height: 14px;
-    stroke: var(--text3); fill: none;
-    stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round;
-    transition: transform .3s cubic-bezier(.4,0,.2,1);
-  }
-  .m-card.expanded .m-expand-btn svg { transform: rotate(180deg); }
-  .m-card.expanded .m-expand-btn {
-    border-color: var(--pink-border);
-    background: var(--pink-glow);
-  }
-  .m-card.expanded .m-expand-btn svg { stroke: var(--pink); }
-
-  /* Scores rápidos no header do card */
-  .m-scores {
-    display: flex;
-    gap: 6px;
-    padding: 0 14px 12px;
-    flex-wrap: wrap;
-  }
-  .m-score-chip {
-    font-size: 0.68rem;
-    font-weight: 600;
-    padding: 3px 8px;
-    border-radius: 6px;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    color: var(--text2);
-    display: flex; align-items: center; gap: 3px;
-  }
-  .m-score-chip span { color: var(--text3); font-weight: 400; }
-
-  /* Área expansível */
-  .m-card-detail {
-    display: none;
-    border-top: 1px solid var(--border);
-    padding: 14px;
-    animation: fadeDetailIn .25s ease;
-  }
-  @keyframes fadeDetailIn {
-    from { opacity: 0; transform: translateY(-6px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  .m-card.expanded .m-card-detail { display: block; }
-
-  .m-detail-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-    margin-bottom: 10px;
-  }
-  .m-detail-item {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    padding: 9px 11px;
-  }
-  .m-detail-item.full { grid-column: span 2; }
-  .m-detail-key {
-    font-size: 0.6rem;
-    font-weight: 700;
-    color: var(--text3);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-bottom: 3px;
-  }
-  .m-detail-val {
-    font-size: 0.8rem;
-    font-weight: 500;
-    color: var(--text);
-    word-break: break-word;
+    /* Respostas: oculta tabela, exibe cards */
+    .table-wrap { display: none; }
+    #cards-container { display: block; }
+    /* Atletas: oculta tabela, exibe cards */
+    .athletes-table-wrap { display: none; }
+    #ath-cards-container { display: block; }
   }
 </style>
 </head>
@@ -664,11 +589,11 @@
 
     <!-- STATS -->
     <div class="stats-row" id="stats-row">
-      <div class="stat-card pink"><div class="stat-label">Total de Respostas</div><div class="stat-val pink-v" id="stat-total">—</div><div class="stat-trend trend-neu" id="stat-total-trend"></div></div>
-      <div class="stat-card red"><div class="stat-label">⚠️ Risco</div><div class="stat-val red-v" id="stat-risk">—</div><div class="stat-trend trend-neu" id="stat-risk-trend"></div></div>
-      <div class="stat-card warn"><div class="stat-label">Atenção</div><div class="stat-val warn-v" id="stat-warn">—</div><div class="stat-trend trend-neu" id="stat-warn-trend"></div></div>
-      <div class="stat-card green"><div class="stat-label">✓ OK</div><div class="stat-val green-v" id="stat-ok">—</div><div class="stat-trend trend-neu" id="stat-ok-trend"></div></div>
-      <div class="stat-card"><div class="stat-label">Atletas únicos</div><div class="stat-val" id="stat-unique">—</div><div class="stat-trend trend-neu" id="stat-unique-trend"></div></div>
+      <div class="stat-card pink"><div class="stat-label">Total de Respostas</div><div class="stat-val pink-v" id="stat-total">—</div></div>
+      <div class="stat-card red"><div class="stat-label">⚠️ Risco</div><div class="stat-val red-v" id="stat-risk">—</div></div>
+      <div class="stat-card warn"><div class="stat-label">Atenção</div><div class="stat-val warn-v" id="stat-warn">—</div></div>
+      <div class="stat-card green"><div class="stat-label">✓ OK</div><div class="stat-val green-v" id="stat-ok">—</div></div>
+      <div class="stat-card"><div class="stat-label">Atletas únicos</div><div class="stat-val" id="stat-unique">—</div></div>
     </div>
 
     <!-- CONTROLS -->
@@ -708,17 +633,29 @@
       </button>
     </div>
 
+    <!-- FILTER ACTIVE BAR -->
+    <div id="filter-status-bar">
+      <span id="filter-status-text"></span>
+      <button class="filter-badge-clear" onclick="clearAllFilters()">✕ Limpar filtros</button>
+    </div>
+
     <!-- TABLE -->
     <div class="table-wrap">
       <div class="table-header">
         <span class="table-title">Respostas dos Atletas</span>
-        <span class="table-count" id="table-count">—</span>
+        <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+          <span class="table-count" id="table-count">—</span>
+          <span id="last-updated" style="display:none">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <span id="last-updated-text">—</span>
+          </span>
+        </div>
       </div>
       <div class="table-container">
         <table id="main-table">
           <thead>
             <tr>
-              <th></th>
+              <th style="width:36px"></th>
               <th onclick="sortBy('data_resposta')">Data ↕</th>
               <th onclick="sortBy('cpf')">CPF ↕</th>
               <th>Atleta</th>
@@ -729,8 +666,8 @@
               <th>Cansaço</th>
               <th>Estresse</th>
               <th>Humor</th>
-              <th>Dores</th>
-              <th>Status</th>
+              <th style="width:180px">Dores</th>
+              <th style="width:90px;white-space:nowrap">Status</th>
             </tr>
           </thead>
           <tbody id="table-body">
@@ -748,10 +685,8 @@
       <div class="pagination" id="pagination"></div>
     </div>
 
-    <!-- MOBILE CARDS (visível apenas em telas < 480px) -->
-    <div class="mobile-cards-list" id="mobile-cards-list">
-      <!-- Preenchido via JS -->
-    </div>
+    <!-- MOBILE CARDS -->
+    <div id="cards-container"></div>
 
   </div><!-- /tab-1 -->
 
@@ -793,6 +728,9 @@
         </table>
       </div>
     </div>
+
+    <!-- MOBILE CARDS ATLETAS -->
+    <div id="ath-cards-container"></div>
 
   </div><!-- /tab-2 -->
 
@@ -927,6 +865,7 @@ function calcRisk(row) {
 async function loadData() {
   document.getElementById('table-body').innerHTML = `
     <tr><td colspan="13"><div class="loading-state"><div class="spinner"></div>Carregando dados…</div></td></tr>`;
+  document.getElementById('cards-container').innerHTML = '';
 
   const { data: aths } = await sb.from('cadastro_aluno').select('cpf,nome,categoria,modalidade');
   if (aths) aths.forEach(a => { athletes[a.cpf] = a; });
@@ -940,56 +879,40 @@ async function loadData() {
   allData = (data || []).map(r => ({ ...r, _risk: calcRisk(r) }));
   updateStats();
   currentPage = 1;
+
+  // Timestamp de atualização
+  const now = new Date();
+  const hh = String(now.getHours()).padStart(2,'0');
+  const min = String(now.getMinutes()).padStart(2,'0');
+  const lu = document.getElementById('last-updated');
+  const lut = document.getElementById('last-updated-text');
+  if (lu && lut) { lut.textContent = `Atualizado às ${hh}:${min}`; lu.style.display = 'flex'; }
+
   renderTable();
 }
 
 // ── STATS ─────────────────────────────────────────────────
 function updateStats() {
-  const total  = allData.length;
   const risk   = allData.filter(r => r._risk === 'risco').length;
   const warn   = allData.filter(r => r._risk === 'atencao').length;
   const ok     = allData.filter(r => r._risk === 'ok').length;
   const unique = new Set(allData.map(r => r.cpf)).size;
-
-  document.getElementById('stat-total').textContent  = total;
+  document.getElementById('stat-total').textContent  = allData.length;
   document.getElementById('stat-risk').textContent   = risk;
   document.getElementById('stat-warn').textContent   = warn;
   document.getElementById('stat-ok').textContent     = ok;
   document.getElementById('stat-unique').textContent = unique;
-
-  // Indicadores de tendência baseados em proporções
-  const riskPct  = total ? Math.round(risk / total * 100) : 0;
-  const warnPct  = total ? Math.round(warn / total * 100) : 0;
-  const okPct    = total ? Math.round(ok   / total * 100) : 0;
-
-  const setTrend = (id, pct, invertColors) => {
-    const el = document.getElementById(id);
-    if (!el || !total) return;
-    // invertColors: risco e atenção — alto % é ruim; ok — alto % é bom
-    if (pct >= 30 && invertColors)      { el.className = 'stat-trend trend-up';   el.textContent = `▲ ${pct}% do total`; }
-    else if (pct < 10 && invertColors)  { el.className = 'stat-trend trend-down'; el.textContent = `▼ ${pct}% do total`; }
-    else if (!invertColors && pct >= 70){ el.className = 'stat-trend trend-down'; el.textContent = `▲ ${pct}% do total`; }
-    else                                { el.className = 'stat-trend trend-neu';  el.textContent = `${pct}% do total`; }
-  };
-
-  setTrend('stat-total-trend',  null, false);
-  document.getElementById('stat-total-trend').textContent = `${unique} atleta${unique !== 1 ? 's' : ''} único${unique !== 1 ? 's' : ''}`;
-  document.getElementById('stat-total-trend').className = 'stat-trend trend-neu';
-
-  setTrend('stat-risk-trend',   riskPct, true);
-  setTrend('stat-warn-trend',   warnPct, true);
-  setTrend('stat-ok-trend',     okPct,   false);
-
-  const uniqueTrend = document.getElementById('stat-unique-trend');
-  if (uniqueTrend) { uniqueTrend.textContent = `de ${total} resposta${total !== 1 ? 's' : ''}`; uniqueTrend.className = 'stat-trend trend-neu'; }
 }
 
 // ── DATE FILTER HELPERS ───────────────────────────────────
 function parseRowDate(raw) {
   if (!raw) return null;
+  // Formato ISO: YYYY-MM-DD ou YYYY-MM-DDTHH:MM...
   if (/^\d{4}-\d{2}-\d{2}/.test(raw)) return raw.substring(0, 10);
-  if (/^\d{2}\/\d{2}\/\d{4}/.test(raw)) {
-    const [dd, mm, yyyy] = raw.split('/');
+  // Formato brasileiro: DD/MM/AAAA HH:MM  →  pegar só a parte da data antes do espaço
+  const datePart = raw.trim().split(' ')[0]; // "DD/MM/AAAA"
+  if (/^\d{2}\/\d{2}\/\d{4}$/.test(datePart)) {
+    const [dd, mm, yyyy] = datePart.split('/');
     return `${yyyy}-${mm.padStart(2,'0')}-${dd.padStart(2,'0')}`;
   }
   return null;
@@ -999,6 +922,37 @@ function clearDateFilter() {
   document.getElementById('date-filter').value = '';
   currentPage = 1;
   renderTable();
+}
+
+function clearAllFilters() {
+  document.getElementById('date-filter').value = '';
+  document.getElementById('search-input').value = '';
+  currentFilter = 'todos';
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector('.filter-btn').classList.add('active');
+  currentPage = 1;
+  renderTable();
+}
+
+function updateFilterBar(dateFilter, query, count) {
+  const bar = document.getElementById('filter-status-bar');
+  const txt = document.getElementById('filter-status-text');
+  const hasDate   = !!dateFilter;
+  const hasSearch = !!query;
+  const hasRisk   = currentFilter !== 'todos';
+  if (!hasDate && !hasSearch && !hasRisk) { bar.classList.remove('show'); return; }
+  bar.classList.add('show');
+  const parts = [];
+  if (hasDate) {
+    const [yyyy, mm, dd] = dateFilter.split('-');
+    parts.push(`📅 ${dd}/${mm}/${yyyy}`);
+  }
+  if (hasSearch) parts.push(`🔍 "${query}"`);
+  if (hasRisk) {
+    const labels = { risco: '⚠️ Risco', atencao: 'Atenção', ok: '✓ OK' };
+    parts.push(labels[currentFilter]);
+  }
+  txt.innerHTML = `<span style="font-size:0.72rem;color:var(--text3);margin-right:4px">Filtrando por</span><strong style="color:var(--pink)">${parts.join(' · ')}</strong><span style="color:var(--text2);margin-left:6px">— ${count} resultado${count !== 1 ? 's' : ''}</span>`;
 }
 
 // ── FILTER ────────────────────────────────────────────────
@@ -1043,6 +997,8 @@ function renderTable() {
   });
 
   document.getElementById('table-count').textContent = `${rows.length} registro${rows.length !== 1 ? 's' : ''}`;
+  updateFilterBar(dateFilter, query, rows.length);
+  renderCards(rows);
 
   const totalPages = Math.max(1, Math.ceil(rows.length / PAGE_SIZE));
   if (currentPage > totalPages) currentPage = totalPages;
@@ -1055,7 +1011,6 @@ function renderTable() {
       <svg viewBox="0 0 24 24"><path d="M9 9h.01M15 9h.01M9 13a3.5 3.5 0 0 0 6 0"/><circle cx="12" cy="12" r="10"/></svg>
       <p>Nenhum resultado encontrado.</p></div></td></tr>`;
     document.getElementById('pagination').innerHTML = '';
-    document.getElementById('mobile-cards-list').innerHTML = `<div style="text-align:center;padding:40px 20px;color:var(--text3);font-size:0.88rem;">Nenhum resultado encontrado.</div>`;
     return;
   }
 
@@ -1074,7 +1029,10 @@ function renderTable() {
     if (row.dores_locais && row.dores_locais !== 'Nenhuma') {
       const parts = row.dores_locais.split(',').map(s => s.trim());
       const many = parts.length >= 4;
-      painHtml = `<div class="pain-pills">${parts.map(p => `<span class="pain-pill${many?' many':''}">${p}</span>`).join('')}</div>`;
+      const MAX_SHOW = 3;
+      const shown = parts.slice(0, MAX_SHOW);
+      const extra = parts.length - MAX_SHOW;
+      painHtml = `<div class="pain-pills">${shown.map(p => `<span class="pain-pill${many?' many':''}">${p}</span>`).join('')}${extra > 0 ? `<span class="pain-more">+${extra} mais…</span>` : ''}</div>`;
     }
 
     const tr = document.createElement('tr');
@@ -1100,7 +1058,7 @@ function renderTable() {
       <td style="font-weight:700;font-size:0.92rem">${row.estresse !== null && row.estresse !== undefined ? row.estresse : '—'}</td>
       <td style="font-weight:700;font-size:0.92rem">${row.humor !== null && row.humor !== undefined ? row.humor : '—'}</td>
       <td class="pain-cell">${painHtml}</td>
-      <td>${badgeHtml}</td>
+      <td class="td-status">${badgeHtml}</td>
     `;
     tbody.appendChild(tr);
 
@@ -1125,71 +1083,91 @@ function renderTable() {
     tbody.appendChild(dtr);
   });
 
-  // ── RENDER MOBILE CARDS ──────────────────────────────────
-  const mobileList = document.getElementById('mobile-cards-list');
-  mobileList.innerHTML = '';
+  renderPagination(totalPages, rows.length);
+}
+
+// ── MOBILE CARDS ──────────────────────────────────────────
+function renderCards(rows) {
+  const container = document.getElementById('cards-container');
+  if (!container) return;
+  if (!rows.length) {
+    container.innerHTML = `<div class="empty-state" style="background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);padding:40px 20px">
+      <svg viewBox="0 0 24 24"><path d="M9 9h.01M15 9h.01M9 13a3.5 3.5 0 0 0 6 0"/><circle cx="12" cy="12" r="10"/></svg>
+      <p>Nenhum resultado encontrado.</p></div>`;
+    return;
+  }
+  const pageRows = rows.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+  container.innerHTML = '';
   pageRows.forEach(row => {
     const ath = athletes[row.cpf];
-    const nome = ath ? ath.nome : '—';
-    const riskMCls = row._risk === 'risco' ? 'm-risk' : row._risk === 'atencao' ? 'm-warn' : 'm-ok';
-    const badgeMHtml = row._risk === 'risco'
+    const nome = ath ? ath.nome : row.cpf;
+    const riskCls = row._risk === 'risco' ? 'card-risk' : row._risk === 'atencao' ? 'card-warn' : 'card-ok';
+    const badgeHtml = row._risk === 'risco'
       ? `<span class="badge badge-risk">Risco</span>`
       : row._risk === 'atencao'
       ? `<span class="badge badge-warn">Atenção</span>`
       : `<span class="badge badge-ok">OK</span>`;
 
+    const rec = row.recuperado !== null && row.recuperado !== undefined ? row.recuperado : '—';
+    const can = row.cansaco   !== null && row.cansaco   !== undefined ? row.cansaco   : '—';
+    const est = row.estresse  !== null && row.estresse  !== undefined ? row.estresse  : '—';
+    const hum = row.humor     !== null && row.humor     !== undefined ? row.humor     : '—';
+
+    // Cor das métricas
+    const metricCls = (v, lowBad) => {
+      if (v === '—') return '';
+      const n = Number(v);
+      if (lowBad) return n <= 2 ? 'val-risk' : n <= 4 ? 'val-warn' : 'val-ok';
+      return n <= 2 ? 'val-risk' : n <= 4 ? 'val-warn' : 'val-ok';
+    };
+
+    let painHtml = '<span style="color:var(--text3);font-size:0.72rem">Nenhuma dor relatada</span>';
+    if (row.dores_locais && row.dores_locais !== 'Nenhuma') {
+      const parts = row.dores_locais.split(',').map(s => s.trim());
+      const many = parts.length >= 4;
+      painHtml = `<div class="card-mob-pills">${parts.map(p => `<span class="card-mob-pill${many?' pill-risk':''}">${p}</span>`).join('')}</div>`;
+    }
+
     const card = document.createElement('div');
-    card.className = `m-card ${riskMCls}`;
-    card.id = `mcard-${row.id}`;
-
-    // Dores locais para detalhe
-    const doresVal = row.dores_locais && row.dores_locais !== 'Nenhuma' ? row.dores_locais : 'Nenhuma';
-
+    card.className = `athlete-card-mobile ${riskCls}`;
     card.innerHTML = `
-      <div class="m-card-header" onclick="toggleMobileCard(${row.id})">
-        <div class="m-card-info">
-          <div class="m-card-name">${nome}</div>
-          <div class="m-card-meta">${row.data_resposta || '—'} · ${row.peso ? row.peso + ' kg' : 'Peso N/A'}</div>
+      <div class="card-mob-top">
+        <div>
+          <div class="card-mob-name">${nome}</div>
+          <div class="card-mob-date">${row.data_resposta || '—'} · ${row.peso ? row.peso + 'kg' : '—'} · ${row.horas_sono !== null ? row.horas_sono + 'h sono' : '—'}</div>
         </div>
-        <div class="m-card-right">
-          ${badgeMHtml}
-          <div class="m-expand-btn">
-            <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
-          </div>
+        ${badgeHtml}
+      </div>
+      <div class="card-mob-metrics">
+        <div class="card-mob-metric">
+          <div class="card-mob-metric-label">Recuperação</div>
+          <div class="card-mob-metric-val ${metricCls(rec, true)}">${rec}</div>
+        </div>
+        <div class="card-mob-metric">
+          <div class="card-mob-metric-label">Cansaço</div>
+          <div class="card-mob-metric-val ${metricCls(can, true)}">${can}</div>
+        </div>
+        <div class="card-mob-metric">
+          <div class="card-mob-metric-label">Estresse</div>
+          <div class="card-mob-metric-val ${metricCls(est, true)}">${est}</div>
         </div>
       </div>
-      <div class="m-scores">
-        <div class="m-score-chip">💤 Sono <span>${row.horas_sono !== null && row.horas_sono !== undefined ? row.horas_sono + 'h' : '—'}</span></div>
-        <div class="m-score-chip">⚡ Recup. <span>${row.recuperado !== null && row.recuperado !== undefined ? row.recuperado : '—'}</span></div>
-        <div class="m-score-chip">😓 Cansaço <span>${row.cansaco !== null && row.cansaco !== undefined ? row.cansaco : '—'}</span></div>
-        <div class="m-score-chip">😤 Estresse <span>${row.estresse !== null && row.estresse !== undefined ? row.estresse : '—'}</span></div>
-        <div class="m-score-chip">😊 Humor <span>${row.humor !== null && row.humor !== undefined ? row.humor : '—'}</span></div>
+      <div class="card-mob-row">
+        <span>Humor</span><span>${hum}</span>
       </div>
-      <div class="m-card-detail" id="mdetail-${row.id}">
-        <div class="m-detail-grid">
-          <div class="m-detail-item"><div class="m-detail-key">CPF</div><div class="m-detail-val" style="font-family:monospace;font-size:0.75rem">${row.cpf}</div></div>
-          <div class="m-detail-item"><div class="m-detail-key">Urina</div><div class="m-detail-val">${row.urina || '—'}</div></div>
-          <div class="m-detail-item"><div class="m-detail-key">Sexo</div><div class="m-detail-val">${row.sexo || '—'}</div></div>
-          <div class="m-detail-item"><div class="m-detail-key">Dor Musc. (geral)</div><div class="m-detail-val">${row.dor_muscular !== null && row.dor_muscular !== undefined ? row.dor_muscular : '—'}</div></div>
-          <div class="m-detail-item"><div class="m-detail-key">Qual. Sono</div><div class="m-detail-val">${row.qualidade_sono !== null && row.qualidade_sono !== undefined ? row.qualidade_sono : '—'}</div></div>
-          <div class="m-detail-item"><div class="m-detail-key">Menstruou</div><div class="m-detail-val">${row.menstruou || 'N/A'}</div></div>
-          <div class="m-detail-item"><div class="m-detail-key">Duração Normal</div><div class="m-detail-val">${row.menst_duracao || 'N/A'}</div></div>
-          <div class="m-detail-item"><div class="m-detail-key">Mais de 1x/mês</div><div class="m-detail-val">${row.menst_vezes || 'N/A'}</div></div>
-          <div class="m-detail-item full"><div class="m-detail-key">Dores Locais</div><div class="m-detail-val">${doresVal}</div></div>
-          ${ath ? `
-          <div class="m-detail-item"><div class="m-detail-key">Categoria</div><div class="m-detail-val">${ath.categoria || '—'}</div></div>
-          <div class="m-detail-item"><div class="m-detail-key">Modalidade</div><div class="m-detail-val">${ath.modalidade || '—'}</div></div>
-          ` : ''}
-        </div>
+      <div class="card-mob-row">
+        <span>Urina</span><span>${row.urina || '—'}</span>
+      </div>
+      <div class="card-mob-dores">
+        <div class="card-mob-dores-label">Dores</div>
+        ${painHtml}
       </div>
     `;
-    mobileList.appendChild(card);
+    container.appendChild(card);
   });
-
-  renderPagination(totalPages, rows.length);
 }
 
-// ── EXPAND DETAIL (desktop) ───────────────────────────────
+// ── EXPAND DETAIL ─────────────────────────────────────────
 function toggleDetail(id) {
   const dtr = document.getElementById(`detail-${id}`);
   const btn = document.getElementById(`expand-${id}`);
@@ -1198,16 +1176,6 @@ function toggleDetail(id) {
   document.querySelectorAll('.detail-row.open').forEach(r => r.classList.remove('open'));
   document.querySelectorAll('.expand-btn.open').forEach(b => b.classList.remove('open'));
   if (!isOpen) { dtr.classList.add('open'); btn.classList.add('open'); }
-}
-
-// ── EXPAND MOBILE CARD ────────────────────────────────────
-function toggleMobileCard(id) {
-  const card = document.getElementById(`mcard-${id}`);
-  if (!card) return;
-  const isExpanded = card.classList.contains('expanded');
-  // Fecha todos os outros
-  document.querySelectorAll('.m-card.expanded').forEach(c => c.classList.remove('expanded'));
-  if (!isExpanded) card.classList.add('expanded');
 }
 
 // ── PAGINATION ────────────────────────────────────────────
@@ -1320,24 +1288,69 @@ function renderAthletes() {
     return a.nome.toLowerCase().includes(q) || (a.cpf || '').includes(q);
   });
   document.getElementById('ath-count').textContent = `${filtered.length} atleta${filtered.length !== 1 ? 's' : ''}`;
+
+  // ── Tabela (desktop) ──
   const tbody = document.getElementById('ath-table-body');
   if (!filtered.length) {
     tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><p>Nenhum atleta encontrado.</p></div></td></tr>`;
+  } else {
+    tbody.innerHTML = '';
+    filtered.forEach(ath => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td style="font-family:monospace;font-size:0.78rem;color:var(--text2)">${ath.cpf || '—'}</td>
+        <td style="font-weight:600">${ath.nome || '—'}</td>
+        <td style="font-size:0.8rem;color:var(--text3)">${ath.nascimento || '—'}</td>
+        <td style="font-size:0.8rem">${ath.sexo || '—'}</td>
+        <td style="font-size:0.8rem">${ath.categoria || '—'}</td>
+        <td style="font-size:0.8rem">${ath.modalidade || '—'}</td>
+        <td><button class="edit-btn" onclick="openEditModal('${ath.cpf}')">✏️ Editar</button></td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  // ── Cards (mobile) ──
+  const cardWrap = document.getElementById('ath-cards-container');
+  if (!cardWrap) return;
+  if (!filtered.length) {
+    cardWrap.innerHTML = `<div class="empty-state" style="background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);padding:40px 20px">
+      <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <p>Nenhum atleta encontrado.</p></div>`;
     return;
   }
-  tbody.innerHTML = '';
+  cardWrap.innerHTML = '';
   filtered.forEach(ath => {
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td style="font-family:monospace;font-size:0.78rem;color:var(--text2)">${ath.cpf || '—'}</td>
-      <td style="font-weight:600">${ath.nome || '—'}</td>
-      <td style="font-size:0.8rem;color:var(--text3)">${ath.nascimento || '—'}</td>
-      <td style="font-size:0.8rem">${ath.sexo || '—'}</td>
-      <td style="font-size:0.8rem">${ath.categoria || '—'}</td>
-      <td style="font-size:0.8rem">${ath.modalidade || '—'}</td>
-      <td><button class="edit-btn" onclick="openEditModal('${ath.cpf}')">✏️ Editar</button></td>
+    const card = document.createElement('div');
+    card.className = 'ath-card-mobile';
+    card.innerHTML = `
+      <div class="ath-card-top">
+        <div>
+          <div class="ath-card-name">${ath.nome || '—'}</div>
+          <div class="ath-card-cpf">${ath.cpf || '—'}</div>
+        </div>
+        <button class="edit-btn" onclick="openEditModal('${ath.cpf}')">✏️ Editar</button>
+      </div>
+      <div class="ath-card-grid">
+        <div class="ath-card-field">
+          <div class="ath-card-field-label">Nascimento</div>
+          <div class="ath-card-field-val">${ath.nascimento || '—'}</div>
+        </div>
+        <div class="ath-card-field">
+          <div class="ath-card-field-label">Sexo</div>
+          <div class="ath-card-field-val">${ath.sexo || '—'}</div>
+        </div>
+        <div class="ath-card-field">
+          <div class="ath-card-field-label">Categoria</div>
+          <div class="ath-card-field-val">${ath.categoria || '—'}</div>
+        </div>
+        <div class="ath-card-field">
+          <div class="ath-card-field-label">Modalidade</div>
+          <div class="ath-card-field-val">${ath.modalidade || '—'}</div>
+        </div>
+      </div>
     `;
-    tbody.appendChild(tr);
+    cardWrap.appendChild(card);
   });
 }
 
