@@ -261,8 +261,8 @@
   }
   .table-title { font-family: 'Sora', sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--text); }
   .table-count { font-size: 0.75rem; color: var(--text3); }
-  .table-container { overflow-x: auto; }
-  table { width: 100%; border-collapse: collapse; }
+  .table-container { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  table { width: 100%; border-collapse: collapse; min-width: 900px; }
   thead { background: var(--surface2); }
   th {
     padding: 11px 14px; text-align: left; font-size: 0.68rem; font-weight: 700;
@@ -272,6 +272,7 @@
   }
   th:hover { color: var(--pink); }
   td { padding: 11px 14px; font-size: 0.82rem; border-bottom: 1px solid var(--border); vertical-align: middle; }
+  td.td-status { white-space: nowrap; }
   tr:last-child td { border-bottom: none; }
   tbody tr { transition: background .15s; }
   tbody tr:hover { background: var(--surface2); }
@@ -799,9 +800,12 @@ function updateStats() {
 // ── DATE FILTER HELPERS ───────────────────────────────────
 function parseRowDate(raw) {
   if (!raw) return null;
+  // Formato ISO: YYYY-MM-DD ou YYYY-MM-DDTHH:MM...
   if (/^\d{4}-\d{2}-\d{2}/.test(raw)) return raw.substring(0, 10);
-  if (/^\d{2}\/\d{2}\/\d{4}/.test(raw)) {
-    const [dd, mm, yyyy] = raw.split('/');
+  // Formato brasileiro: DD/MM/AAAA HH:MM  →  pegar só a parte da data antes do espaço
+  const datePart = raw.trim().split(' ')[0]; // "DD/MM/AAAA"
+  if (/^\d{2}\/\d{2}\/\d{4}$/.test(datePart)) {
+    const [dd, mm, yyyy] = datePart.split('/');
     return `${yyyy}-${mm.padStart(2,'0')}-${dd.padStart(2,'0')}`;
   }
   return null;
@@ -911,7 +915,7 @@ function renderTable() {
       <td style="font-weight:700;font-size:0.92rem">${row.estresse !== null && row.estresse !== undefined ? row.estresse : '—'}</td>
       <td style="font-weight:700;font-size:0.92rem">${row.humor !== null && row.humor !== undefined ? row.humor : '—'}</td>
       <td class="pain-cell">${painHtml}</td>
-      <td>${badgeHtml}</td>
+      <td class="td-status">${badgeHtml}</td>
     `;
     tbody.appendChild(tr);
 
